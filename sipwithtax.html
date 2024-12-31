@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIP Calculator with Annual Step Up And LTCG Tax Details</title>
+    <title>SIP Calculator with Annual Step Up</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,7 +53,7 @@
 <body>
     <div class="container">
         <div id="main">
-            <h2>SIP Calculator with Annual Step Up</h2>
+            <h2>SIP Calculator with Annual Step Up and LTCG Tax</h2>
             <form id="sipForm">
                 Monthly SIP Amount (INR): <input type="number" id="monthly_sip" value="50000" required><br>
                 Investment Period (years): <input type="number" id="years" value="5" required><br>
@@ -134,10 +134,10 @@
             document.getElementById('post_tax_maturity_amount').textContent = post_tax_maturity_amount.toFixed(2);
 
             const paymentBreakupData = {
-                labels: ['Total Investment', 'Total Gain'],
+                labels: ['Total Investment', 'Total Gain', 'LTCG Tax'],
                 datasets: [{
-                    data: [total_investment, total_gain],
-                    backgroundColor: ['#ff9999', '#66b3ff']
+                    data: [total_investment, total_gain, ltcg_tax],
+                    backgroundColor: ['#ff9999', '#66b3ff', '#ffcc99']
                 }]
             };
 
