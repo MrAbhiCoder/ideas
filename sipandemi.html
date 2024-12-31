@@ -102,6 +102,7 @@
                     <p>Total Gain (INR): <span id="total_gain"></span></p>
                     <p>Taxable Gain (INR): <span id="taxable_gain"></span></p>
                     <p>LTCG Tax (INR): <span id="ltcg_tax"></span></p>
+                    <p id="surcharge_distribution"></p>
                     <p>Maturity Amount after Tax (INR): <span id="post_tax_maturity_amount"></span></p>
 
                     <div class="chart-container">
@@ -197,20 +198,49 @@
 
             const total_gain = maturity_amount - total_investment;
             const taxable_gain = total_gain - 100000;
-            const ltcg_tax = taxable_gain > 0 ? taxable_gain * 0.10 : 0;
-            const post_tax_maturity_amount = maturity_amount - ltcg_tax;
+            
+            // Calculate LTCG tax with surcharges
+            const base_ltcg_tax_rate = 0.125;
+            const surcharge_rates = [
+                { limit: 5000000, rate: 0.10 },  // 10% surcharge for income above 50 lakhs
+                { limit: 10000000, rate: 0.15 }, // 15% surcharge for income above 1 crore
+                { limit: 20000000, rate: 0.25 }, // 25% surcharge for income above 2 crores
+                { limit: 50000000, rate: 0.37 }  // 37% surcharge for income above 5 crores
+            ];
+            
+            let ltcg_tax = taxable_gain * base_ltcg_tax_rate;
+            let surcharge = 0;
+
+            for (const { limit, rate } of surcharge_rates) {
+                if (taxable_gain > limit) {
+                    surcharge += (taxable_gain - limit) * rate;
+                }
+            }
+            
+            const total_ltcg_tax = ltcg_tax + surcharge;
+            const post_tax_maturity_amount = maturity_amount - total_ltcg_tax;
 
             document.getElementById('maturity_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(maturity_amount);
             document.getElementById('total_investment').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_investment);
             document.getElementById('total_gain').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_gain);
             document.getElementById('taxable_gain').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(taxable_gain);
-            document.getElementById('ltcg_tax').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(ltcg_tax);
+            
+            document.getElementById('ltcg_tax').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_ltcg_tax) + 
+            ` (Base Tax: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(ltcg_tax)}, Surcharge: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(surcharge)})`;
+
+            const surchargeBreakdown = surcharge_rates.map(({ limit, rate }) => {
+                const applicableSurcharge = taxable_gain > limit ? (taxable_gain - limit) * rate : 0;
+                return `Income above ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(limit)}: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(applicableSurcharge)}`;
+            }).filter(text => !text.includes(': ₹0.00')).join(', ');
+
+            document.getElementById('surcharge_distribution').textContent = `Surcharge Distribution: ${surchargeBreakdown}`;
+            
             document.getElementById('post_tax_maturity_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(post_tax_maturity_amount);
 
             const paymentBreakupData = {
                 labels: ['Total Investment', 'Total Gain', 'LTCG Tax'],
                 datasets: [{
-                    data: [total_investment, total_gain, ltcg_tax],
+                    data: [total_investment, total_gain, total_ltcg_tax],
                     backgroundColor: ['#ff9999', '#66b3ff', '#ffcc99']
                 }]
             };
