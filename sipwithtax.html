@@ -42,10 +42,20 @@
         }
         .chart-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: row; /* Align items in a row */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            gap: 20px;
         }
         .chart {
-            width: 48%;
+            width: 100%;
+            max-width: 450px; /* Set a maximum width */
+            /*margin: auto;  Center the chart */
+            margin-left: 0; /* Align to the left */
+        }
+        .chart canvas {
+            width: 100% !important;
+            max-height: 400px !important; /* Set a maximum height */
+            height: auto !important;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -53,7 +63,7 @@
 <body>
     <div class="container">
         <div id="main">
-            <h2>SIP Calculator with Annual Step Up and LTCG Tax</h2>
+            <h2>SIP Calculator with Annual Step Up</h2>
             <form id="sipForm">
                 Monthly SIP Amount (INR): <input type="number" id="monthly_sip" value="50000" required><br>
                 Investment Period (years): <input type="number" id="years" value="5" required><br>
@@ -79,10 +89,11 @@
                         <h3>SIP Schedule showing accumulated growth year-wise</h3>
                         <canvas id="sipScheduleChart"></canvas>
                     </div>
+                    <div class="chart">
+                        <h3>Accumulated Yearly SIP Contributions</h3>
+                        <canvas id="yearlySipChart"></canvas>
+                    </div>
                 </div>
-
-                <h3>Accumulated Yearly SIP Contributions</h3>
-                <canvas id="yearlySipChart"></canvas>
             </div>
         </div>
     </div>
