@@ -126,12 +126,12 @@
             const ltcg_tax = taxable_gain > 0 ? taxable_gain * 0.10 : 0;
             const post_tax_maturity_amount = maturity_amount - ltcg_tax;
 
-            document.getElementById('maturity_amount').textContent = maturity_amount.toFixed(2);
-            document.getElementById('total_investment').textContent = total_investment.toFixed(2);
-            document.getElementById('total_gain').textContent = total_gain.toFixed(2);
-            document.getElementById('taxable_gain').textContent = taxable_gain.toFixed(2);
-            document.getElementById('ltcg_tax').textContent = ltcg_tax.toFixed(2);
-            document.getElementById('post_tax_maturity_amount').textContent = post_tax_maturity_amount.toFixed(2);
+            document.getElementById('maturity_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(maturity_amount);
+            document.getElementById('total_investment').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_investment);
+            document.getElementById('total_gain').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_gain);
+            document.getElementById('taxable_gain').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(taxable_gain);
+            document.getElementById('ltcg_tax').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(ltcg_tax);
+            document.getElementById('post_tax_maturity_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(post_tax_maturity_amount);
 
             const paymentBreakupData = {
                 labels: ['Total Investment', 'Total Gain', 'LTCG Tax'],
