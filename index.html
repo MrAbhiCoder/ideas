@@ -78,11 +78,12 @@
         }
         table {
             width: 100%;
-            max-width: 800px; /* Set a maximum width for tables */
+            max-width: 100%; /* Ensure tables are responsive */
             border-collapse: collapse;
             margin: 20px auto; /* Center the table */
             font-size: 18px;
             text-align: left;
+            overflow-x: auto; /* Enable horizontal scrolling if needed */
         }
         table th, table td {
             padding: 12px 15px;
@@ -98,6 +99,11 @@
         }
         table tr:hover {
             background-color: #f1f1f1;
+        }
+        /* Add this for better responsiveness */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
         }
         form {
             background-color: #fff;
@@ -163,40 +169,42 @@
                 </form>
                 <div id="results" style="display:none;">
                 <h3>Results:</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Amount (INR)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Maturity Amount before Tax</td>
-                            <td><span id="maturity_amount"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Total Investment</td>
-                            <td><span id="total_investment"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Total Gain</td>
-                            <td><span id="total_gain"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Taxable Gain</td>
-                            <td><span id="taxable_gain"></span></td>
-                        </tr>
-                        <tr>
-                            <td>LTCG Tax</td>
-                            <td><span id="ltcg_tax"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Maturity Amount after Tax</td>
-                            <td><span id="post_tax_maturity_amount"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Amount (INR)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Maturity Amount before Tax</td>
+                                <td><span id="maturity_amount"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Total Investment</td>
+                                <td><span id="total_investment"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Total Gain</td>
+                                <td><span id="total_gain"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Taxable Gain</td>
+                                <td><span id="taxable_gain"></span></td>
+                            </tr>
+                            <tr>
+                                <td>LTCG Tax</td>
+                                <td><span id="ltcg_tax"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Maturity Amount after Tax</td>
+                                <td><span id="post_tax_maturity_amount"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <p id="surcharge_distribution"></p>
                 <div class="chart-container">
                     <div class="chart">
@@ -230,28 +238,30 @@
                 </form>
                 <div id="emiResults" class="hidden">
                 <h3>Results:</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Amount (INR)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Monthly EMI</td>
-                            <td><span id="monthly_emi"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Total Payment</td>
-                            <td><span id="total_payment"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Total Interest</td>
-                            <td><span id="total_interest"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Amount (INR)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Monthly EMI</td>
+                                <td><span id="monthly_emi"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Total Payment</td>
+                                <td><span id="total_payment"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Total Interest</td>
+                                <td><span id="total_interest"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="chart-container">
                     <div class="chart">
                         <h3>Break-up of Total Payment</h3>
@@ -293,58 +303,64 @@
                 </form>
                 <div id="swpResults" class="hidden">
                     <h3>Results:</h3>
-                    <table>
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Amount (INR)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Total Withdrawn Amount</td>
-                            <td><span id="total_withdrawn"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Remaining Investment Amount</td>
-                            <td><span id="remaining_investment"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Taxable Amount</td>
-                            <td><span id="taxable_amount"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Total Tax Paid</td>
-                            <td><span id="total_tax"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Amount (INR)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Total Withdrawn Amount</td>
+                                    <td><span id="total_withdrawn"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Remaining Investment Amount</td>
+                                    <td><span id="remaining_investment"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Taxable Amount</td>
+                                    <td><span id="taxable_amount"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Tax Paid</td>
+                                    <td><span id="total_tax"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <p id="surcharge_distribution"></p>
                     <h3>Monthly Growth Table</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Period</th>
-                                <th>Op. Balance (INR)</th>
-                                <th>Withdrawal (INR)</th>
-                                <th>Growth (INR)</th>
-                                <th>Cl. Balance (INR)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="monthlyGrowthTable"></tbody>
-                    </table>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Period</th>
+                                    <th>Op. Balance (INR)</th>
+                                    <th>Withdrawal (INR)</th>
+                                    <th>Growth (INR)</th>
+                                    <th>Cl. Balance (INR)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthlyGrowthTable"></tbody>
+                        </table>
+                    </div>
                     <h3>Yearly Details</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Year</th>
-                                <th>Amount Withdrawn (INR)</th>
-                                <th>Taxable Amount (INR)</th>
-                                <th>Total Tax Paid (INR)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="yearlyDetails"></tbody>
-                    </table>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Amount Withdrawn (INR)</th>
+                                    <th>Taxable Amount (INR)</th>
+                                    <th>Total Tax Paid (INR)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="yearlyDetails"></tbody>
+                        </table>
+                    </div>
                     <div class="chart-container">
                         <div class="chart">
                             <h3>SWP Schedule showing remaining investment year-wise</h3>
