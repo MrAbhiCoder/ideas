@@ -100,6 +100,31 @@
         table tr:hover {
             background-color: #f1f1f1;
         }
+        .small-table {
+            width: 50%; /* Adjust the width as needed */
+            margin: 20px 0; /* Align the table to the left */
+            font-size: 14px; /* Adjust the font size as needed */
+            border: 1px solid #ccc; /* Add border to distinguish */
+        }
+
+        .small-table th, .small-table td {
+            padding: 8px 10px; /* Adjust the padding as needed */
+            border: 1px solid #ddd; /* Add border to cells */
+        }
+
+        .small-table th {
+            background-color: #f4f4f4; /* Background color for header */
+            color: #333; /* Text color for header */
+            font-weight: bold; /* Bold text for header */
+        }
+
+        .small-table tr:nth-child(even) {
+            background-color: #f9f9f9; /* Background color for even rows */
+        }
+
+        .small-table tr:hover {
+            background-color: #f1f1f1; /* Background color on hover */
+        }
         /* Add this for better responsiveness */
         .table-container {
             width: 100%;
@@ -205,7 +230,18 @@
                         </tbody>
                     </table>
                 </div>
-                <p id="surcharge_distribution"></p>
+                <!-- <p id="surcharge_distribution"></p> -->
+                <div id="surchargeTableContainer" class="table-container" style="display: none;">
+                    <table id="surchargeTable" class="small-table">
+                        <thead>
+                            <tr>
+                                <th>Income Above (INR)</th>
+                                <th>Surcharge Tax (INR)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="surchargeTableBody"></tbody>
+                    </table>
+                </div>
                 <div class="chart-container">
                     <div class="chart">
                         <h3>Break-up of Total Payment</h3>
@@ -428,39 +464,73 @@
             // Calculate LTCG tax with surcharges
             const base_ltcg_tax_rate = 0.125;
             const surcharge_rates = [
-                { limit: 5000000, rate: 0.10 },  // 10% surcharge for income above 50 lakhs
-                { limit: 10000000, rate: 0.15 }, // 15% surcharge for income above 1 crore
-                { limit: 20000000, rate: 0.25 }, // 25% surcharge for income above 2 crores
-                { limit: 50000000, rate: 0.37 }  // 37% surcharge for income above 5 crores
+                { limit: 50000000, rate: 0.37 },  // 37% surcharge for income above 5 crores
+                { limit: 20000000, rate: 0.25 },  // 25% surcharge for income above 2 crores
+                { limit: 10000000, rate: 0.15 },  // 15% surcharge for income above 1 crore
+                { limit: 5000000, rate: 0.10 }    // 10% surcharge for income above 50 lakhs
             ];
-            
+
             let ltcg_tax = taxable_gain * base_ltcg_tax_rate;
             let surcharge = 0;
+            let remaining_taxable_gain = taxable_gain;
 
             for (const { limit, rate } of surcharge_rates) {
-                if (taxable_gain > limit) {
-                    surcharge += (taxable_gain - limit) * rate;
+                if (remaining_taxable_gain > limit) {
+                    surcharge += (remaining_taxable_gain - limit) * rate;
+                    remaining_taxable_gain = limit;  // Adjust remaining_taxable_gain to the current limit
                 }
             }
-            
+
             const total_ltcg_tax = ltcg_tax + surcharge;
             const post_tax_maturity_amount = maturity_amount - total_ltcg_tax;
+
+            console.log(`Total LTCG Tax: ${total_ltcg_tax}`);
+            console.log(`Post-Tax Maturity Amount: ${post_tax_maturity_amount}`);
 
             document.getElementById('maturity_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(maturity_amount);
             document.getElementById('total_investment').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_investment);
             document.getElementById('total_gain').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_gain);
             document.getElementById('taxable_gain').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(taxable_gain);
-            
+
             document.getElementById('ltcg_tax').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_ltcg_tax) + 
             ` (Base Tax: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(ltcg_tax)}, Surcharge: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(surcharge)})`;
 
-            const surchargeBreakdown = surcharge_rates.map(({ limit, rate }) => {
-                const applicableSurcharge = taxable_gain > limit ? (taxable_gain - limit) * rate : 0;
-                return `Income above ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(limit)}: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(applicableSurcharge)}`;
-            }).filter(text => !text.includes(': ₹0.00')).join(', ');
+            document.getElementById('post_tax_maturity_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(post_tax_maturity_amount);
 
-            document.getElementById('surcharge_distribution').textContent = `Surcharge Distribution: ${surchargeBreakdown}`;
+            let surchargeBreakdownText = '';
+            let surchargeBreakdownTable = [];
+            let remaining_surchargable_taxable_gain = taxable_gain;
+
+            for (const { limit, rate } of surcharge_rates) {
+                if (remaining_surchargable_taxable_gain > limit) {
+                    const applicableSurcharge = (remaining_surchargable_taxable_gain - limit) * rate;
+                    surchargeBreakdownTable.push({
+                        incomeAbove: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(limit),
+                        surcharge: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(applicableSurcharge)
+                    });
+                    remaining_surchargable_taxable_gain = limit;
+                }
+            }
+            surchargeBreakdownText = surchargeBreakdownText.slice(0, -2); // Remove the trailing comma and space
             
+            surchargeBreakdownTable.reverse();
+
+            const surchargeTableBody = document.getElementById('surchargeTableBody');
+            surchargeTableBody.innerHTML = '';
+            
+            surchargeBreakdownTable.forEach(({ incomeAbove, surcharge }) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${incomeAbove}</td><td>${surcharge}</td>`;
+                surchargeTableBody.appendChild(row);
+            });
+            
+            // Display the surcharge table only if there are surcharge entries
+            if (surchargeBreakdownTable.length > 0) {
+                document.getElementById('surchargeTableContainer').style.display = 'block';
+            } else {
+                document.getElementById('surchargeTableContainer').style.display = 'none';
+            }
+
             document.getElementById('post_tax_maturity_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(post_tax_maturity_amount);
 
             const paymentBreakupData = {
