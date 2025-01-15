@@ -235,7 +235,9 @@
                     <table id="surchargeTable" class="small-table">
                         <thead>
                             <tr>
-                                <th>Income Above (INR)</th>
+                                <th>Slab Value (INR)</th>
+                                <th>Income Above Slab Value (INR)</th>
+                                <th>Applicable Surcharge (%)</th>
                                 <th>Surcharge Tax (INR)</th>
                             </tr>
                         </thead>
@@ -497,33 +499,34 @@
 
             document.getElementById('post_tax_maturity_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(post_tax_maturity_amount);
 
-            let surchargeBreakdownText = '';
-            let surchargeBreakdownTable = [];
-            let remaining_surchargable_taxable_gain = taxable_gain;
-
-            for (const { limit, rate } of surcharge_rates) {
-                if (remaining_surchargable_taxable_gain > limit) {
-                    const applicableSurcharge = (remaining_surchargable_taxable_gain - limit) * rate;
-                    surchargeBreakdownTable.push({
-                        incomeAbove: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(limit),
-                        surcharge: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(applicableSurcharge)
-                    });
-                    remaining_surchargable_taxable_gain = limit;
-                }
-            }
-            surchargeBreakdownText = surchargeBreakdownText.slice(0, -2); // Remove the trailing comma and space
-            
-            surchargeBreakdownTable.reverse();
-
+            // Clear the existing surcharge table content
             const surchargeTableBody = document.getElementById('surchargeTableBody');
             surchargeTableBody.innerHTML = '';
-            
-            surchargeBreakdownTable.forEach(({ incomeAbove, surcharge }) => {
+
+            let surchargeBreakdownTable = [];
+            let remainingSurchargableTaxableGain = taxable_gain;
+            for (const { limit, rate } of surcharge_rates) {
+                if (remainingSurchargableTaxableGain > limit) {
+                    const applicableSurcharge = (remainingSurchargableTaxableGain - limit) * rate;
+                    surchargeBreakdownTable.push({
+                        slabValue: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(limit),
+                        incomeAboveSlab: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(remainingSurchargableTaxableGain - limit),
+                        surchargeRate: (rate * 100).toFixed(2) + '%',
+                        surcharge: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(applicableSurcharge)
+                    });
+                    remainingSurchargableTaxableGain = limit;
+                }
+            }
+
+            // Reverse the surchargeBreakdownTable array
+            surchargeBreakdownTable.reverse();
+
+            surchargeBreakdownTable.forEach(({ slabValue, incomeAboveSlab, surchargeRate, surcharge }) => {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${incomeAbove}</td><td>${surcharge}</td>`;
+                row.innerHTML = `<td>${slabValue}</td><td>${incomeAboveSlab}</td><td>${surchargeRate}</td><td>${surcharge}</td>`;
                 surchargeTableBody.appendChild(row);
             });
-            
+
             // Display the surcharge table only if there are surcharge entries
             if (surchargeBreakdownTable.length > 0) {
                 document.getElementById('surchargeTableContainer').style.display = 'block';
