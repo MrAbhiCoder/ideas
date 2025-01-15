@@ -76,6 +76,63 @@
         .hidden {
             display: none;
         }
+        table {
+            width: 100%;
+            max-width: 800px; /* Set a maximum width for tables */
+            border-collapse: collapse;
+            margin: 20px auto; /* Center the table */
+            font-size: 18px;
+            text-align: left;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f4f4f4;
+            color: #333;
+            font-weight: bold;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        form h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        form input[type="number"], form input[type="submit"] {
+            width: 100%;
+            max-width: 300px; /* Set a maximum width for input boxes */
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        form input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form input[type="submit"]:hover {
+            background-color: #218838;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -83,58 +140,118 @@
     <div class="container">
         <div class="button-container">
             <button id="sipButton">SIP Calculator</button>
+            <button id="swpButton">SWP Calculator</button>
             <button id="emiButton">EMI Calculator</button>
         </div>
         <div id="main">
             <div id="sipCalculator">
-                <h2>SIP Calculator with Annual Step Up And LTCG Tax Details</h2>
                 <form id="sipForm">
-                    Monthly SIP Amount (INR): <input type="number" id="monthly_sip" value="50000" required><br>
-                    Investment Period (years): <input type="number" id="years" value="5" required><br>
-                    Expected Annual Return (%): <input type="number" step="0.01" id="annual_return" value="12" required><br>
-                    Annual Step Up (%): <input type="number" step="0.01" id="annual_step_up" value="0" required><br>
+                    <h2>SIP Calculator with Annual Step Up And LTCG Tax Details</h2>
+                    <label for="monthly_sip">Monthly SIP Amount (INR):</label>
+                    <input type="number" id="monthly_sip" value="50000" required>
+                    
+                    <label for="years">Investment Period (years):</label>
+                    <input type="number" id="years" value="5" required>
+                    
+                    <label for="annual_return">Expected Annual Return (%):</label>
+                    <input type="number" step="0.01" id="annual_return" value="12" required>
+                    
+                    <label for="annual_step_up">Annual Step Up (%):</label>
+                    <input type="number" step="0.01" id="annual_step_up" value="0" required>
+                    
                     <input type="submit" value="Calculate">
                 </form>
                 <div id="results" style="display:none;">
-                    <h3>Results:</h3>
-                    <p>Maturity Amount before Tax (INR): <span id="maturity_amount"></span></p>
-                    <p>Total Investment (INR): <span id="total_investment"></span></p>
-                    <p>Total Gain (INR): <span id="total_gain"></span></p>
-                    <p>Taxable Gain (INR): <span id="taxable_gain"></span></p>
-                    <p>LTCG Tax (INR): <span id="ltcg_tax"></span></p>
-                    <p id="surcharge_distribution"></p>
-                    <p>Maturity Amount after Tax (INR): <span id="post_tax_maturity_amount"></span></p>
-
-                    <div class="chart-container">
-                        <div class="chart">
-                            <h3>Break-up of Total Payment</h3>
-                            <canvas id="paymentBreakupChart"></canvas>
-                        </div>
-                        <div class="chart">
-                            <h3>SIP Schedule showing accumulated growth year-wise</h3>
-                            <canvas id="sipScheduleChart"></canvas>
-                        </div>
-                        <div class="chart">
-                            <h3>Accumulated Yearly SIP Contributions</h3>
-                            <canvas id="yearlySipChart"></canvas>
-                        </div>
+                <h3>Results:</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount (INR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Maturity Amount before Tax</td>
+                            <td><span id="maturity_amount"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Total Investment</td>
+                            <td><span id="total_investment"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Total Gain</td>
+                            <td><span id="total_gain"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Taxable Gain</td>
+                            <td><span id="taxable_gain"></span></td>
+                        </tr>
+                        <tr>
+                            <td>LTCG Tax</td>
+                            <td><span id="ltcg_tax"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Maturity Amount after Tax</td>
+                            <td><span id="post_tax_maturity_amount"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p id="surcharge_distribution"></p>
+                <div class="chart-container">
+                    <div class="chart">
+                        <h3>Break-up of Total Payment</h3>
+                        <canvas id="paymentBreakupChart"></canvas>
+                    </div>
+                    <div class="chart">
+                        <h3>SIP Schedule showing accumulated growth year-wise</h3>
+                        <canvas id="sipScheduleChart"></canvas>
+                    </div>
+                    <div class="chart">
+                        <h3>Accumulated Yearly SIP Contributions</h3>
+                        <canvas id="yearlySipChart"></canvas>
                     </div>
                 </div>
             </div>
+            </div>
             <div id="emiCalculator" class="hidden">
-                <h2>EMI Calculator</h2>
                 <form id="emiForm">
-                    Loan Amount (INR): <input type="number" id="loan_amount" value="4000000" required><br>
-                    Loan Tenure (years): <input type="number" id="loan_tenure" value="5" required><br>
-                    Annual Interest Rate (%): <input type="number" step="0.01" id="interest_rate" value="12" required><br>
+                    <h2>EMI Calculator</h2>
+                    <label for="loan_amount">Loan Amount (INR):</label>
+                    <input type="number" id="loan_amount" value="1000000" required>
+                    
+                    <label for="loan_tenure">Loan Tenure (years):</label>
+                    <input type="number" id="loan_tenure" value="5" required>
+                    
+                    <label for="interest_rate">Annual Interest Rate (%):</label>
+                    <input type="number" step="0.01" id="interest_rate" value="8" required>
+                    
                     <input type="submit" value="Calculate">
                 </form>
                 <div id="emiResults" class="hidden">
                 <h3>Results:</h3>
-                <p>Monthly EMI (INR): <span id="monthly_emi"></span></p>
-                <p>Total Payment (INR): <span id="total_payment"></span></p>
-                <p>Total Interest (INR): <span id="total_interest"></span></p>
-
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount (INR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Monthly EMI</td>
+                            <td><span id="monthly_emi"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Total Payment</td>
+                            <td><span id="total_payment"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Total Interest</td>
+                            <td><span id="total_interest"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="chart-container">
                     <div class="chart">
                         <h3>Break-up of Total Payment</h3>
@@ -151,6 +268,91 @@
                 </div>
             </div>
             </div>
+            <div id="swpCalculator" class="hidden">
+                <form id="swpForm">
+                    <h2>SWP Calculator</h2>
+                    <label for="initial_investment">Initial Investment Amount (INR):</label>
+                    <input type="number" id="initial_investment" value="1000000" required>
+                    
+                    <label for="monthly_withdrawal">Withdrawal Amount per Month (INR):</label>
+                    <input type="number" id="monthly_withdrawal" value="20000" required>
+                    
+                    <label for="swp_years">Investment Period (years):</label>
+                    <input type="number" id="swp_years" value="5" required>
+                    
+                    <label for="swp_annual_return">Expected Annual Return (%):</label>
+                    <input type="number" step="0.01" id="swp_annual_return" value="8" required>
+                    
+                    <label for="defer_months">Defer Withdrawal Period (months):</label>
+                    <input type="number" id="defer_months" value="0" required>
+                    
+                    <label for="inflation_rate">Inflation Rate (%):</label>
+                    <input type="number" step="0.01" id="inflation_rate" value="5" required>
+                    
+                    <input type="submit" value="Calculate">
+                </form>
+                <div id="swpResults" class="hidden">
+                    <h3>Results:</h3>
+                    <table>
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount (INR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Withdrawn Amount</td>
+                            <td><span id="total_withdrawn"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Remaining Investment Amount</td>
+                            <td><span id="remaining_investment"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Taxable Amount</td>
+                            <td><span id="taxable_amount"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Total Tax Paid</td>
+                            <td><span id="total_tax"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                    <p id="surcharge_distribution"></p>
+                    <h3>Monthly Growth Table</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Period</th>
+                                <th>Op. Balance (INR)</th>
+                                <th>Withdrawal (INR)</th>
+                                <th>Growth (INR)</th>
+                                <th>Cl. Balance (INR)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthlyGrowthTable"></tbody>
+                    </table>
+                    <h3>Yearly Details</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Amount Withdrawn (INR)</th>
+                                <th>Taxable Amount (INR)</th>
+                                <th>Total Tax Paid (INR)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearlyDetails"></tbody>
+                    </table>
+                    <div class="chart-container">
+                        <div class="chart">
+                            <h3>SWP Schedule showing remaining investment year-wise</h3>
+                            <canvas id="swpScheduleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
@@ -158,11 +360,19 @@
         document.getElementById('sipButton').addEventListener('click', function() {
             document.getElementById('sipCalculator').classList.remove('hidden');
             document.getElementById('emiCalculator').classList.add('hidden');
+            document.getElementById('swpCalculator').classList.add('hidden');
         });
 
         document.getElementById('emiButton').addEventListener('click', function() {
             document.getElementById('sipCalculator').classList.add('hidden');
             document.getElementById('emiCalculator').classList.remove('hidden');
+            document.getElementById('swpCalculator').classList.add('hidden');
+        });
+
+        document.getElementById('swpButton').addEventListener('click', function() {
+            document.getElementById('sipCalculator').classList.add('hidden');
+            document.getElementById('emiCalculator').classList.add('hidden');
+            document.getElementById('swpCalculator').classList.remove('hidden'); 
         });
         document.getElementById('sipForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -582,6 +792,219 @@
             }
 
             document.getElementById('emiResults').style.display = 'block';
+        });
+
+        let swpScheduleChart;
+        document.getElementById('swpForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const initial_investment = parseFloat(document.getElementById('initial_investment').value);
+            let monthly_withdrawal = parseFloat(document.getElementById('monthly_withdrawal').value);
+            const swp_years = parseInt(document.getElementById('swp_years').value);
+            const swp_annual_return = parseFloat(document.getElementById('swp_annual_return').value) / 100;
+            const defer_months = parseInt(document.getElementById('defer_months').value);
+            const inflation_rate = parseFloat(document.getElementById('inflation_rate').value) / 100;
+            const start_date = new Date();
+            const start_month = start_date.getMonth() + 1; // JavaScript months are 0-11
+            const start_year = start_date.getFullYear();
+            const total_months = swp_years * 12;
+
+            // Adjust for financial year starting in April
+            const financial_year_start_month = 4; // April
+            const financial_year_end_month = 3; // March
+            const monthly_rate = swp_annual_return / 12;
+
+            // Define tax brackets as per Indian ITR for FY 2025
+            const tax_brackets = [
+                { limit: 250000, rate: 0.05 },
+                { limit: 500000, rate: 0.10 },
+                { limit: 1000000, rate: 0.20 },
+                { limit: Infinity, rate: 0.30 }
+            ];
+
+            let remaining_investment = initial_investment;
+            let total_withdrawn = 0;
+            let total_tax = 0;
+            let swp_schedule = [];
+            let annual_withdrawals = 0;
+            let taxable_amount = 0;
+            let surcharge_distribution = [];
+            let yearly_details = [];
+            let monthly_growth_table = [];
+
+            for (let month = 1; month <= total_months; month++) {
+                const current_month = (start_month + month - 1) % 12 || 12;
+                const current_year = start_year + Math.floor((start_month + month - 1) / 12);
+                // Adjust for financial year
+                const financial_year = current_month >= financial_year_start_month ? current_year : current_year - 1;
+                let op_balance = remaining_investment;
+                let growth = remaining_investment * monthly_rate;
+
+                if (month > defer_months) {
+                    remaining_investment += growth - monthly_withdrawal;
+                    total_withdrawn += monthly_withdrawal;
+                    annual_withdrawals += monthly_withdrawal;
+
+                    // Calculate tax for the current year
+                    if (month % 12 === 0) {
+                        let annual_tax = 0;
+                        let taxable_income = annual_withdrawals;
+                        taxable_amount += taxable_income;
+                        let surcharge_details = [];
+                        for (const { limit, rate } of tax_brackets) {
+                            if (taxable_income > limit) {
+                                let applicable_surcharge = (taxable_income - limit) * rate;
+                                annual_tax += applicable_surcharge;
+                                surcharge_details.push(`Income above ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(limit)}: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(applicable_surcharge)}`);
+                                taxable_income = limit;
+                            }
+                        }
+                        total_tax += annual_tax;
+                        surcharge_distribution.push(`Year ${Math.ceil(month / 12)}: ${surcharge_details.join(', ')}`);
+                        yearly_details.push({
+                            year: Math.ceil(month / 12),
+                            amount_withdrawn: annual_withdrawals,
+                            taxable_amount: taxable_income,
+                            total_tax_paid: annual_tax
+                        });
+                        annual_withdrawals = 0; // Reset annual withdrawals for the next year
+                    }
+                    else if (month === total_months) {
+                        // Handle the final year with less than 12 months
+                        let annual_tax = 0;
+                        let taxable_income = annual_withdrawals;
+                        taxable_amount += taxable_income;
+                        let surcharge_details = [];
+                        for (const { limit, rate } of tax_brackets) {
+                            if (taxable_income > limit) {
+                                let applicable_surcharge = (taxable_income - limit) * rate;
+                                annual_tax += applicable_surcharge;
+                                surcharge_details.push(`Income above ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(limit)}: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(applicable_surcharge)}`);
+                                taxable_income = limit;
+                            }
+                        }
+                        total_tax += annual_tax;
+                        surcharge_distribution.push(`Year ${Math.ceil(month / 12)}: ${surcharge_details.join(', ')}`);
+                        yearly_details.push({
+                            year: Math.ceil(month / 12),
+                            amount_withdrawn: annual_withdrawals,
+                            taxable_amount: taxable_income,
+                            total_tax_paid: annual_tax
+                        });
+                    }
+
+                    if (current_month === financial_year_start_month) {
+                        monthly_withdrawal *= (1 + inflation_rate);
+                    }
+                } else {
+                    remaining_investment += growth;
+                }
+
+                monthly_growth_table.push({
+                    period: month,
+                    op_balance: op_balance,
+                    withdrawal: month > defer_months ? monthly_withdrawal : 0,
+                    growth: growth,
+                    cl_balance: remaining_investment
+                });
+
+                if (month % 12 === 0) {
+                    swp_schedule.push(remaining_investment);
+                }
+
+                if (remaining_investment <= 0) {
+                    remaining_investment = 0;
+                    break;
+                }
+            }
+            document.getElementById('total_withdrawn').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_withdrawn);
+        document.getElementById('remaining_investment').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(remaining_investment);
+        document.getElementById('total_tax').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(total_tax);
+        document.getElementById('taxable_amount').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(taxable_amount);
+        document.getElementById('surcharge_distribution').textContent = `Surcharge Distribution: ${surcharge_distribution.join('; ')}`;
+
+        // Update yearly details table
+        const yearlyDetailsTable = document.getElementById('yearlyDetails');
+        yearlyDetailsTable.innerHTML = '';
+        yearly_details.forEach(detail => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${detail.year} (${financial_year_start_month}/${financial_year_end_month})</td>
+                <td>${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(detail.amount_withdrawn)}</td>
+                <td>${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(detail.taxable_amount)}</td>
+                <td>${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(detail.total_tax_paid)}</td>
+            `;
+            yearlyDetailsTable.appendChild(row);
+        });
+
+        // Update monthly growth table
+        const monthlyGrowthTable = document.getElementById('monthlyGrowthTable');
+        monthlyGrowthTable.innerHTML = '';
+        monthly_growth_table.forEach(detail => {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const periodDate = new Date(start_year, start_month - 1 + detail.period - 1); // Adjust for 0-based index
+            const periodMonthYear = `${monthNames[periodDate.getMonth()]} ${periodDate.getFullYear()}`;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${periodMonthYear}</td>
+                <td>${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(detail.op_balance)}</td>
+                <td>${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(detail.withdrawal)}</td>
+                <td>${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(detail.growth)}</td>
+                <td>${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(detail.cl_balance)}</td>
+            `;
+            monthlyGrowthTable.appendChild(row);
+        });
+
+        const swpScheduleData = {
+            labels: Array.from({ length: swp_schedule.length }, (_, i) => i + 1),
+            datasets: [{
+                label: 'Remaining Investment (INR)',
+                data: swp_schedule,
+                borderColor: '#66b3ff',
+                fill: false,
+                tension: 0.1
+            }]
+        };
+
+        if (swpScheduleChart) {
+            swpScheduleChart.data = swpScheduleData;
+            swpScheduleChart.update();
+        } else {
+            swpScheduleChart = new Chart(document.getElementById('swpScheduleChart'), {
+                type: 'line',
+                data: swpScheduleData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('swpResults').classList.remove('hidden');
         });
 </script>
     </script>
