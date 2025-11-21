@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinCalc Pro 4.0 - Arbitrage Edition</title>
+    <title>FinCalc Pro 4.1 - Indian Format</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
@@ -45,12 +45,25 @@
 
         /* Inputs */
         .input-group { margin-bottom: 1.5rem; }
-        .label-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
         label { font-weight: 600; font-size: 0.9rem; }
         
+        .input-wrapper { display: flex; align-items: center; gap: 10px; }
+
+        /* The New Badge Style */
+        .badge {
+            font-size: 0.75rem;
+            background: var(--primary-soft);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
         .number-display {
             border: 1px solid #e5e7eb; background: #f9fafb; padding: 0.4rem 0.8rem; border-radius: 8px;
-            color: var(--primary); font-weight: 700; width: 100px; text-align: right;
+            color: var(--primary); font-weight: 700; width: 110px; text-align: right;
         }
         .number-display:focus { outline: 2px solid var(--primary); border-color: transparent; }
 
@@ -89,21 +102,21 @@
 
 <div class="container">
     <header>
-        <h1>💰 FinCalc Pro <span style="font-size:0.5em; vertical-align: super; color: var(--primary);">ARBITRAGE</span></h1>
+        <h1>💰 FinCalc Pro <span style="font-size:0.5em; vertical-align: super; color: var(--primary);">INDIA</span></h1>
     </header>
 
     <nav class="nav-tabs">
         <button class="nav-btn active" onclick="setMode('sip')">SIP (Wealth)</button>
         <button class="nav-btn" onclick="setMode('emi')">EMI (Loan)</button>
         <button class="nav-btn" onclick="setMode('swp')">SWP (Income)</button>
-        <button class="nav-btn" onclick="setMode('arb')">Arbitrage (Loan vs SWP)</button>
+        <button class="nav-btn" onclick="setMode('arb')">Arbitrage</button>
     </nav>
 
     <div id="sip" class="dashboard active">
         <div class="card">
             <h3>Investment Plan</h3><br>
             <div class="input-group">
-                <div class="label-row"><label>Monthly Investment</label><input type="number" class="number-display" id="sip_amt_num"></div>
+                <div class="label-row"><label>Monthly Investment</label><div class="input-wrapper"><span class="badge" id="sip_amt_badge"></span><input type="number" class="number-display" id="sip_amt_num"></div></div>
                 <input type="range" id="sip_amt" min="500" max="100000" step="500" value="10000">
             </div>
             <div class="input-group">
@@ -134,7 +147,7 @@
         <div class="card">
             <h3>Loan Repayment</h3><br>
             <div class="input-group">
-                <div class="label-row"><label>Loan Amount</label><input type="number" class="number-display" id="emi_amt_num"></div>
+                <div class="label-row"><label>Loan Amount</label><div class="input-wrapper"><span class="badge" id="emi_amt_badge"></span><input type="number" class="number-display" id="emi_amt_num"></div></div>
                 <input type="range" id="emi_amt" min="100000" max="10000000" step="50000" value="5000000">
             </div>
             <div class="input-group">
@@ -164,11 +177,11 @@
         <div class="card">
             <h3>Retirement Income</h3><br>
             <div class="input-group">
-                <div class="label-row"><label>Total Corpus</label><input type="number" class="number-display" id="swp_corpus_num"></div>
+                <div class="label-row"><label>Total Corpus</label><div class="input-wrapper"><span class="badge" id="swp_corpus_badge"></span><input type="number" class="number-display" id="swp_corpus_num"></div></div>
                 <input type="range" id="swp_corpus" min="500000" max="20000000" step="100000" value="5000000">
             </div>
             <div class="input-group">
-                <div class="label-row"><label>Monthly Withdrawal</label><input type="number" class="number-display" id="swp_withdraw_num"></div>
+                <div class="label-row"><label>Monthly Withdrawal</label><div class="input-wrapper"><span class="badge" id="swp_withdraw_badge"></span><input type="number" class="number-display" id="swp_withdraw_num"></div></div>
                 <input type="range" id="swp_withdraw" min="5000" max="200000" step="1000" value="30000">
             </div>
             <div class="input-group">
@@ -196,12 +209,12 @@
 
     <div id="arb" class="dashboard">
         <div class="card">
-            <h3>Arbitrage Strategy (Loan vs Invest)</h3>
+            <h3>Arbitrage Strategy</h3>
             <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:15px">Take a loan, invest it, and pay EMI via SWP.</p>
             
             <div class="arb-group">
                 <div class="input-group">
-                    <div class="label-row"><label>Loan Amount (Invested)</label><input type="number" class="number-display" id="arb_amt_num"></div>
+                    <div class="label-row"><label>Loan Amount (Invested)</label><div class="input-wrapper"><span class="badge" id="arb_amt_badge"></span><input type="number" class="number-display" id="arb_amt_num"></div></div>
                     <input type="range" id="arb_amt" min="500000" max="10000000" step="50000" value="5000000">
                 </div>
                 <div class="input-group">
@@ -227,7 +240,7 @@
                 <span id="arb_status" style="font-size:0.9rem; display:block; margin-top:5px;"></span>
             </div>
             <div class="stats-grid">
-                <div class="mini-stat"><h4>Monthly EMI (Paid via SWP)</h4><p id="arb_emi_val">₹0</p></div>
+                <div class="mini-stat"><h4>Monthly EMI</h4><p id="arb_emi_val">₹0</p></div>
                 <div class="mini-stat"><h4>Remaining Corpus</h4><p id="arb_final_val">₹0</p></div>
             </div>
             <div class="chart-wrapper"><canvas id="arbChart"></canvas></div>
@@ -238,14 +251,44 @@
 
 <script>
     const formatCurrency = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+    
+    // --- NEW: Short Format Helper (1.5 L, 2 Cr) ---
+    function formatShortIndian(num) {
+        if (num >= 10000000) return (num / 10000000).toFixed(2).replace(/\.00$/, '') + ' Cr';
+        if (num >= 100000) return (num / 100000).toFixed(2).replace(/\.00$/, '') + ' L';
+        if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + ' k';
+        return num;
+    }
+
     let charts = {};
 
+    // --- Updated Sync to include Badges ---
     function setupSync(id) {
         const slider = document.getElementById(id);
         const num = document.getElementById(id + '_num');
-        slider.addEventListener('input', () => { num.value = slider.value; calculateAll(); });
-        num.addEventListener('input', () => { slider.value = num.value; calculateAll(); });
+        const badge = document.getElementById(id + '_badge'); // Find badge
+
+        const sync = () => {
+            // Update badge if it exists for this input
+            if(badge) {
+                badge.innerText = formatShortIndian(parseFloat(slider.value));
+            }
+            calculateAll();
+        };
+
+        slider.addEventListener('input', () => { 
+            num.value = slider.value; 
+            sync(); 
+        });
+        
+        num.addEventListener('input', () => { 
+            slider.value = num.value; 
+            sync(); 
+        });
+
+        // Initial trigger
         num.value = slider.value;
+        if(badge) badge.innerText = formatShortIndian(parseFloat(slider.value));
     }
 
     function updateChart(id, type, labels, datasets, isCurrency = true) {
@@ -259,13 +302,13 @@
                 interaction: { mode: 'index', intersect: false },
                 scales: type === 'doughnut' ? {} : {
                     x: { grid: { display: false } },
-                    y: { grid: { borderDash: [5, 5] }, ticks: { callback: v => isCurrency ? v/1000 + 'k' : v } }
+                    y: { grid: { borderDash: [5, 5] }, ticks: { callback: v => isCurrency ? formatShortIndian(v) : v } }
                 }
             }
         });
     }
 
-    // --- CORE ALGORITHMS ---
+    // --- CORE ALGORITHMS (Same as before) ---
     function calculateSIP() {
         let P = parseFloat(document.getElementById('sip_amt').value);
         const years = parseFloat(document.getElementById('sip_years').value);
@@ -349,46 +392,32 @@
         updateChart('swpChart', 'line', labels, [{ label: 'Corpus', data: balanceData, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true }]);
     }
 
-    // --- NEW: ARBITRAGE LOGIC ---
     function calculateArb() {
         const Principal = parseFloat(document.getElementById('arb_amt').value);
         const years = parseFloat(document.getElementById('arb_years').value);
         const loanRate = parseFloat(document.getElementById('arb_loan_rate').value) / 100 / 12;
         const invRate = parseFloat(document.getElementById('arb_inv_rate').value) / 100 / 12;
         
-        // 1. Calculate Standard EMI
         const n = years * 12;
         const emi = (Principal * loanRate * Math.pow(1 + loanRate, n)) / (Math.pow(1 + loanRate, n) - 1);
 
-        // 2. Simulate Investment Corpus paying that EMI
         let corpus = Principal;
-        const corpusData = [];
-        const loanData = []; // For visual comparison
-        const labels = [];
+        const corpusData = [], loanData = [], labels = [];
         let loanBalance = Principal;
 
         for(let y = 1; y <= years; y++) {
             for(let m=1; m<=12; m++) {
-                // Investment grows, then pays EMI
                 corpus = (corpus * (1 + invRate)) - emi;
-                
-                // Track Loan Balance for visual
                 const interest = loanBalance * loanRate;
                 loanBalance -= (emi - interest);
             }
-            labels.push(`Yr ${y}`);
-            corpusData.push(corpus);
-            loanData.push(Math.max(0, loanBalance));
+            labels.push(`Yr ${y}`); corpusData.push(corpus); loanData.push(Math.max(0, loanBalance));
         }
 
         const isProfit = corpus > 0;
-        const statusText = isProfit 
-            ? `Profitable Strategy (Delta: ${(parseFloat(document.getElementById('arb_inv_rate').value) - parseFloat(document.getElementById('arb_loan_rate').value)).toFixed(1)}%)` 
-            : `Loss Making (Negative Arbitrage)`;
-        
         document.getElementById('arb_net_val').innerText = formatCurrency(corpus);
         document.getElementById('arb_net_val').style.color = isProfit ? 'var(--success)' : 'var(--danger)';
-        document.getElementById('arb_status').innerText = statusText;
+        document.getElementById('arb_status').innerText = isProfit ? "Profitable Strategy" : "Loss Making Strategy";
         document.getElementById('arb_status').style.color = isProfit ? 'var(--success)' : 'var(--danger)';
         
         document.getElementById('arb_emi_val').innerText = formatCurrency(emi);
