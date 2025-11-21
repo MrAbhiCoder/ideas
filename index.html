@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinCalc Pro 3.0 - Step Up Edition</title>
+    <title>FinCalc Pro 3.1</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
@@ -88,7 +88,7 @@
 
 <div class="container">
     <header>
-        <h1>💰 FinCalc Pro <span style="font-size:0.5em; vertical-align: super; color: var(--success);">STEP-UP</span></h1>
+        <h1>💰 FinCalc Pro <span style="font-size:0.5em; vertical-align: super; color: var(--success);">v3.1</span></h1>
     </header>
 
     <nav class="nav-tabs">
@@ -177,12 +177,17 @@
             </div>
             <div class="input-group">
                 <div class="label-row"><label>Starting Monthly Withdrawal</label><input type="number" class="number-display" id="swp_withdraw_num"></div>
-                <input type="range" id="swp_withdraw" min="5000" max="100000" step="1000" value="30000">
+                <input type="range" id="swp_withdraw" min="5000" max="200000" step="1000" value="30000">
             </div>
             <div class="input-group">
                 <div class="label-row"><label>Duration (Years)</label><input type="number" class="number-display" id="swp_years_num"></div>
                 <input type="range" id="swp_years" min="1" max="30" step="1" value="20">
             </div>
+            <div class="input-group">
+                <div class="label-row"><label>Expected Return (%)</label><input type="number" class="number-display" id="swp_rate_num"></div>
+                <input type="range" id="swp_rate" min="1" max="15" step="0.1" value="8">
+            </div>
+
             <div class="input-group step-up-group">
                 <div class="label-row"><label>Inflation Increase (%)</label><input type="number" class="number-display" id="swp_step_num"></div>
                 <input type="range" id="swp_step" min="0" max="15" step="1" value="6">
@@ -197,7 +202,7 @@
             </div>
             <div class="stats-grid">
                 <div class="mini-stat"><h4>Total Withdrawn</h4><p id="swp_out_val" style="color:var(--success)">₹0</p></div>
-                <div class="mini-stat"><h4>Est. Returns</h4><p style="color:var(--text-sub)">@ 8% p.a.</p></div>
+                <div class="mini-stat"><h4>Est. Returns</h4><p id="swp_return_val" style="color:var(--text-sub)">@ 8% p.a.</p></div>
             </div>
             <div class="chart-wrapper"><canvas id="swpChart"></canvas></div>
         </div>
@@ -251,7 +256,6 @@
         const labels = [];
 
         for (let y = 1; y <= years; y++) {
-            // Calculate for 12 months
             for (let m = 1; m <= 12; m++) {
                 currentValue = (currentValue + P) * (1 + monthlyRate);
                 totalInvested += P;
@@ -260,7 +264,6 @@
             dataValue.push(currentValue);
             labels.push(`Yr ${y}`);
             
-            // Apply Step Up
             P = P * (1 + step);
         }
 
@@ -283,11 +286,8 @@
         const months = years * 12;
         const monthlyRate = rate / 12;
         
-        // Calculate Initial EMI for Step-Up Logic
-        // Formula: Loan = Sum of PV of all future payments
-        // We iterate to find the 'Base EMI' factor
         let pvFactor = 0;
-        let currentFactor = 1; // Represents 1 unit of EMI
+        let currentFactor = 1;
         
         for(let m = 1; m <= months; m++) {
             pvFactor += currentFactor / Math.pow(1 + monthlyRate, m);
@@ -307,7 +307,6 @@
                 const interest = balance * monthlyRate;
                 let principal = currentEMI - interest;
                 
-                // Handle last payment precision
                 if(balance - principal < 0) {
                     principal = balance;
                     currentEMI = principal + interest;
@@ -319,7 +318,6 @@
             labels.push(`Yr ${y}`);
             balanceData.push(balance);
             
-            // Step up EMI for next year
             if (balance > 0) currentEMI *= (1 + step);
         }
 
@@ -338,7 +336,10 @@
         let withdraw = parseFloat(document.getElementById('swp_withdraw').value);
         const years = parseFloat(document.getElementById('swp_years').value);
         const step = parseFloat(document.getElementById('swp_step').value) / 100;
-        const rate = 0.08 / 12; // Assumed 8% conservative
+        
+        // NEW: Use dynamic rate instead of hardcoded 8%
+        const annualRate = parseFloat(document.getElementById('swp_rate').value);
+        const rate = annualRate / 100 / 12; 
 
         let totalOut = 0;
         const balanceData = [];
@@ -357,6 +358,8 @@
 
         document.getElementById('swp_final_val').innerText = formatCurrency(corpus);
         document.getElementById('swp_out_val').innerText = formatCurrency(totalOut);
+        // Update the text in the stats box
+        document.getElementById('swp_return_val').innerText = `@ ${annualRate}% p.a.`;
 
         updateChart('swpChart', 'line', labels, [
             { label: 'Corpus Balance', data: balanceData, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true }
@@ -365,8 +368,6 @@
 
     // --- INIT ---
     function calculateAll() {
-        // We only calc the active tab to save resources, 
-        // but since they are fast, we can just run the active one.
         if(document.getElementById('sip').classList.contains('active')) calculateSIP();
         if(document.getElementById('emi').classList.contains('active')) calculateEMI();
         if(document.getElementById('swp').classList.contains('active')) calculateSWP();
@@ -377,14 +378,15 @@
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(mode).classList.add('active');
         event.target.classList.add('active');
-        setTimeout(calculateAll, 100); // calc after transition
+        setTimeout(calculateAll, 100); 
     }
 
+    // Init all inputs including the new swp_rate
     ['sip_amt', 'sip_years', 'sip_rate', 'sip_step', 
      'emi_amt', 'emi_years', 'emi_rate', 'emi_step',
-     'swp_corpus', 'swp_withdraw', 'swp_years', 'swp_step'].forEach(setupSync);
+     'swp_corpus', 'swp_withdraw', 'swp_years', 'swp_step', 'swp_rate'].forEach(setupSync);
 
-    calculateSIP(); // Initial load
+    calculateSIP(); 
 </script>
 
 </body>
