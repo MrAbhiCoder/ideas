@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinCalc Pro 2.0</title>
+    <title>FinCalc Pro 3.0 - Step Up Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #6366f1; /* Indigo 500 */
+            --primary: #6366f1;
             --primary-soft: #e0e7ff;
             --success: #10b981;
             --danger: #ef4444;
@@ -17,531 +17,374 @@
             --card-bg: #ffffff;
             --text-main: #111827;
             --text-sub: #6b7280;
-            --border-radius: 16px;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); padding: 2rem; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            padding: 2rem;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* --- Header & Nav --- */
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        h1 { font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; }
-        p.subtitle { color: var(--text-sub); }
-
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
+        /* Header */
+        header { text-align: center; margin-bottom: 2rem; }
+        h1 { font-weight: 800; color: var(--text-main); letter-spacing: -1px; }
+        
+        /* Navigation */
+        .nav-tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .nav-btn {
-            background: white;
-            border: 1px solid #e5e7eb;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-sub);
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: white; border: 1px solid #e5e7eb; padding: 0.75rem 1.5rem; border-radius: 50px;
+            cursor: pointer; font-weight: 600; color: var(--text-sub); transition: all 0.2s;
         }
+        .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
 
-        .nav-btn:hover { transform: translateY(-2px); }
-        
-        .nav-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
+        /* Dashboard Layout */
+        .dashboard { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; display: none; animation: fadeIn 0.4s ease-out; }
+        .dashboard.active { display: grid; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Main Grid --- */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 2rem;
-            opacity: 0;
-            animation: fadeIn 0.5s forwards;
-            display: none; /* Hidden by default */
-        }
-        .dashboard.active { display: grid; opacity: 1; }
+        /* Cards */
+        .card { background: var(--card-bg); border-radius: 16px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
 
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        /* --- Input Card --- */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--shadow);
-        }
-
+        /* Inputs */
         .input-group { margin-bottom: 1.5rem; }
+        .label-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        label { font-weight: 600; font-size: 0.9rem; }
         
-        .label-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-        
-        label { font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
-        
-        /* Custom Number Input that looks like text */
         .number-display {
-            border: 1px solid #e5e7eb;
-            background: #f9fafb;
-            padding: 0.4rem 0.8rem;
-            border-radius: 8px;
-            color: var(--primary);
-            font-weight: 700;
-            width: 100px;
-            text-align: right;
-            transition: border 0.2s;
+            border: 1px solid #e5e7eb; background: #f9fafb; padding: 0.4rem 0.8rem; border-radius: 8px;
+            color: var(--primary); font-weight: 700; width: 100px; text-align: right;
         }
-        .number-display:focus { outline: none; border-color: var(--primary); background: white; }
+        .number-display:focus { outline: 2px solid var(--primary); border-color: transparent; }
 
-        /* Modern Range Slider */
+        /* Range Slider */
         input[type=range] {
-            width: 100%;
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 5px;
-            outline: none;
-            -webkit-appearance: none;
-            cursor: pointer;
+            width: 100%; height: 6px; background: #e5e7eb; border-radius: 5px; outline: none; -webkit-appearance: none; cursor: pointer;
         }
-        
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary);
-            box-shadow: 0 0 0 4px var(--primary-soft);
-            transition: transform 0.1s;
+            -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-soft); transition: transform 0.1s;
         }
         input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
 
-        /* --- Results Section --- */
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid #f3f4f6;
-            padding-bottom: 1rem;
-        }
+        /* Step Up Highlight */
+        .step-up-group { background: #f0fdf4; padding: 1rem; border-radius: 12px; border: 1px solid #bbf7d0; }
+        .step-up-group label { color: #15803d; }
+        .step-up-group input[type=range]::-webkit-slider-thumb { background: #15803d; box-shadow: 0 0 0 4px #dcfce7; }
+        .step-up-group .number-display { color: #15803d; }
 
-        .big-stat {
-            text-align: right;
-        }
-        .big-stat span { display: block; font-size: 0.85rem; color: var(--text-sub); }
-        .big-stat strong { font-size: 1.8rem; color: var(--primary); font-weight: 800; }
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .mini-stat { background: #f9fafb; padding: 1rem; border-radius: 12px; text-align: center; }
+        .mini-stat h4 { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; margin-bottom: 0.5rem; }
+        .mini-stat p { font-size: 1.1rem; font-weight: 700; }
+        
+        .big-stat { text-align: right; margin-bottom: 1.5rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1rem; }
+        .big-stat strong { font-size: 2rem; color: var(--primary); display: block; }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
+        .chart-wrapper { position: relative; height: 300px; width: 100%; }
 
-        .mini-stat {
-            background: #f9fafb;
-            padding: 1rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-        .mini-stat h4 { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;}
-        .mini-stat p { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
-
-        .chart-wrapper {
-            position: relative;
-            height: 300px;
-            width: 100%;
-        }
-
-        /* --- Responsive --- */
-        @media (max-width: 900px) {
-            .dashboard { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 500px) {
-            body { padding: 1rem; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .big-stat strong { font-size: 1.4rem; }
-        }
+        @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>💰 FinCalc Pro</h1>
-        <p class="subtitle">Interactive Financial Planning Suite</p>
+        <h1>💰 FinCalc Pro <span style="font-size:0.5em; vertical-align: super; color: var(--success);">STEP-UP</span></h1>
     </header>
 
     <nav class="nav-tabs">
-        <button class="nav-btn active" onclick="setMode('sip')">SIP Calculator</button>
-        <button class="nav-btn" onclick="setMode('emi')">EMI Planner</button>
-        <button class="nav-btn" onclick="setMode('swp')">SWP Income</button>
+        <button class="nav-btn active" onclick="setMode('sip')">SIP (Wealth)</button>
+        <button class="nav-btn" onclick="setMode('emi')">EMI (Loan)</button>
+        <button class="nav-btn" onclick="setMode('swp')">SWP (Income)</button>
     </nav>
 
     <div id="sip" class="dashboard active">
-        <div class="card controls">
-            <h3>Plan your Investment</h3>
-            <br>
+        <div class="card">
+            <h3>Investment Plan</h3><br>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Monthly Investment</label>
-                    <input type="number" class="number-display" id="sip_amt_num" value="10000">
-                </div>
+                <div class="label-row"><label>Monthly Investment</label><input type="number" class="number-display" id="sip_amt_num"></div>
                 <input type="range" id="sip_amt" min="500" max="100000" step="500" value="10000">
             </div>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Time Period (Years)</label>
-                    <input type="number" class="number-display" id="sip_years_num" value="10">
-                </div>
-                <input type="range" id="sip_years" min="1" max="30" step="1" value="10">
+                <div class="label-row"><label>Duration (Years)</label><input type="number" class="number-display" id="sip_years_num"></div>
+                <input type="range" id="sip_years" min="1" max="40" step="1" value="15">
             </div>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Expected Return (%.p.a)</label>
-                    <input type="number" class="number-display" id="sip_rate_num" value="12">
-                </div>
-                <input type="range" id="sip_rate" min="1" max="30" step="0.5" value="12">
+                <div class="label-row"><label>Expected Return (%)</label><input type="number" class="number-display" id="sip_rate_num"></div>
+                <input type="range" id="sip_rate" min="5" max="25" step="0.5" value="12">
+            </div>
+            <div class="input-group step-up-group">
+                <div class="label-row"><label>Annual Step-up (%)</label><input type="number" class="number-display" id="sip_step_num"></div>
+                <input type="range" id="sip_step" min="0" max="20" step="1" value="10">
+                <small style="color:#15803d; display:block; margin-top:5px;">Increase investment amount yearly</small>
             </div>
         </div>
 
-        <div class="card results">
-            <div class="result-header">
-                <h3>Projection</h3>
-                <div class="big-stat">
-                    <span>Total Value</span>
-                    <strong id="sip_total_val">₹ 0</strong>
-                </div>
+        <div class="card">
+            <div class="big-stat">
+                <span>Maturity Value</span>
+                <strong id="sip_total_val">₹ 0</strong>
             </div>
-            
             <div class="stats-grid">
-                <div class="mini-stat">
-                    <h4>Invested</h4>
-                    <p id="sip_invested_val" style="color: #6b7280">₹0</p>
-                </div>
-                <div class="mini-stat">
-                    <h4>Est. Returns</h4>
-                    <p id="sip_gains_val" style="color: var(--success)">₹0</p>
-                </div>
-                <div class="mini-stat">
-                    <h4>LTCG Tax</h4>
-                    <p id="sip_tax_val" style="color: var(--danger)">₹0</p>
-                </div>
+                <div class="mini-stat"><h4>Total Invested</h4><p id="sip_invested_val">₹0</p></div>
+                <div class="mini-stat"><h4>Wealth Gained</h4><p id="sip_gains_val" style="color:var(--success)">₹0</p></div>
             </div>
-
-            <div class="chart-wrapper">
-                <canvas id="sipChart"></canvas>
-            </div>
+            <div class="chart-wrapper"><canvas id="sipChart"></canvas></div>
         </div>
     </div>
 
     <div id="emi" class="dashboard">
-        <div class="card controls">
-            <h3>Loan Details</h3>
-            <br>
+        <div class="card">
+            <h3>Loan Repayment</h3><br>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Loan Amount</label>
-                    <input type="number" class="number-display" id="emi_amt_num" value="2500000">
-                </div>
-                <input type="range" id="emi_amt" min="100000" max="10000000" step="50000" value="2500000">
+                <div class="label-row"><label>Loan Amount</label><input type="number" class="number-display" id="emi_amt_num"></div>
+                <input type="range" id="emi_amt" min="100000" max="10000000" step="50000" value="5000000">
             </div>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Tenure (Years)</label>
-                    <input type="number" class="number-display" id="emi_years_num" value="20">
-                </div>
+                <div class="label-row"><label>Tenure (Years)</label><input type="number" class="number-display" id="emi_years_num"></div>
                 <input type="range" id="emi_years" min="1" max="30" step="1" value="20">
             </div>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Interest Rate (%)</label>
-                    <input type="number" class="number-display" id="emi_rate_num" value="8.5">
-                </div>
-                <input type="range" id="emi_rate" min="1" max="20" step="0.1" value="8.5">
+                <div class="label-row"><label>Interest Rate (%)</label><input type="number" class="number-display" id="emi_rate_num"></div>
+                <input type="range" id="emi_rate" min="6" max="18" step="0.1" value="8.5">
+            </div>
+            <div class="input-group step-up-group">
+                <div class="label-row"><label>Annual EMI Increase (%)</label><input type="number" class="number-display" id="emi_step_num"></div>
+                <input type="range" id="emi_step" min="0" max="20" step="1" value="0">
+                <small style="color:#15803d; display:block; margin-top:5px;">Start with lower EMI, increase yearly</small>
             </div>
         </div>
 
-        <div class="card results">
-            <div class="result-header">
-                <h3>Repayment Summary</h3>
-                <div class="big-stat">
-                    <span>Monthly EMI</span>
-                    <strong id="emi_monthly_val">₹ 0</strong>
-                </div>
+        <div class="card">
+            <div class="big-stat">
+                <span>Starting Monthly EMI</span>
+                <strong id="emi_monthly_val">₹ 0</strong>
+                <span id="emi_last_val" style="font-size: 0.9rem; color: var(--danger); margin-top: 5px;"></span>
             </div>
-            
             <div class="stats-grid">
-                <div class="mini-stat">
-                    <h4>Principal</h4>
-                    <p id="emi_principal_val">₹0</p>
-                </div>
-                <div class="mini-stat">
-                    <h4>Total Interest</h4>
-                    <p id="emi_interest_val" style="color: var(--danger)">₹0</p>
-                </div>
-                <div class="mini-stat">
-                    <h4>Total Payable</h4>
-                    <p id="emi_total_val">₹0</p>
-                </div>
+                <div class="mini-stat"><h4>Total Interest</h4><p id="emi_interest_val" style="color:var(--danger)">₹0</p></div>
+                <div class="mini-stat"><h4>Total Repayment</h4><p id="emi_total_val">₹0</p></div>
             </div>
-
-            <div class="chart-wrapper">
-                <canvas id="emiChart"></canvas>
-            </div>
+            <div class="chart-wrapper"><canvas id="emiChart"></canvas></div>
         </div>
     </div>
 
     <div id="swp" class="dashboard">
-        <div class="card controls">
-            <h3>Retirement / Income Plan</h3>
-            <br>
+        <div class="card">
+            <h3>Retirement Income</h3><br>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Total Corpus</label>
-                    <input type="number" class="number-display" id="swp_corpus_num" value="5000000">
-                </div>
+                <div class="label-row"><label>Total Corpus</label><input type="number" class="number-display" id="swp_corpus_num"></div>
                 <input type="range" id="swp_corpus" min="500000" max="20000000" step="100000" value="5000000">
             </div>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Monthly Withdrawal</label>
-                    <input type="number" class="number-display" id="swp_withdraw_num" value="30000">
-                </div>
-                <input type="range" id="swp_withdraw" min="5000" max="200000" step="1000" value="30000">
+                <div class="label-row"><label>Starting Monthly Withdrawal</label><input type="number" class="number-display" id="swp_withdraw_num"></div>
+                <input type="range" id="swp_withdraw" min="5000" max="100000" step="1000" value="30000">
             </div>
             <div class="input-group">
-                <div class="label-row">
-                    <label>Period (Years)</label>
-                    <input type="number" class="number-display" id="swp_years_num" value="15">
-                </div>
-                <input type="range" id="swp_years" min="1" max="30" step="1" value="15">
+                <div class="label-row"><label>Duration (Years)</label><input type="number" class="number-display" id="swp_years_num"></div>
+                <input type="range" id="swp_years" min="1" max="30" step="1" value="20">
+            </div>
+            <div class="input-group step-up-group">
+                <div class="label-row"><label>Inflation Increase (%)</label><input type="number" class="number-display" id="swp_step_num"></div>
+                <input type="range" id="swp_step" min="0" max="15" step="1" value="6">
+                <small style="color:#15803d; display:block; margin-top:5px;">Increase withdrawal yearly to match inflation</small>
             </div>
         </div>
 
-        <div class="card results">
-            <div class="result-header">
-                <h3>Cash Flow</h3>
-                <div class="big-stat">
-                    <span>Final Balance</span>
-                    <strong id="swp_final_val">₹ 0</strong>
-                </div>
+        <div class="card">
+            <div class="big-stat">
+                <span>Final Balance</span>
+                <strong id="swp_final_val">₹ 0</strong>
             </div>
-            
             <div class="stats-grid">
-                <div class="mini-stat">
-                    <h4>Total Withdrawn</h4>
-                    <p id="swp_out_val" style="color: var(--success)">₹0</p>
-                </div>
-                <div class="mini-stat">
-                    <h4>Corpus Growth</h4>
-                    <p>@ 8% (Est)</p> </div>
+                <div class="mini-stat"><h4>Total Withdrawn</h4><p id="swp_out_val" style="color:var(--success)">₹0</p></div>
+                <div class="mini-stat"><h4>Est. Returns</h4><p style="color:var(--text-sub)">@ 8% p.a.</p></div>
             </div>
-
-            <div class="chart-wrapper">
-                <canvas id="swpChart"></canvas>
-            </div>
+            <div class="chart-wrapper"><canvas id="swpChart"></canvas></div>
         </div>
     </div>
 
 </div>
 
 <script>
-    // --- State Management ---
     const formatCurrency = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
-    
-    let charts = {}; // Store chart instances
+    let charts = {};
 
-    // --- Sync Inputs & Sliders ---
-    function setupSync(id1, id2, callback) {
-        const el1 = document.getElementById(id1);
-        const el2 = document.getElementById(id2);
-        
-        el1.addEventListener('input', () => { el2.value = el1.value; callback(); });
-        el2.addEventListener('input', () => { el1.value = el2.value; callback(); });
+    function setupSync(id) {
+        const slider = document.getElementById(id);
+        const num = document.getElementById(id + '_num');
+        slider.addEventListener('input', () => { num.value = slider.value; calculateAll(); });
+        num.addEventListener('input', () => { slider.value = num.value; calculateAll(); });
+        num.value = slider.value; // Init
     }
 
-    // --- Chart Helper ---
-    function updateChart(canvasId, type, labels, datasets) {
-        const ctx = document.getElementById(canvasId).getContext('2d');
-        
-        if (charts[canvasId]) {
-            charts[canvasId].destroy();
-        }
-
-        charts[canvasId] = new Chart(ctx, {
+    function updateChart(id, type, labels, datasets, isCurrency = true) {
+        const ctx = document.getElementById(id).getContext('2d');
+        if (charts[id]) charts[id].destroy();
+        charts[id] = new Chart(ctx, {
             type: type,
-            data: { labels: labels, datasets: datasets },
+            data: { labels, datasets },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } },
                 interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: { position: 'bottom' },
-                    tooltip: {
-                        backgroundColor: '#1e293b',
-                        padding: 10,
-                        cornerRadius: 8,
-                    }
-                },
                 scales: type === 'doughnut' ? {} : {
                     x: { grid: { display: false } },
-                    y: { grid: { borderDash: [5, 5] }, ticks: { callback: function(value){ return value/1000 + 'k'; } } }
+                    y: { grid: { borderDash: [5, 5] }, ticks: { callback: v => isCurrency ? v/1000 + 'k' : v } }
                 }
             }
         });
     }
 
-    // --- SIP LOGIC ---
-    function calcSIP() {
-        const P = parseFloat(document.getElementById('sip_amt').value);
-        const n = parseFloat(document.getElementById('sip_years').value);
-        const r = parseFloat(document.getElementById('sip_rate').value);
+    // --- ALGORITHMS ---
+
+    function calculateSIP() {
+        let P = parseFloat(document.getElementById('sip_amt').value);
+        const years = parseFloat(document.getElementById('sip_years').value);
+        const rate = parseFloat(document.getElementById('sip_rate').value) / 100;
+        const step = parseFloat(document.getElementById('sip_step').value) / 100;
         
-        const months = n * 12;
-        const i = r / 12 / 100;
-        
-        // Formula: P * ({[1 + i]^n - 1} / i) * (1 + i)
-        const fv = P * ((Math.pow(1 + i, months) - 1) / i) * (1 + i);
-        const invested = P * months;
-        const gain = fv - invested;
-        const tax = Math.max(0, (gain - 125000) * 0.125); // 12.5% LTCG > 1.25L
-
-        // Update UI
-        document.getElementById('sip_total_val').innerText = formatCurrency(fv);
-        document.getElementById('sip_invested_val').innerText = formatCurrency(invested);
-        document.getElementById('sip_gains_val').innerText = formatCurrency(gain);
-        document.getElementById('sip_tax_val').innerText = formatCurrency(tax);
-
-        // Generate Chart Data
-        const yearLabels = Array.from({length: n}, (_, i) => `Year ${i+1}`);
-        const investData = [];
-        const valueData = [];
-        
-        let runningVal = 0;
-        let runningInvest = 0;
-        
-        for(let y=1; y<=n; y++) {
-            runningInvest += P * 12;
-            // Simple yearly approximation for chart smoothing
-            runningVal = P * ((Math.pow(1 + i, y*12) - 1) / i) * (1 + i);
-            investData.push(runningInvest);
-            valueData.push(runningVal);
-        }
-
-        updateChart('sipChart', 'line', yearLabels, [
-            { label: 'Invested', data: investData, borderColor: '#9ca3af', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 0 },
-            { label: 'Wealth Value', data: valueData, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', borderWidth: 3, fill: true, tension: 0.4 }
-        ]);
-    }
-
-    // --- EMI LOGIC ---
-    function calcEMI() {
-        const P = parseFloat(document.getElementById('emi_amt').value);
-        const n = parseFloat(document.getElementById('emi_years').value) * 12;
-        const r = parseFloat(document.getElementById('emi_rate').value) / 12 / 100;
-        
-        const emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-        const totalPay = emi * n;
-        const totalInt = totalPay - P;
-
-        document.getElementById('emi_monthly_val').innerText = formatCurrency(emi);
-        document.getElementById('emi_principal_val').innerText = formatCurrency(P);
-        document.getElementById('emi_interest_val').innerText = formatCurrency(totalInt);
-        document.getElementById('emi_total_val').innerText = formatCurrency(totalPay);
-
-        updateChart('emiChart', 'doughnut', ['Principal', 'Interest'], [
-            { data: [P, totalInt], backgroundColor: ['#6366f1', '#ef4444'], hoverOffset: 4 }
-        ]);
-    }
-
-    // --- SWP LOGIC ---
-    function calcSWP() {
-        let corpus = parseFloat(document.getElementById('swp_corpus').value);
-        const withdraw = parseFloat(document.getElementById('swp_withdraw').value);
-        const years = parseFloat(document.getElementById('swp_years').value);
-        const r = 0.08 / 12; // Assumed 8% conservative return for SWP
-        
-        let totalOut = 0;
-        const balances = [];
+        let totalInvested = 0;
+        let currentValue = 0;
+        const monthlyRate = rate / 12;
+        const dataInvested = [];
+        const dataValue = [];
         const labels = [];
 
-        for(let m=1; m <= years*12; m++) {
-            corpus = (corpus * (1+r)) - withdraw;
-            totalOut += withdraw;
-            
-            if(m % 12 === 0) {
-                labels.push(`Year ${m/12}`);
-                balances.push(Math.max(0, corpus));
+        for (let y = 1; y <= years; y++) {
+            // Calculate for 12 months
+            for (let m = 1; m <= 12; m++) {
+                currentValue = (currentValue + P) * (1 + monthlyRate);
+                totalInvested += P;
             }
-            if (corpus <= 0) corpus = 0;
+            dataInvested.push(totalInvested);
+            dataValue.push(currentValue);
+            labels.push(`Yr ${y}`);
+            
+            // Apply Step Up
+            P = P * (1 + step);
+        }
+
+        document.getElementById('sip_total_val').innerText = formatCurrency(currentValue);
+        document.getElementById('sip_invested_val').innerText = formatCurrency(totalInvested);
+        document.getElementById('sip_gains_val').innerText = formatCurrency(currentValue - totalInvested);
+
+        updateChart('sipChart', 'line', labels, [
+            { label: 'Invested', data: dataInvested, borderColor: '#9ca3af', borderWidth: 2, pointRadius:0 },
+            { label: 'Value', data: dataValue, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true }
+        ]);
+    }
+
+    function calculateEMI() {
+        const Loan = parseFloat(document.getElementById('emi_amt').value);
+        const years = parseFloat(document.getElementById('emi_years').value);
+        const rate = parseFloat(document.getElementById('emi_rate').value) / 100;
+        const step = parseFloat(document.getElementById('emi_step').value) / 100;
+        
+        const months = years * 12;
+        const monthlyRate = rate / 12;
+        
+        // Calculate Initial EMI for Step-Up Logic
+        // Formula: Loan = Sum of PV of all future payments
+        // We iterate to find the 'Base EMI' factor
+        let pvFactor = 0;
+        let currentFactor = 1; // Represents 1 unit of EMI
+        
+        for(let m = 1; m <= months; m++) {
+            pvFactor += currentFactor / Math.pow(1 + monthlyRate, m);
+            if(m % 12 === 0) currentFactor *= (1 + step);
+        }
+        
+        const startEMI = Loan / pvFactor;
+        let currentEMI = startEMI;
+        let totalPaid = 0;
+        let balance = Loan;
+        
+        const labels = [];
+        const balanceData = [];
+
+        for(let y = 1; y <= years; y++) {
+            for(let m=1; m<=12; m++) {
+                const interest = balance * monthlyRate;
+                let principal = currentEMI - interest;
+                
+                // Handle last payment precision
+                if(balance - principal < 0) {
+                    principal = balance;
+                    currentEMI = principal + interest;
+                }
+
+                balance -= principal;
+                totalPaid += currentEMI;
+            }
+            labels.push(`Yr ${y}`);
+            balanceData.push(balance);
+            
+            // Step up EMI for next year
+            if (balance > 0) currentEMI *= (1 + step);
+        }
+
+        document.getElementById('emi_monthly_val').innerText = formatCurrency(startEMI);
+        document.getElementById('emi_last_val').innerText = step > 0 ? `Ends at ${formatCurrency(currentEMI)}` : '';
+        document.getElementById('emi_total_val').innerText = formatCurrency(totalPaid);
+        document.getElementById('emi_interest_val').innerText = formatCurrency(totalPaid - Loan);
+
+        updateChart('emiChart', 'bar', labels, [
+            { label: 'Loan Balance', data: balanceData, backgroundColor: '#ef4444' }
+        ]);
+    }
+
+    function calculateSWP() {
+        let corpus = parseFloat(document.getElementById('swp_corpus').value);
+        let withdraw = parseFloat(document.getElementById('swp_withdraw').value);
+        const years = parseFloat(document.getElementById('swp_years').value);
+        const step = parseFloat(document.getElementById('swp_step').value) / 100;
+        const rate = 0.08 / 12; // Assumed 8% conservative
+
+        let totalOut = 0;
+        const balanceData = [];
+        const labels = [];
+
+        for(let y = 1; y <= years; y++) {
+            for(let m=1; m<=12; m++) {
+                corpus = (corpus * (1+rate)) - withdraw;
+                totalOut += withdraw;
+                if(corpus < 0) corpus = 0;
+            }
+            labels.push(`Yr ${y}`);
+            balanceData.push(corpus);
+            withdraw *= (1 + step);
         }
 
         document.getElementById('swp_final_val').innerText = formatCurrency(corpus);
         document.getElementById('swp_out_val').innerText = formatCurrency(totalOut);
 
-        updateChart('swpChart', 'bar', labels, [
-            { label: 'Corpus Balance', data: balances, backgroundColor: '#10b981', borderRadius: 4 }
+        updateChart('swpChart', 'line', labels, [
+            { label: 'Corpus Balance', data: balanceData, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true }
         ]);
     }
 
-    // --- Initialize ---
-    function init() {
-        // SIP Bindings
-        setupSync('sip_amt', 'sip_amt_num', calcSIP);
-        setupSync('sip_years', 'sip_years_num', calcSIP);
-        setupSync('sip_rate', 'sip_rate_num', calcSIP);
-        
-        // EMI Bindings
-        setupSync('emi_amt', 'emi_amt_num', calcEMI);
-        setupSync('emi_years', 'emi_years_num', calcEMI);
-        setupSync('emi_rate', 'emi_rate_num', calcEMI);
-
-        // SWP Bindings
-        setupSync('swp_corpus', 'swp_corpus_num', calcSWP);
-        setupSync('swp_withdraw', 'swp_withdraw_num', calcSWP);
-        setupSync('swp_years', 'swp_years_num', calcSWP);
-
-        // Initial Calc
-        calcSIP();
-        calcEMI();
-        calcSWP();
+    // --- INIT ---
+    function calculateAll() {
+        // We only calc the active tab to save resources, 
+        // but since they are fast, we can just run the active one.
+        if(document.getElementById('sip').classList.contains('active')) calculateSIP();
+        if(document.getElementById('emi').classList.contains('active')) calculateEMI();
+        if(document.getElementById('swp').classList.contains('active')) calculateSWP();
     }
 
     function setMode(mode) {
         document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        
         document.getElementById(mode).classList.add('active');
         event.target.classList.add('active');
+        setTimeout(calculateAll, 100); // calc after transition
     }
 
-    init(); // Run on load
+    ['sip_amt', 'sip_years', 'sip_rate', 'sip_step', 
+     'emi_amt', 'emi_years', 'emi_rate', 'emi_step',
+     'swp_corpus', 'swp_withdraw', 'swp_years', 'swp_step'].forEach(setupSync);
+
+    calculateSIP(); // Initial load
 </script>
 
 </body>
