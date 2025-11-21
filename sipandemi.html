@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinCalc Pro 4.1 - Indian Format</title>
+    <title>FinCalc Pro 5.0 - High Value Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-soft: #e0e7ff;
-            --success: #10b981;
-            --danger: #ef4444;
-            --bg: #f3f4f6;
+            --primary: #2563eb;
+            --primary-soft: #dbeafe;
+            --success: #059669;
+            --danger: #dc2626;
+            --bg: #f1f5f9;
             --card-bg: #ffffff;
-            --text-main: #111827;
-            --text-sub: #6b7280;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -25,75 +25,77 @@
 
         /* Header */
         header { text-align: center; margin-bottom: 2rem; }
-        h1 { font-weight: 800; color: var(--text-main); letter-spacing: -1px; }
+        h1 { font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; font-size: 2rem; }
         
         /* Navigation */
-        .nav-tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav-tabs { display: flex; justify-content: center; gap: 0.8rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .nav-btn {
-            background: white; border: 1px solid #e5e7eb; padding: 0.75rem 1.5rem; border-radius: 50px;
+            background: white; border: 1px solid #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 8px;
             cursor: pointer; font-weight: 600; color: var(--text-sub); transition: all 0.2s;
+            font-size: 0.9rem;
         }
-        .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        .nav-btn:hover { background: #f8fafc; border-color: var(--primary); color: var(--primary); }
+        .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
 
-        /* Dashboard Layout */
-        .dashboard { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; display: none; animation: fadeIn 0.4s ease-out; }
+        /* Dashboard */
+        .dashboard { display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.5rem; display: none; animation: fadeIn 0.3s ease-out; }
         .dashboard.active { display: grid; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Cards */
-        .card { background: var(--card-bg); border-radius: 16px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
 
         /* Inputs */
-        .input-group { margin-bottom: 1.5rem; }
-        .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        label { font-weight: 600; font-size: 0.9rem; }
+        .input-group { margin-bottom: 1.5rem; position: relative; }
         
-        .input-wrapper { display: flex; align-items: center; gap: 10px; }
-
-        /* The New Badge Style */
-        .badge {
-            font-size: 0.75rem;
-            background: var(--primary-soft);
-            color: var(--primary);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-weight: 700;
-            white-space: nowrap;
+        /* The "Above Digit" Label */
+        .smart-label {
+            display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;
+        }
+        .smart-label label { font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
+        .smart-label .value-badge { 
+            font-size: 0.85rem; font-weight: 700; color: var(--primary); 
+            background: var(--primary-soft); padding: 2px 8px; border-radius: 6px;
         }
 
-        .number-display {
-            border: 1px solid #e5e7eb; background: #f9fafb; padding: 0.4rem 0.8rem; border-radius: 8px;
-            color: var(--primary); font-weight: 700; width: 110px; text-align: right;
+        /* Text Input with Comma Support */
+        .text-input {
+            width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 8px;
+            font-size: 1rem; font-weight: 600; color: var(--text-main); outline: none;
+            transition: border 0.2s; margin-bottom: 0.5rem;
         }
-        .number-display:focus { outline: 2px solid var(--primary); border-color: transparent; }
+        .text-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
 
+        /* Range Slider */
         input[type=range] {
-            width: 100%; height: 6px; background: #e5e7eb; border-radius: 5px; outline: none; -webkit-appearance: none; cursor: pointer;
+            width: 100%; height: 6px; background: #e2e8f0; border-radius: 5px; outline: none; -webkit-appearance: none; cursor: pointer;
         }
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--primary);
-            box-shadow: 0 0 0 4px var(--primary-soft); transition: transform 0.1s;
+            -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--primary);
+            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--primary-soft); transition: transform 0.1s; margin-top: -6px;
         }
-        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #e2e8f0; border-radius: 5px; }
+        input[type=range]:focus::-webkit-slider-thumb { background: #1d4ed8; }
 
-        .step-up-group { background: #f0fdf4; padding: 1rem; border-radius: 12px; border: 1px solid #bbf7d0; }
-        .step-up-group label { color: #15803d; }
-        .step-up-group input[type=range]::-webkit-slider-thumb { background: #15803d; box-shadow: 0 0 0 4px #dcfce7; }
-        .step-up-group .number-display { color: #15803d; }
+        /* Specialized Groups */
+        .step-up-group { background: #f0fdf4; padding: 1rem; border-radius: 12px; border: 1px solid #bbf7d0; margin-top: 1rem; }
+        .step-up-group .value-badge { color: #15803d; background: #dcfce7; }
+        .step-up-group input[type=range]::-webkit-slider-thumb { background: #15803d; box-shadow: 0 0 0 3px white, 0 0 0 5px #dcfce7; }
+        .step-up-group .text-input:focus { border-color: #15803d; box-shadow: 0 0 0 3px #dcfce7; }
 
-        /* Arbitrage Specific */
         .arb-group { background: #eff6ff; padding: 1rem; border-radius: 12px; border: 1px solid #dbeafe; margin-bottom:1rem; }
-        .arb-group label { color: #1d4ed8; }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
-        .mini-stat { background: #f9fafb; padding: 1rem; border-radius: 12px; text-align: center; }
-        .mini-stat h4 { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; margin-bottom: 0.5rem; }
-        .mini-stat p { font-size: 1.1rem; font-weight: 700; }
-        
-        .big-stat { text-align: right; margin-bottom: 1.5rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1rem; }
-        .big-stat strong { font-size: 2rem; color: var(--primary); display: block; }
 
-        .chart-wrapper { position: relative; height: 300px; width: 100%; }
+        /* Results */
+        .big-stat { text-align: right; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
+        .big-stat span { font-size: 0.85rem; color: var(--text-sub); display: block; }
+        .big-stat strong { font-size: 2rem; color: var(--primary); font-weight: 800; letter-spacing: -1px; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .mini-stat { background: #f8fafc; padding: 1rem; border-radius: 12px; text-align: center; border: 1px solid #e2e8f0; }
+        .mini-stat h4 { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem; }
+        .mini-stat p { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+        
+        .chart-wrapper { position: relative; height: 320px; width: 100%; }
 
         @media (max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
     </style>
@@ -102,7 +104,7 @@
 
 <div class="container">
     <header>
-        <h1>💰 FinCalc Pro <span style="font-size:0.5em; vertical-align: super; color: var(--primary);">INDIA</span></h1>
+        <h1>💰 FinCalc Pro 5.0</h1>
     </header>
 
     <nav class="nav-tabs">
@@ -116,20 +118,27 @@
         <div class="card">
             <h3>Investment Plan</h3><br>
             <div class="input-group">
-                <div class="label-row"><label>Monthly Investment</label><div class="input-wrapper"><span class="badge" id="sip_amt_badge"></span><input type="number" class="number-display" id="sip_amt_num"></div></div>
-                <input type="range" id="sip_amt" min="500" max="100000" step="500" value="10000">
+                <div class="smart-label"><label>Monthly Investment</label><span class="value-badge" id="sip_amt_badge">10 K</span></div>
+                <input type="text" class="text-input" id="sip_amt_txt">
+                <input type="range" id="sip_amt" min="500" max="100000000" step="500" value="10000">
             </div>
+            
             <div class="input-group">
-                <div class="label-row"><label>Duration (Years)</label><input type="number" class="number-display" id="sip_years_num"></div>
-                <input type="range" id="sip_years" min="1" max="40" step="1" value="15">
+                <div class="smart-label"><label>Duration (Years)</label><span class="value-badge" id="sip_years_badge">15 Yrs</span></div>
+                <input type="text" class="text-input" id="sip_years_txt">
+                <input type="range" id="sip_years" min="1" max="50" step="1" value="15">
             </div>
+            
             <div class="input-group">
-                <div class="label-row"><label>Expected Return (%)</label><input type="number" class="number-display" id="sip_rate_num"></div>
-                <input type="range" id="sip_rate" min="5" max="25" step="0.5" value="12">
+                <div class="smart-label"><label>Expected Return (%)</label><span class="value-badge" id="sip_rate_badge">12%</span></div>
+                <input type="text" class="text-input" id="sip_rate_txt">
+                <input type="range" id="sip_rate" min="5" max="30" step="0.1" value="12">
             </div>
-            <div class="input-group step-up-group">
-                <div class="label-row"><label>Annual Step-up (%)</label><input type="number" class="number-display" id="sip_step_num"></div>
-                <input type="range" id="sip_step" min="0" max="20" step="1" value="10">
+
+            <div class="step-up-group">
+                <div class="smart-label"><label>Annual Step-up (%)</label><span class="value-badge" id="sip_step_badge">10%</span></div>
+                <input type="text" class="text-input" id="sip_step_txt">
+                <input type="range" id="sip_step" min="0" max="50" step="1" value="10">
             </div>
         </div>
 
@@ -147,24 +156,28 @@
         <div class="card">
             <h3>Loan Repayment</h3><br>
             <div class="input-group">
-                <div class="label-row"><label>Loan Amount</label><div class="input-wrapper"><span class="badge" id="emi_amt_badge"></span><input type="number" class="number-display" id="emi_amt_num"></div></div>
-                <input type="range" id="emi_amt" min="100000" max="10000000" step="50000" value="5000000">
+                <div class="smart-label"><label>Loan Amount</label><span class="value-badge" id="emi_amt_badge">50 L</span></div>
+                <input type="text" class="text-input" id="emi_amt_txt">
+                <input type="range" id="emi_amt" min="100000" max="5000000000" step="100000" value="5000000">
             </div>
             <div class="input-group">
-                <div class="label-row"><label>Tenure (Years)</label><input type="number" class="number-display" id="emi_years_num"></div>
-                <input type="range" id="emi_years" min="1" max="30" step="1" value="20">
+                <div class="smart-label"><label>Tenure (Years)</label><span class="value-badge" id="emi_years_badge">20 Yrs</span></div>
+                <input type="text" class="text-input" id="emi_years_txt">
+                <input type="range" id="emi_years" min="1" max="40" step="1" value="20">
             </div>
             <div class="input-group">
-                <div class="label-row"><label>Interest Rate (%)</label><input type="number" class="number-display" id="emi_rate_num"></div>
-                <input type="range" id="emi_rate" min="6" max="18" step="0.1" value="8.5">
+                <div class="smart-label"><label>Interest Rate (%)</label><span class="value-badge" id="emi_rate_badge">8.5%</span></div>
+                <input type="text" class="text-input" id="emi_rate_txt">
+                <input type="range" id="emi_rate" min="1" max="20" step="0.1" value="8.5">
             </div>
-            <div class="input-group step-up-group">
-                <div class="label-row"><label>Annual EMI Increase (%)</label><input type="number" class="number-display" id="emi_step_num"></div>
-                <input type="range" id="emi_step" min="0" max="20" step="1" value="0">
+            <div class="step-up-group">
+                <div class="smart-label"><label>Annual EMI Increase (%)</label><span class="value-badge" id="emi_step_badge">0%</span></div>
+                <input type="text" class="text-input" id="emi_step_txt">
+                <input type="range" id="emi_step" min="0" max="50" step="1" value="0">
             </div>
         </div>
         <div class="card">
-            <div class="big-stat"><span>Starting Monthly EMI</span><strong id="emi_monthly_val">₹ 0</strong><span id="emi_last_val" style="font-size:0.9rem;color:var(--danger)"></span></div>
+            <div class="big-stat"><span>Starting Monthly EMI</span><strong id="emi_monthly_val">₹ 0</strong><span id="emi_last_val" style="font-size:0.9rem;color:var(--danger); margin-top:5px;"></span></div>
             <div class="stats-grid">
                 <div class="mini-stat"><h4>Total Interest</h4><p id="emi_interest_val" style="color:var(--danger)">₹0</p></div>
                 <div class="mini-stat"><h4>Total Repayment</h4><p id="emi_total_val">₹0</p></div>
@@ -177,31 +190,36 @@
         <div class="card">
             <h3>Retirement Income</h3><br>
             <div class="input-group">
-                <div class="label-row"><label>Total Corpus</label><div class="input-wrapper"><span class="badge" id="swp_corpus_badge"></span><input type="number" class="number-display" id="swp_corpus_num"></div></div>
-                <input type="range" id="swp_corpus" min="500000" max="20000000" step="100000" value="5000000">
+                <div class="smart-label"><label>Total Corpus</label><span class="value-badge" id="swp_corpus_badge">50 L</span></div>
+                <input type="text" class="text-input" id="swp_corpus_txt">
+                <input type="range" id="swp_corpus" min="100000" max="5000000000" step="100000" value="5000000">
             </div>
             <div class="input-group">
-                <div class="label-row"><label>Monthly Withdrawal</label><div class="input-wrapper"><span class="badge" id="swp_withdraw_badge"></span><input type="number" class="number-display" id="swp_withdraw_num"></div></div>
-                <input type="range" id="swp_withdraw" min="5000" max="200000" step="1000" value="30000">
+                <div class="smart-label"><label>Monthly Withdrawal</label><span class="value-badge" id="swp_withdraw_badge">30 K</span></div>
+                <input type="text" class="text-input" id="swp_withdraw_txt">
+                <input type="range" id="swp_withdraw" min="1000" max="100000000" step="1000" value="30000">
             </div>
             <div class="input-group">
-                <div class="label-row"><label>Duration (Years)</label><input type="number" class="number-display" id="swp_years_num"></div>
-                <input type="range" id="swp_years" min="1" max="30" step="1" value="20">
+                <div class="smart-label"><label>Duration (Years)</label><span class="value-badge" id="swp_years_badge">20 Yrs</span></div>
+                <input type="text" class="text-input" id="swp_years_txt">
+                <input type="range" id="swp_years" min="1" max="50" step="1" value="20">
             </div>
             <div class="input-group">
-                <div class="label-row"><label>Expected Return (%)</label><input type="number" class="number-display" id="swp_rate_num"></div>
-                <input type="range" id="swp_rate" min="1" max="15" step="0.1" value="8">
+                <div class="smart-label"><label>Expected Return (%)</label><span class="value-badge" id="swp_rate_badge">8%</span></div>
+                <input type="text" class="text-input" id="swp_rate_txt">
+                <input type="range" id="swp_rate" min="1" max="20" step="0.1" value="8">
             </div>
-            <div class="input-group step-up-group">
-                <div class="label-row"><label>Inflation Increase (%)</label><input type="number" class="number-display" id="swp_step_num"></div>
-                <input type="range" id="swp_step" min="0" max="15" step="1" value="6">
+            <div class="step-up-group">
+                <div class="smart-label"><label>Inflation Increase (%)</label><span class="value-badge" id="swp_step_badge">6%</span></div>
+                <input type="text" class="text-input" id="swp_step_txt">
+                <input type="range" id="swp_step" min="0" max="20" step="0.5" value="6">
             </div>
         </div>
         <div class="card">
             <div class="big-stat"><span>Final Balance</span><strong id="swp_final_val">₹ 0</strong></div>
             <div class="stats-grid">
                 <div class="mini-stat"><h4>Total Withdrawn</h4><p id="swp_out_val" style="color:var(--success)">₹0</p></div>
-                <div class="mini-stat"><h4>Est. Returns</h4><p id="swp_return_val">@ 8% p.a.</p></div>
+                <div class="mini-stat"><h4>Return Rate</h4><p id="swp_return_val">8% p.a.</p></div>
             </div>
             <div class="chart-wrapper"><canvas id="swpChart"></canvas></div>
         </div>
@@ -210,87 +228,106 @@
     <div id="arb" class="dashboard">
         <div class="card">
             <h3>Arbitrage Strategy</h3>
-            <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:15px">Take a loan, invest it, and pay EMI via SWP.</p>
+            <p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:1rem;">Leverage Check: Loan vs Investment Returns</p>
             
             <div class="arb-group">
                 <div class="input-group">
-                    <div class="label-row"><label>Loan Amount (Invested)</label><div class="input-wrapper"><span class="badge" id="arb_amt_badge"></span><input type="number" class="number-display" id="arb_amt_num"></div></div>
-                    <input type="range" id="arb_amt" min="500000" max="10000000" step="50000" value="5000000">
+                    <div class="smart-label"><label>Loan Amount</label><span class="value-badge" id="arb_amt_badge">50 L</span></div>
+                    <input type="text" class="text-input" id="arb_amt_txt">
+                    <input type="range" id="arb_amt" min="500000" max="5000000000" step="100000" value="5000000">
                 </div>
                 <div class="input-group">
-                    <div class="label-row"><label>Loan Interest Rate (%)</label><input type="number" class="number-display" id="arb_loan_rate_num"></div>
-                    <input type="range" id="arb_loan_rate" min="6" max="15" step="0.1" value="8.5">
+                    <div class="smart-label"><label>Loan Rate (%)</label><span class="value-badge" id="arb_loan_rate_badge">8.5%</span></div>
+                    <input type="text" class="text-input" id="arb_loan_rate_txt">
+                    <input type="range" id="arb_loan_rate" min="1" max="20" step="0.1" value="8.5">
                 </div>
                 <div class="input-group">
-                    <div class="label-row"><label>Loan Tenure (Years)</label><input type="number" class="number-display" id="arb_years_num"></div>
-                    <input type="range" id="arb_years" min="1" max="30" step="1" value="15">
+                    <div class="smart-label"><label>Tenure (Years)</label><span class="value-badge" id="arb_years_badge">15 Yrs</span></div>
+                    <input type="text" class="text-input" id="arb_years_txt">
+                    <input type="range" id="arb_years" min="1" max="40" step="1" value="15">
                 </div>
             </div>
 
             <div class="input-group">
-                <div class="label-row"><label>Investment Return (%)</label><input type="number" class="number-display" id="arb_inv_rate_num"></div>
-                <input type="range" id="arb_inv_rate" min="5" max="20" step="0.1" value="10.5">
+                <div class="smart-label"><label>Invest Return (%)</label><span class="value-badge" id="arb_inv_rate_badge">10.5%</span></div>
+                <input type="text" class="text-input" id="arb_inv_rate_txt">
+                <input type="range" id="arb_inv_rate" min="1" max="30" step="0.1" value="10.5">
             </div>
         </div>
 
         <div class="card">
-            <div class="big-stat">
-                <span>Net Profit / Loss</span>
-                <strong id="arb_net_val">₹ 0</strong>
-                <span id="arb_status" style="font-size:0.9rem; display:block; margin-top:5px;"></span>
-            </div>
+            <div class="big-stat"><span>Net Profit / Loss</span><strong id="arb_net_val">₹ 0</strong><span id="arb_status" style="margin-top:5px;"></span></div>
             <div class="stats-grid">
                 <div class="mini-stat"><h4>Monthly EMI</h4><p id="arb_emi_val">₹0</p></div>
-                <div class="mini-stat"><h4>Remaining Corpus</h4><p id="arb_final_val">₹0</p></div>
+                <div class="mini-stat"><h4>Rem. Corpus</h4><p id="arb_final_val">₹0</p></div>
             </div>
             <div class="chart-wrapper"><canvas id="arbChart"></canvas></div>
         </div>
     </div>
-
 </div>
 
 <script>
+    // --- FORMATTERS ---
     const formatCurrency = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+    const formatNum = (num) => new Intl.NumberFormat('en-IN', { maximumFractionDigits: 2 }).format(num);
     
-    // --- NEW: Short Format Helper (1.5 L, 2 Cr) ---
-    function formatShortIndian(num) {
-        if (num >= 10000000) return (num / 10000000).toFixed(2).replace(/\.00$/, '') + ' Cr';
-        if (num >= 100000) return (num / 100000).toFixed(2).replace(/\.00$/, '') + ' L';
-        if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + ' k';
-        return num;
+    // Convert number to "1.5 Cr" or "50 L"
+    function toWords(num) {
+        if (num >= 10000000) return "₹ " + (num / 10000000).toFixed(2) + " Cr";
+        if (num >= 100000) return "₹ " + (num / 100000).toFixed(2) + " L";
+        if (num >= 1000) return "₹ " + (num / 1000).toFixed(1) + " K";
+        return "₹ " + num;
     }
 
     let charts = {};
 
-    // --- Updated Sync to include Badges ---
-    function setupSync(id) {
+    // --- SYNC LOGIC (The Brain) ---
+    // Connects Slider <-> Text Input <-> Badge Label
+    function setupSync(id, isPercent = false, isYear = false) {
         const slider = document.getElementById(id);
-        const num = document.getElementById(id + '_num');
-        const badge = document.getElementById(id + '_badge'); // Find badge
+        const text = document.getElementById(id + '_txt');
+        const badge = document.getElementById(id + '_badge');
 
-        const sync = () => {
-            // Update badge if it exists for this input
-            if(badge) {
-                badge.innerText = formatShortIndian(parseFloat(slider.value));
-            }
+        function updateUI(val) {
+            // 1. Update Badge (Short form: 1.5 Cr)
+            if(isPercent) badge.innerText = val + "%";
+            else if(isYear) badge.innerText = val + " Yrs";
+            else badge.innerText = toWords(val);
+
+            // 2. Update Text Input (Comma Separated: 1,50,00,000)
+            text.value = formatNum(val);
+        }
+
+        // Slider moves -> Update Text & Badge & Calc
+        slider.addEventListener('input', () => {
+            updateUI(slider.value);
             calculateAll();
-        };
-
-        slider.addEventListener('input', () => { 
-            num.value = slider.value; 
-            sync(); 
-        });
-        
-        num.addEventListener('input', () => { 
-            slider.value = num.value; 
-            sync(); 
         });
 
-        // Initial trigger
-        num.value = slider.value;
-        if(badge) badge.innerText = formatShortIndian(parseFloat(slider.value));
+        // Text Input changes -> Parse commas -> Update Slider & Badge & Calc
+        text.addEventListener('input', () => {
+            // Remove commas to get raw number
+            let raw = text.value.replace(/,/g, '');
+            if(raw === '' || isNaN(raw)) return;
+            
+            let val = parseFloat(raw);
+            
+            // Update slider (clamped by its min/max)
+            slider.value = val;
+            
+            // Update badge immediately
+            if(isPercent) badge.innerText = val + "%";
+            else if(isYear) badge.innerText = val + " Yrs";
+            else badge.innerText = toWords(val);
+            
+            calculateAll();
+        });
+
+        // Initialize
+        updateUI(slider.value);
     }
 
+    // --- CHART RENDERER ---
     function updateChart(id, type, labels, datasets, isCurrency = true) {
         const ctx = document.getElementById(id).getContext('2d');
         if (charts[id]) charts[id].destroy();
@@ -298,39 +335,43 @@
             type: type, data: { labels, datasets },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } },
-                interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { position: 'bottom' }, tooltip: { mode: 'index', intersect: false } },
+                interaction: { mode: 'nearest', axis: 'x', intersect: false },
                 scales: type === 'doughnut' ? {} : {
                     x: { grid: { display: false } },
-                    y: { grid: { borderDash: [5, 5] }, ticks: { callback: v => isCurrency ? formatShortIndian(v) : v } }
+                    y: { grid: { borderDash: [5, 5] }, ticks: { callback: v => isCurrency ? v/1000 + 'k' : v } }
                 }
             }
         });
     }
 
-    // --- CORE ALGORITHMS (Same as before) ---
+    // --- CALCULATION ENGINES ---
+
     function calculateSIP() {
         let P = parseFloat(document.getElementById('sip_amt').value);
         const years = parseFloat(document.getElementById('sip_years').value);
         const rate = parseFloat(document.getElementById('sip_rate').value) / 100;
         const step = parseFloat(document.getElementById('sip_step').value) / 100;
-        let totalInvested = 0, currentValue = 0, monthlyRate = rate/12;
-        const dataInvested = [], dataValue = [], labels = [];
+        
+        let totalInv = 0, val = 0, monthlyRate = rate/12;
+        let dataInv = [], dataVal = [], labels = [];
 
         for (let y = 1; y <= years; y++) {
             for (let m = 1; m <= 12; m++) {
-                currentValue = (currentValue + P) * (1 + monthlyRate);
-                totalInvested += P;
+                val = (val + P) * (1 + monthlyRate);
+                totalInv += P;
             }
-            dataInvested.push(totalInvested); dataValue.push(currentValue); labels.push(`Yr ${y}`);
+            dataInv.push(totalInv); dataVal.push(val); labels.push(`Yr ${y}`);
             P *= (1 + step);
         }
-        document.getElementById('sip_total_val').innerText = formatCurrency(currentValue);
-        document.getElementById('sip_invested_val').innerText = formatCurrency(totalInvested);
-        document.getElementById('sip_gains_val').innerText = formatCurrency(currentValue - totalInvested);
+        
+        document.getElementById('sip_total_val').innerText = formatCurrency(val);
+        document.getElementById('sip_invested_val').innerText = formatCurrency(totalInv);
+        document.getElementById('sip_gains_val').innerText = formatCurrency(val - totalInv);
+
         updateChart('sipChart', 'line', labels, [
-            { label: 'Invested', data: dataInvested, borderColor: '#9ca3af', borderWidth: 2, pointRadius:0 },
-            { label: 'Value', data: dataValue, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true }
+            { label: 'Invested', data: dataInv, borderColor: '#94a3b8', borderWidth: 2, pointRadius:0 },
+            { label: 'Value', data: dataVal, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', fill: true }
         ]);
     }
 
@@ -339,33 +380,36 @@
         const years = parseFloat(document.getElementById('emi_years').value);
         const rate = parseFloat(document.getElementById('emi_rate').value) / 100 / 12;
         const step = parseFloat(document.getElementById('emi_step').value) / 100;
-        const months = years * 12;
         
-        let pvFactor = 0, currentFactor = 1;
-        for(let m = 1; m <= months; m++) {
-            pvFactor += currentFactor / Math.pow(1 + rate, m);
-            if(m % 12 === 0) currentFactor *= (1 + step);
+        // Calculate initial EMI for Step-Up
+        const n = years * 12;
+        let pvFactor = 0, currentF = 1;
+        for(let m=1; m<=n; m++) {
+            pvFactor += currentF / Math.pow(1 + rate, m);
+            if(m % 12 === 0) currentF *= (1 + step);
         }
         
         const startEMI = Loan / pvFactor;
-        let currentEMI = startEMI, totalPaid = 0, balance = Loan;
-        const labels = [], balanceData = [];
+        let emi = startEMI, totalPaid = 0, bal = Loan;
+        let labels = [], balData = [];
 
-        for(let y = 1; y <= years; y++) {
+        for(let y=1; y<=years; y++) {
             for(let m=1; m<=12; m++) {
-                const interest = balance * rate;
-                let principal = currentEMI - interest;
-                if(balance - principal < 0) { principal = balance; currentEMI = principal + interest; }
-                balance -= principal; totalPaid += currentEMI;
+                const int = bal * rate;
+                let prin = emi - int;
+                if(bal - prin < 0) { prin = bal; emi = prin + int; }
+                bal -= prin; totalPaid += emi;
             }
-            labels.push(`Yr ${y}`); balanceData.push(balance);
-            if (balance > 0) currentEMI *= (1 + step);
+            labels.push(`Yr ${y}`); balData.push(bal);
+            if(bal > 0) emi *= (1 + step);
         }
+        
         document.getElementById('emi_monthly_val').innerText = formatCurrency(startEMI);
-        document.getElementById('emi_last_val').innerText = step > 0 ? `Ends at ${formatCurrency(currentEMI)}` : '';
+        document.getElementById('emi_last_val').innerText = step > 0 ? `Ends at ${formatCurrency(emi)}` : '';
         document.getElementById('emi_total_val').innerText = formatCurrency(totalPaid);
         document.getElementById('emi_interest_val').innerText = formatCurrency(totalPaid - Loan);
-        updateChart('emiChart', 'bar', labels, [{ label: 'Loan Balance', data: balanceData, backgroundColor: '#ef4444' }]);
+        
+        updateChart('emiChart', 'bar', labels, [{ label: 'Loan Balance', data: balData, backgroundColor: '#dc2626' }]);
     }
 
     function calculateSWP() {
@@ -374,22 +418,25 @@
         const years = parseFloat(document.getElementById('swp_years').value);
         const rate = parseFloat(document.getElementById('swp_rate').value) / 100 / 12;
         const step = parseFloat(document.getElementById('swp_step').value) / 100;
+        
         let totalOut = 0;
-        const balanceData = [], labels = [];
+        let labels = [], balData = [];
 
-        for(let y = 1; y <= years; y++) {
+        for(let y=1; y<=years; y++) {
             for(let m=1; m<=12; m++) {
-                corpus = (corpus * (1+rate)) - withdraw;
+                corpus = (corpus * (1 + rate)) - withdraw;
                 totalOut += withdraw;
                 if(corpus < 0) corpus = 0;
             }
-            labels.push(`Yr ${y}`); balanceData.push(corpus);
+            labels.push(`Yr ${y}`); balData.push(corpus);
             withdraw *= (1 + step);
         }
+        
         document.getElementById('swp_final_val').innerText = formatCurrency(corpus);
         document.getElementById('swp_out_val').innerText = formatCurrency(totalOut);
-        document.getElementById('swp_return_val').innerText = `@ ${document.getElementById('swp_rate').value}% p.a.`;
-        updateChart('swpChart', 'line', labels, [{ label: 'Corpus', data: balanceData, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true }]);
+        document.getElementById('swp_return_val').innerText = document.getElementById('swp_rate').value + "% p.a.";
+        
+        updateChart('swpChart', 'line', labels, [{ label: 'Corpus', data: balData, borderColor: '#059669', backgroundColor: 'rgba(5, 150, 105, 0.1)', fill: true }]);
     }
 
     function calculateArb() {
@@ -401,34 +448,32 @@
         const n = years * 12;
         const emi = (Principal * loanRate * Math.pow(1 + loanRate, n)) / (Math.pow(1 + loanRate, n) - 1);
 
-        let corpus = Principal;
-        const corpusData = [], loanData = [], labels = [];
-        let loanBalance = Principal;
+        let corpus = Principal, loanBal = Principal;
+        let labels = [], cData = [], lData = [];
 
-        for(let y = 1; y <= years; y++) {
+        for(let y=1; y<=years; y++) {
             for(let m=1; m<=12; m++) {
-                corpus = (corpus * (1 + invRate)) - emi;
-                const interest = loanBalance * loanRate;
-                loanBalance -= (emi - interest);
+                corpus = (corpus * (1+invRate)) - emi;
+                loanBal -= (emi - (loanBal * loanRate));
             }
-            labels.push(`Yr ${y}`); corpusData.push(corpus); loanData.push(Math.max(0, loanBalance));
+            labels.push(`Yr ${y}`); cData.push(Math.max(0, corpus)); lData.push(Math.max(0, loanBal));
         }
 
-        const isProfit = corpus > 0;
+        const profit = corpus > 0;
         document.getElementById('arb_net_val').innerText = formatCurrency(corpus);
-        document.getElementById('arb_net_val').style.color = isProfit ? 'var(--success)' : 'var(--danger)';
-        document.getElementById('arb_status').innerText = isProfit ? "Profitable Strategy" : "Loss Making Strategy";
-        document.getElementById('arb_status').style.color = isProfit ? 'var(--success)' : 'var(--danger)';
-        
+        document.getElementById('arb_net_val').style.color = profit ? 'var(--success)' : 'var(--danger)';
+        document.getElementById('arb_status').innerText = profit ? "Positive Cashflow Strategy" : "Strategy in Loss";
+        document.getElementById('arb_status').style.color = profit ? 'var(--success)' : 'var(--danger)';
         document.getElementById('arb_emi_val').innerText = formatCurrency(emi);
         document.getElementById('arb_final_val').innerText = formatCurrency(Math.max(0, corpus));
 
         updateChart('arbChart', 'line', labels, [
-            { label: 'Investment Value', data: corpusData, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true },
-            { label: 'Loan Balance (Ref)', data: loanData, borderColor: '#ef4444', borderDash: [5, 5], fill: false }
+            { label: 'Investment', data: cData, borderColor: '#059669', fill: true, backgroundColor: 'rgba(5, 150, 105, 0.1)' },
+            { label: 'Loan', data: lData, borderColor: '#dc2626', borderDash: [5,5], fill: false }
         ]);
     }
 
+    // --- INIT ---
     function calculateAll() {
         const active = document.querySelector('.dashboard.active').id;
         if(active === 'sip') calculateSIP();
@@ -442,15 +487,16 @@
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(mode).classList.add('active');
         event.target.classList.add('active');
-        setTimeout(calculateAll, 100); 
+        setTimeout(calculateAll, 50);
     }
 
-    ['sip_amt', 'sip_years', 'sip_rate', 'sip_step', 
-     'emi_amt', 'emi_years', 'emi_rate', 'emi_step',
-     'swp_corpus', 'swp_withdraw', 'swp_years', 'swp_step', 'swp_rate',
-     'arb_amt', 'arb_loan_rate', 'arb_years', 'arb_inv_rate'].forEach(setupSync);
+    // Setup Syncs
+    setupSync('sip_amt'); setupSync('sip_years', false, true); setupSync('sip_rate', true); setupSync('sip_step', true);
+    setupSync('emi_amt'); setupSync('emi_years', false, true); setupSync('emi_rate', true); setupSync('emi_step', true);
+    setupSync('swp_corpus'); setupSync('swp_withdraw'); setupSync('swp_years', false, true); setupSync('swp_step', true); setupSync('swp_rate', true);
+    setupSync('arb_amt'); setupSync('arb_loan_rate', true); setupSync('arb_years', false, true); setupSync('arb_inv_rate', true);
 
-    calculateSIP(); 
+    calculateSIP();
 </script>
 
 </body>
