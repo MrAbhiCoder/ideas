@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CalcIndiaLearnPlay</title>
+    <title>WealthVerse | High Roller v14</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -61,7 +61,6 @@
         .big-value { font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .chart-wrapper { position: relative; height: 300px; width: 100%; display: flex; justify-content: center; }
 
-        /* DETAILS BOX */
         .details-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-glass); }
         .detail-item { font-size: 0.9rem; color: var(--text-sub); }
         .detail-item strong { display: block; color: #fff; font-size: 1.1rem; margin-top: 4px; }
@@ -70,7 +69,6 @@
         .game-screen { background: #020617; height: 450px; border-radius: 12px; border: 1px solid #334155; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .control-pad { display: flex; gap: 20px; width: 100%; justify-content: center; margin-top: 15px; }
         .ctrl-btn { width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 1.5rem; cursor: pointer; }
-        
         .kid-btn { padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; border: none; font-size: 1rem; width: 100%; transition: transform 0.1s; }
         .kid-btn:active { transform: scale(0.95); }
         .btn-green { background: var(--success); color: #fff; }
@@ -103,7 +101,7 @@
 
 <div class="container">
     <header>
-        <div class="brand"><i class="ph-fill ph-currency-inr"></i> WealthVerse v13</div>
+        <div class="brand"><i class="ph-fill ph-currency-inr"></i> WealthVerse v14</div>
     </header>
 
     <nav class="nav-dock">
@@ -121,9 +119,9 @@
 
         <div id="tool-sip" class="tool-content dashboard-grid">
             <div class="glass-card">
-                <h3>SIP Calculator (FY24-25 Tax)</h3><br>
-                <div class="input-wrap"><div class="input-header"><label>Monthly Investment</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div><input type="range" id="sip_amt" min="1000" max="100000" step="500" value="25000"></div>
-                <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="sip_years_val">10 Yrs</span></div><input type="range" id="sip_years" min="1" max="40" step="1" value="10"></div>
+                <h3>SIP Calculator</h3><br>
+                <div class="input-wrap"><div class="input-header"><label>Monthly Investment</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div><input type="range" id="sip_amt" min="500" max="1000000" step="500" value="25000"></div>
+                <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="sip_years_val">10 Yrs</span></div><input type="range" id="sip_years" min="1" max="50" step="1" value="10"></div>
                 <div class="input-wrap"><div class="input-header"><label>Exp. Return</label><span class="input-val" id="sip_rate_val">12 %</span></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div>
             </div>
             <div class="glass-card">
@@ -141,9 +139,9 @@
         <div id="tool-emi" class="tool-content dashboard-grid" style="display:none;">
             <div class="glass-card">
                 <h3>EMI Calculator</h3><br>
-                <div class="input-wrap"><div class="input-header"><label>Loan Amount</label><span class="input-val" id="emi_amt_val">₹ 50 L</span></div><input type="range" id="emi_amt" min="500000" max="10000000" step="100000" value="5000000"></div>
-                <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20 Yrs</span></div><input type="range" id="emi_years" min="1" max="30" step="1" value="20"></div>
-                <div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5 %</span></div><input type="range" id="emi_rate" min="6" max="15" step="0.1" value="8.5"></div>
+                <div class="input-wrap"><div class="input-header"><label>Loan Amount</label><span class="input-val" id="emi_amt_val">₹ 50 L</span></div><input type="range" id="emi_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
+                <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20 Yrs</span></div><input type="range" id="emi_years" min="1" max="40" step="1" value="20"></div>
+                <div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5 %</span></div><input type="range" id="emi_rate" min="1" max="20" step="0.1" value="8.5"></div>
             </div>
             <div class="glass-card">
                 <div class="big-value" id="emi_monthly">₹ 0</div>
@@ -158,9 +156,12 @@
         <div id="tool-arb" class="tool-content dashboard-grid" style="display:none;">
             <div class="glass-card">
                 <h3>Arbitrage Strategy</h3><br>
-                <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="arb_amt_val">₹ 50 L</span></div><input type="range" id="arb_amt" min="500000" max="10000000" step="100000" value="5000000"></div>
-                <div class="input-wrap"><div class="input-header"><label>Loan Rate</label><span class="input-val" id="arb_loan_rate_val">8 %</span></div><input type="range" id="arb_loan_rate" min="1" max="15" step="0.1" value="8"></div>
-                <div class="input-wrap"><div class="input-header"><label>Inv Return</label><span class="input-val" id="arb_inv_rate_val">12 %</span></div><input type="range" id="arb_inv_rate" min="1" max="20" step="0.1" value="12"></div>
+                <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="arb_amt_val">₹ 50 L</span></div><input type="range" id="arb_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
+                
+                <div class="input-wrap"><div class="input-header"><label>Duration</label><span class="input-val" id="arb_years_val">10 Yrs</span></div><input type="range" id="arb_years" min="1" max="50" step="1" value="10"></div>
+                
+                <div class="input-wrap"><div class="input-header"><label>Loan Rate</label><span class="input-val" id="arb_loan_rate_val">8 %</span></div><input type="range" id="arb_loan_rate" min="1" max="20" step="0.1" value="8"></div>
+                <div class="input-wrap"><div class="input-header"><label>Inv Return</label><span class="input-val" id="arb_inv_rate_val">12 %</span></div><input type="range" id="arb_inv_rate" min="1" max="30" step="0.1" value="12"></div>
             </div>
             <div class="glass-card">
                 <div class="big-value" id="arb_net">₹ 0</div>
@@ -333,7 +334,8 @@
     }
 
     // --- CALCULATORS ---
-    ['sip_amt','sip_years','sip_rate','emi_amt','emi_years','emi_rate','arb_amt','arb_loan_rate','arb_inv_rate'].forEach(id => {
+    // Added 'arb_years' to the listener list
+    ['sip_amt','sip_years','sip_rate','emi_amt','emi_years','emi_rate','arb_amt','arb_loan_rate','arb_inv_rate','arb_years'].forEach(id => {
         document.getElementById(id).addEventListener('input', (e) => {
             let val = parseFloat(e.target.value);
             let suffix = id.includes('rate') ? '%' : (id.includes('years') ? ' Yrs' : '');
@@ -357,7 +359,7 @@
             document.getElementById('sip_net').innerText = formatCurrency(val - tax);
             drawChart('sipChart', 'line', Array.from({length:N},(_,i)=>i+1), Array.from({length:N},(_,i)=>{let t=0;for(let m=0;m<(i+1)*12;m++)t=(t+P)*(1+mR);return t}), '#6366f1');
         }
-        // EMI (PIE CHART)
+        // EMI
         if(document.getElementById('tool-emi').style.display !== 'none') {
             const L=parseFloat(document.getElementById('emi_amt').value), Y=parseFloat(document.getElementById('emi_years').value)*12, I=parseFloat(document.getElementById('emi_rate').value)/1200;
             const emi=(L*I*Math.pow(1+I,Y))/(Math.pow(1+I,Y)-1);
@@ -367,11 +369,17 @@
             document.getElementById('emi_total').innerText=formatCurrency(total);
             drawChart('emiChart', 'doughnut', ['Principal','Interest'], [L, total-L], ['#6366f1', '#f43f5e']);
         }
-        // ARBITRAGE (FIXED Z-INDEX)
+        // ARBITRAGE (UPDATED WITH DURATION)
         if(document.getElementById('tool-arb').style.display !== 'none') {
             const A=parseFloat(document.getElementById('arb_amt').value), lR=parseFloat(document.getElementById('arb_loan_rate').value)/100, iR=parseFloat(document.getElementById('arb_inv_rate').value)/100;
+            // Get duration from new slider
+            const Dur = parseFloat(document.getElementById('arb_years').value);
+            
             let c=A, l=A, lbs=[], d1=[], d2=[];
-            for(let i=1;i<=10;i++){ c*=(1+iR); l*=(1+lR); lbs.push("Yr "+i); d1.push(c); d2.push(l); }
+            for(let i=1; i<=Dur; i++){ 
+                c*=(1+iR); l*=(1+lR); 
+                lbs.push("Yr "+i); d1.push(c); d2.push(l); 
+            }
             document.getElementById('arb_net').innerText=formatCurrency(c-l);
             document.getElementById('arb_status').innerText=(c-l)>0?"✅ Profit":"❌ Loss";
             
@@ -397,7 +405,7 @@
         charts[id] = new Chart(ctx, { type, data:{labels,datasets:[{data:d1, backgroundColor:c1, borderColor:Array.isArray(c1)?undefined:c1, fill:type==='line'}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{display:type!=='doughnut', color:'#333'}}}} });
     }
 
-    // --- GAME 1: TRADER PRO (REAL) ---
+    // --- GAME 1: TRADER PRO ---
     let traderInt, traderPrice=20000, traderEquity=1000000, traderStocks=0, currentCandle=null, candleEnd=0, chartType='bar';
     const patterns = [{n:"Bull Run 🚀", t:1.02}, {n:"Crash 📉", t:0.98}, {n:"Sideways", t:1.00}];
     let currentPattern = patterns[0];
@@ -543,7 +551,8 @@
         document.getElementById('kq_name').innerText = i.n;
     }
     function checkKQ(t) {
-        if(t===kqList[kqI].t) { kqS++; document.getElementById('kq_msg').innerText="✅ Correct!"; document.getElementById('kq_msg').style.color='#10b981'; }
+        let i = kqList[kqI % kqList.length];
+        if(t===i.t) { kqS++; document.getElementById('kq_msg').innerText="✅ Correct!"; document.getElementById('kq_msg').style.color='#10b981'; }
         else { document.getElementById('kq_msg').innerText="❌ Wrong!"; document.getElementById('kq_msg').style.color='#ef4444'; }
         document.getElementById('kq_score').innerText=kqS;
         kqI++; setTimeout(loadKQ, 500);
@@ -585,7 +594,8 @@
         pigAnim = requestAnimationFrame(loopPiggy);
     }
 
-    setTimeout(() => { showSection('tools', document.querySelector('.menu-btn')); }, 100);
+    // Initial Load
+    setTimeout(() => { calcAll(); }, 100);
 </script>
 </body>
 </html>
