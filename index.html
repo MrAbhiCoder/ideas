@@ -71,7 +71,7 @@
         .menu-btn:hover { background: rgba(255,255,255,0.05); color: white; padding-left: 15px; }
         .menu-btn.active { background: rgba(99, 102, 241, 0.2); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3); }
 
-        /* VIEW CONTAINERS (Crucial for Switching) */
+        /* VIEW CONTAINERS */
         .app-view { display: none; opacity: 0; transition: opacity 0.2s ease-in; }
         .app-view.active-view { display: grid; opacity: 1; }
         
@@ -150,7 +150,8 @@
         </div>
     </nav>
 
-    <div id="sip" class="app-view tool-layout active-view">
+    <!-- TOOLS -->
+    <div id="sip" class="app-view tool-layout active-view" style="display:grid;opacity:1;">
         <div class="glass-card">
             <h3><i class="ph ph-sliders"></i> SIP Calculator</h3><br>
             <div class="input-wrap"><div class="input-header"><label>Monthly</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div><input type="range" id="sip_amt" min="1000" max="200000" step="500" value="25000"></div>
@@ -189,6 +190,7 @@
         </div>
     </div>
 
+    <!-- ARCADE -->
     <div id="game1" class="app-view game-layout">
         <div class="glass-card">
             <div style="display:flex;justify-content:space-between;align-items:center;"><h3>Live Market</h3><button class="reset-btn" onclick="resetMM()">Restart</button></div>
@@ -223,14 +225,15 @@
                 <div id="run_game_container">
                     <div class="road"><div class="lane-marker"></div><div class="lane-marker right"></div></div>
                     <div id="run_player" class="player-ball">🏎️</div>
-                    <div id="run_overlay" class="game-over-overlay"><h2>CRASHED!</h2><button class="kid-btn btn-need" onclick="startRunGame()">Try Again</button></div>
-                    <div id="run_start" class="game-over-overlay" style="display:flex;"><h2>Ready?</h2><button class="kid-btn btn-need" onclick="startRunGame()">Start</button></div>
+                    <div id="run_overlay" class="game-overlay"><h2>CRASHED!</h2><button class="kid-btn btn-need" onclick="startRunGame()">Try Again</button></div>
+                    <div id="run_start" class="game-overlay" style="display:flex;"><h2>Ready?</h2><button class="kid-btn btn-need" onclick="startRunGame()">Start</button></div>
                 </div>
             </div>
             <div class="control-pad"><button class="control-btn" onclick="moveRun('left')"><i class="ph-bold ph-arrow-left"></i></button><button class="control-btn" onclick="moveRun('jump')">UP</button><button class="control-btn" onclick="moveRun('right')"><i class="ph-bold ph-arrow-right"></i></button></div>
         </div>
     </div>
 
+    <!-- KIDS -->
     <div id="kid1" class="app-view kid-layout">
         <div class="glass-card" style="border-color:var(--kid-blue);background:rgba(14,165,233,0.1);">
             <div style="display:flex;justify-content:space-between;"><h2>Coin Quest</h2><button class="reset-btn" onclick="resetKQ()">Reset</button></div>
@@ -249,9 +252,12 @@
             <div style="display:flex;justify-content:space-between;"><h2>Piggy Dash</h2><div style="color:var(--gold)">₹ <span id="piggy_score">0</span></div></div>
             <div class="game-screen" id="piggy_container" style="margin-top:15px;border:2px solid var(--neon-pink);">
                 <div id="piggy_player" class="piggy">🐷</div>
-                <div id="piggy_overlay" class="game-over-overlay" style="display:flex;"><h2>Catch Cash!</h2><button class="kid-btn btn-need" onclick="startPiggy()">Start</button></div>
+                <div id="piggy_overlay" class="game-overlay" style="display:flex;"><h2>Catch Cash!</h2><button class="kid-btn btn-need" onclick="startPiggy()">Start</button></div>
             </div>
-            <div class="control-pad"><button class="control-btn" onmousedown="movePiggy('left')" onmouseup="stopPiggy()" ontouchstart="movePiggy('left')" ontouchend="stopPiggy()"><i class="ph-bold ph-arrow-left"></i></button><button class="control-btn" onmousedown="movePiggy('right')" onmouseup="stopPiggy()" ontouchstart="movePiggy('right')" ontouchend="stopPiggy()"><i class="ph-bold ph-arrow-right"></i></button></div>
+            <div class="control-pad">
+                <button class="control-btn" onmousedown="movePiggy('left')" onmouseup="stopPiggy()" ontouchstart="movePiggy('left')" ontouchend="stopPiggy()"><i class="ph-bold ph-arrow-left"></i></button>
+                <button class="control-btn" onmousedown="movePiggy('right')" onmouseup="stopPiggy()" ontouchstart="movePiggy('right')" ontouchend="stopPiggy()"><i class="ph-bold ph-arrow-right"></i></button>
+            </div>
         </div>
     </div>
 
@@ -263,54 +269,51 @@
 
     // --- UNIVERSAL NAVIGATION ---
     function toggleMenu(menuId, btn) {
-        // Close others
         document.querySelectorAll('.drop-menu').forEach(m => { if(m.id !== menuId) m.classList.remove('show-menu'); });
         document.getElementById(menuId).classList.toggle('show-menu');
     }
 
     function switchTab(targetId, btn, category) {
-        // 1. UI Reset
+        // Close dropdowns
         document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('show-menu'));
+        // Active category button
         document.querySelectorAll('.drop-trigger').forEach(b => b.classList.remove('active-cat'));
         btn.closest('.dropdown-container').querySelector('.drop-trigger').classList.add('active-cat');
-        
+        // Active menu button
         document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        // 2. Hide All Views
+        // Hide all views
         document.querySelectorAll('.app-view').forEach(v => {
             v.classList.remove('active-view');
-            // Small timeout to allow css fade out before display:none (simplified here to instant switch for robustness)
-            v.style.display = 'none'; 
+            v.style.display = 'none';
         });
 
-        // 3. Stop Games
-        if(runActive) gameOverRun();
-        if(pigActive) { pigActive=false; clearInterval(pigSpawnInt); cancelAnimationFrame(pigInt); }
-        if(mmInt) { clearInterval(mmInt); mmInt=null; }
+        // Stop games
+        if (runActive) gameOverRun();
+        if (pigActive) { pigActive = false; clearInterval(pigSpawnInt); cancelAnimationFrame(pigInt); }
+        if (mmInt) { clearInterval(mmInt); mmInt = null; }
 
-        // 4. Background Logic
+        // Background mode
         document.body.className = 'mode-default';
-        if(category === 'arcade') {
-            if(targetId === 'game1') document.body.classList.add('mode-trader');
-            if(targetId === 'game3') document.body.classList.add('mode-run');
-        } else if(category === 'kids') {
+        if (category === 'arcade') {
+            if (targetId === 'game1') document.body.classList.add('mode-trader');
+            if (targetId === 'game3') document.body.classList.add('mode-run');
+        } else if (category === 'kids') {
             document.body.classList.add('mode-kids');
         }
 
-        // 5. Show Target View
+        // Show target
         const targetView = document.getElementById(targetId);
-        targetView.style.display = 'grid'; // Force layout
-        
-        // 6. Init Logic (Delayed slightly for Layout Paint)
+        targetView.style.display = 'grid';
+
         setTimeout(() => {
             targetView.classList.add('active-view');
-            
-            if(category === 'tools') {
-                calcAll(); // Force redraw charts
-            } else if(targetId === 'game1') {
+            if (category === 'tools') {
+                calcAll();
+            } else if (targetId === 'game1') {
                 initMM();
-            } else if(targetId === 'kid1') {
+            } else if (targetId === 'kid1') {
                 loadKQ();
             }
         }, 10);
@@ -318,69 +321,113 @@
 
     // --- CALCULATORS ---
     function setupInput(id) {
-        document.getElementById(id).addEventListener('input', (e) => {
+        const el = document.getElementById(id);
+        el.addEventListener('input', (e) => {
             let valId = id + '_val';
             let type = id.includes('rate') ? '%' : (id.includes('years') ? 'Yrs' : '');
             let val = parseFloat(e.target.value);
-            document.getElementById(valId).innerText = type==='%' || type==='Yrs' ? val + " " + type : formatCurrency(val);
+            document.getElementById(valId).innerText = (type === '%' || type === 'Yrs') ? val + " " + type : formatCurrency(val);
             calcAll();
         });
-        // Init val
-        let ev = new Event('input'); document.getElementById(id).dispatchEvent(ev);
+        let ev = new Event('input'); el.dispatchEvent(ev);
     }
 
     function calcAll() {
         // SIP
-        if(document.getElementById('sip').style.display !== 'none') {
-            const P=parseFloat(document.getElementById('sip_amt').value), N=parseFloat(document.getElementById('sip_years').value), R=parseFloat(document.getElementById('sip_rate').value);
-            let v=0, mR=R/1200; for(let i=0;i<N*12;i++) v=(v+P)*(1+mR);
+        if (document.getElementById('sip').style.display !== 'none') {
+            const P = parseFloat(document.getElementById('sip_amt').value),
+                  N = parseFloat(document.getElementById('sip_years').value),
+                  R = parseFloat(document.getElementById('sip_rate').value);
+            let v = 0, mR = R / 1200;
+            for (let i = 0; i < N * 12; i++) v = (v + P) * (1 + mR);
             document.getElementById('sip_final').innerText = formatCurrency(v);
-            drawChart('sipLineChart', 'line', Array.from({length:N},(_,i)=>i+1), Array.from({length:N},(_,i)=>{let t=0;for(let m=0;m<(i+1)*12;m++)t=(t+P)*(1+mR);return t}), '#6366f1');
+            drawChart('sipLineChart', 'line',
+                Array.from({length:N},(_,i)=>i+1),
+                Array.from({length:N},(_,i)=>{let t=0;for(let m=0;m<(i+1)*12;m++)t=(t+P)*(1+mR);return t}),
+                '#6366f1'
+            );
         }
         // EMI
-        if(document.getElementById('emi').style.display !== 'none') {
-            const L=parseFloat(document.getElementById('emi_amt').value), Y=parseFloat(document.getElementById('emi_years').value)*12, I=parseFloat(document.getElementById('emi_rate').value)/1200;
-            const emi=(L*I*Math.pow(1+I,Y))/(Math.pow(1+I,Y)-1);
-            document.getElementById('emi_monthly').innerText=formatCurrency(emi);
+        if (document.getElementById('emi').style.display !== 'none') {
+            const L = parseFloat(document.getElementById('emi_amt').value),
+                  Y = parseFloat(document.getElementById('emi_years').value) * 12,
+                  I = parseFloat(document.getElementById('emi_rate').value) / 1200;
+            const emi = (L * I * Math.pow(1 + I, Y)) / (Math.pow(1 + I, Y) - 1);
+            document.getElementById('emi_monthly').innerText = formatCurrency(emi);
             drawChart('emiChart', 'bar', ['Principal','Interest'], [L, (emi*Y)-L], '#6366f1');
         }
         // Arb
-        if(document.getElementById('arb').style.display !== 'none') {
-            const A=parseFloat(document.getElementById('arb_amt').value), lR=parseFloat(document.getElementById('arb_loan_rate').value)/100, iR=parseFloat(document.getElementById('arb_inv_rate').value)/100;
-            let c=A, l=A, lbs=[], d1=[], d2=[];
-            for(let i=1;i<=10;i++){c*=(1+iR); l*=(1+lR); lbs.push(i); d1.push(c); d2.push(l);}
-            document.getElementById('arb_net').innerText=formatCurrency(c-l);
-            document.getElementById('arb_status').innerText=(c-l)>0?"✅ Profit":"❌ Loss";
+        if (document.getElementById('arb').style.display !== 'none') {
+            const A = parseFloat(document.getElementById('arb_amt').value),
+                  lR = parseFloat(document.getElementById('arb_loan_rate').value)/100,
+                  iR = parseFloat(document.getElementById('arb_inv_rate').value)/100;
+            let c = A, l = A, lbs = [], d1 = [], d2 = [];
+            for (let i = 1; i <= 10; i++) { c *= (1+iR); l *= (1+lR); lbs.push(i); d1.push(c); d2.push(l); }
+            document.getElementById('arb_net').innerText = formatCurrency(c-l);
+            document.getElementById('arb_status').innerText = (c-l)>0 ? "✅ Profit" : "❌ Loss";
             drawChart('arbChart', 'line', lbs, d1, '#10b981', d2);
         }
     }
 
     function drawChart(id, type, labels, data, color, data2=null) {
         const ctx = document.getElementById(id).getContext('2d');
-        if(charts[id]) charts[id].destroy();
-        let datasets = [{ label:'Value', data:data, borderColor:color, backgroundColor:color==='#6366f1'?'rgba(99,102,241,0.2)':color, fill:type==='line' }];
-        if(data2) datasets.push({ label:'Loan', data:data2, borderColor:'#f43f5e', borderDash:[5,5], fill:false });
+        if (charts[id]) charts[id].destroy();
+        let datasets = [{
+            label:'Value',
+            data,
+            borderColor:color,
+            backgroundColor: color === '#6366f1' ? 'rgba(99,102,241,0.2)' : color,
+            fill: type === 'line'
+        }];
+        if (data2) datasets.push({ label:'Loan', data2, borderColor:'#f43f5e', borderDash:[5,5], fill:false });
         
         charts[id] = new Chart(ctx, {
             type: type,
-            data: { labels, datasets },
-            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{grid:{color:'rgba(255,255,255,0.1)'}}} }
+             { labels, datasets },
+            options: {
+                responsive:true,
+                maintainAspectRatio:false,
+                plugins:{legend:{display:false}},
+                scales:{x:{grid:{display:false}}, y:{grid:{color:'rgba(255,255,255,0.1)'}}}
+            }
         });
     }
 
     // --- GAME 1: TRADER ---
     let mmInt, mmP=20000, mmC=1000000, mmS=0;
     function initMM() {
-        if(charts['mm']) return;
         const ctx = document.getElementById('mmChart').getContext('2d');
-        charts['mm'] = new Chart(ctx, { type:'bar', data:{labels:Array(30).fill(''),datasets:[{data:Array(30).fill(null),backgroundColor:'#94a3b8',barThickness:2},{data:Array(30).fill(null),backgroundColor:(c)=>c.raw&&c.raw[1]>=c.raw[0]?'#10b981':'#f43f5e',barThickness:8}]}, options:{animation:false,responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{position:'right',grid:{color:'#333'}}}} });
-        mmInt = setInterval(()=>{
-            if(!document.getElementById('game1').classList.contains('active-view')) return;
-            mmP += (Math.random()-0.5)*50; 
-            document.getElementById('mm_price').innerText=mmP.toFixed(0);
-            updateMM();
-            let c=charts['mm']; c.data.datasets[0].data.shift(); c.data.datasets[0].data.push([mmP-20, mmP+20]); c.data.datasets[1].data.shift(); c.data.datasets[1].data.push([mmP, mmP+(Math.random()-0.5)*30]); c.update('none');
-        }, 100);
+        if (!charts['mm']) {
+            charts['mm'] = new Chart(ctx, {
+                type:'bar',
+                {
+                    labels:Array(30).fill(''),
+                    datasets:[
+                        {Array(30).fill(null),backgroundColor:'#94a3b8',barThickness:2},
+                        {Array(30).fill(null),backgroundColor:(c)=>c.raw&&c.raw[1]>=c.raw[0]?'#10b981':'#f43f5e',barThickness:8}
+                    ]
+                },
+                options:{
+                    animation:false,
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    plugins:{legend:{display:false}},
+                    scales:{x:{display:false},y:{position:'right',grid:{color:'#333'}}}
+                }
+            });
+        }
+        if (!mmInt) {
+            mmInt = setInterval(()=>{
+                if(!document.getElementById('game1').classList.contains('active-view')) return;
+                mmP += (Math.random()-0.5)*50; 
+                document.getElementById('mm_price').innerText=mmP.toFixed(0);
+                updateMM();
+                let c=charts['mm'];
+                c.data.datasets[0].data.shift(); c.data.datasets[0].data.push([mmP-20, mmP+20]);
+                c.data.datasets[1].data.shift(); c.data.datasets[1].data.push([mmP, mmP+(Math.random()-0.5)*30]);
+                c.update('none');
+            }, 100);
+        }
     }
     function updateMM(){document.getElementById('mm_equity').innerText=formatCurrency(mmC+mmS*mmP);document.getElementById('mm_cash').innerText=formatCurrency(mmC);}
     function mmTrade(t){if(t==='buy'&&mmC>mmP){mmS++;mmC-=mmP;}if(t==='sell'&&mmS>0){mmS--;mmC+=mmP;}updateMM();}
@@ -388,23 +435,61 @@
 
     // --- GAME 2: DEFENSE ---
     let pdN=1000000, pdY=1; const pdScen=[{t:"Boom",val:1.2},{t:"Crash",val:0.8}];
-    function pdResolve(c){if(pdY>10)return; let s=pdScen[Math.floor(Math.random()*2)]; pdN*=(c==='invest'?s.val:(s.val>1?1.05:0.98)); pdY++; document.getElementById('pd_networth').innerText=formatCurrency(pdN); document.getElementById('pd_feedback').innerText=s.t; if(pdY>10)document.getElementById('pd_event').innerText="Finished!";}
-    function resetPD(){pdN=1000000;pdY=1;document.getElementById('pd_networth').innerText=formatCurrency(pdN);}
+    function pdResolve(c){
+        if(pdY>10)return;
+        let s=pdScen[Math.floor(Math.random()*2)];
+        pdN *= (c==='invest' ? s.val : (s.val>1 ? 1.05 : 0.98));
+        pdY++;
+        document.getElementById('pd_networth').innerText=formatCurrency(pdN);
+        document.getElementById('pd_fb').innerText=s.t;
+        if(pdY>10)document.getElementById('pd_event').innerText="Finished!";
+        document.getElementById('pd_year').innerText="Year "+pdY;
+    }
+    function resetPD(){
+        pdN=1000000;pdY=1;
+        document.getElementById('pd_networth').innerText=formatCurrency(pdN);
+        document.getElementById('pd_fb').innerText='';
+        document.getElementById('pd_event').innerText='Market Stable';
+        document.getElementById('pd_year').innerText='Year 1';
+    }
 
     // --- GAME 3: WEALTH RUN ---
     let runGameInterval, spawnInterval, runLane=1, runIsJumping=false, runScore=0, runActive=false;
     const lanes=[15,50,85];
     function startRunGame(){
-        if(runActive)return; runActive=true; runScore=0; document.getElementById('run_score').innerText=0; document.getElementById('run_start').style.display='none'; document.getElementById('run_overlay').style.display='none'; document.querySelectorAll('.obstacle,.coin').forEach(e=>e.remove());
-        runGameInterval=requestAnimationFrame(gameLoopRun); spawnInterval=setInterval(spawnObject,700);
+        if(runActive)return;
+        runActive=true; runScore=0;
+        document.getElementById('run_score').innerText=0;
+        document.getElementById('run_start').style.display='none';
+        document.getElementById('run_overlay').style.display='none';
+        document.querySelectorAll('.obstacle,.coin').forEach(e=>e.remove());
+        runGameInterval=requestAnimationFrame(gameLoopRun);
+        spawnInterval=setInterval(spawnObject,700);
     }
-    function moveRun(d){if(!runActive)return; if(d==='left'&&runLane>0)runLane--; if(d==='right'&&runLane<2)runLane++; document.getElementById('run_player').style.left=lanes[runLane]+'%'; if(d==='jump'&&!runIsJumping){runIsJumping=true;document.getElementById('run_player').style.transform='translateX(-50%) scale(1.5)';setTimeout(()=>{document.getElementById('run_player').style.transform='translateX(-50%) scale(1)';runIsJumping=false;},500);}}
+    function moveRun(d){
+        if(!runActive)return;
+        if(d==='left'&&runLane>0)runLane--;
+        if(d==='right'&&runLane<2)runLane++;
+        document.getElementById('run_player').style.left=lanes[runLane]+'%';
+        if(d==='jump'&&!runIsJumping){
+            runIsJumping=true;
+            document.getElementById('run_player').style.transform='translateX(-50%) scale(1.5)';
+            setTimeout(()=>{
+                document.getElementById('run_player').style.transform='translateX(-50%) scale(1)';
+                runIsJumping=false;
+            },500);
+        }
+    }
     function spawnObject(){
-        if(!runActive)return; const type=Math.random()>0.4?'obstacle':'coin'; const l=Math.floor(Math.random()*3);
-        const el=document.createElement('div'); el.className=type; el.style.top='25%'; el.style.left=lanes[l]+'%'; el.dataset.lane=l; el.dataset.y=25;
+        if(!runActive)return;
+        const type=Math.random()>0.4?'obstacle':'coin';
+        const l=Math.floor(Math.random()*3);
+        const el=document.createElement('div');
+        el.className=type; el.style.top='25%'; el.style.left=lanes[l]+'%'; el.dataset.lane=l; el.dataset.y=25;
         document.getElementById('run_game_container').appendChild(el);
         function move(){
-            if(!runActive||!el.parentNode)return; let y=parseFloat(el.dataset.y)+2; el.dataset.y=y;
+            if(!runActive||!el.parentNode)return;
+            let y=parseFloat(el.dataset.y)+2; el.dataset.y=y;
             let s=0.2+((y-25)/75)*2; el.style.top=y+'%'; el.style.transform=`translateX(-50%) scale(${s})`;
             if(y>85&&y<95&&parseInt(el.dataset.lane)===runLane){
                 if(type==='obstacle'&&!runIsJumping) gameOverRun();
@@ -414,29 +499,75 @@
         } requestAnimationFrame(move);
     }
     function gameLoopRun(){if(runActive)requestAnimationFrame(gameLoopRun);}
-    function gameOverRun(){runActive=false;clearInterval(spawnInterval);cancelAnimationFrame(runGameInterval);document.getElementById('run_overlay').style.display='flex';}
+    function gameOverRun(){
+        runActive=false;
+        clearInterval(spawnInterval);
+        cancelAnimationFrame(runGameInterval);
+        document.getElementById('run_overlay').style.display='flex';
+    }
 
-    // --- KIDS ---
+    // --- KIDS: Coin Quest ---
     let kqS=0, kqI=0; const kq=[{n:"Apple",t:"need",i:"🍎"},{n:"Toy",t:"want",i:"🧸"}];
-    function loadKQ(){let i=kq[kqI%2];document.getElementById('kq_icon').innerText=i.i;document.getElementById('kq_item').innerText=i.n;}
-    function checkKQ(c){let i=kq[kqI%2]; if(c===i.t){kqS++;document.getElementById('kq_msg').innerText="Correct!";}else{document.getElementById('kq_msg').innerText="Wrong";} kqI++; document.getElementById('kq_score').innerText=kqS; setTimeout(loadKQ,500);}
-    function resetKQ(){kqS=0;kqI=0;document.getElementById('kq_score').innerText=0;loadKQ();}
+    function loadKQ(){let i=kq[kqI%kq.length];document.getElementById('kq_icon').innerText=i.i;document.getElementById('kq_item').innerText=i.n;}
+    function checkKQ(c){
+        let i=kq[kqI%kq.length];
+        if(c===i.t){kqS++;document.getElementById('kq_msg').innerText="Correct!";}
+        else{document.getElementById('kq_msg').innerText="Wrong";}
+        kqI++; document.getElementById('kq_score').innerText=kqS;
+        setTimeout(loadKQ,500);
+    }
+    function resetKQ(){kqS=0;kqI=0;document.getElementById('kq_score').innerText=0;document.getElementById('kq_msg').innerText='';loadKQ();}
 
-    let pigInt, pigSpawn, pigPos=50, pigSc=0, pigAct=false, pigDir=0;
-    function startPiggy(){if(pigAct)return;pigAct=true;pigSc=0;pigPos=50;document.getElementById('piggy_overlay').style.display='none';document.querySelectorAll('.drop-item').forEach(e=>e.remove());pigInt=requestAnimationFrame(loopPig);pigSpawn=setInterval(spawnPig,600);}
-    function movePiggy(d){pigDir=d==='left'?-2:2;} function stopPiggy(){pigDir=0;}
-    function spawnPig(){if(!pigAct)return;const el=document.createElement('div');el.className='drop-item';el.innerText=Math.random()>0.3?'💰':'🔨';el.dataset.type=el.innerText==='💰'?'good':'bad';el.style.left=(Math.random()*90+5)+'%';el.style.top='-50px';el.dataset.y=-50;document.getElementById('piggy_container').appendChild(el);}
+    // --- KIDS: Piggy Dash ---
+    let pigInt, pigSpawnInt, pigPos=50, pigSc=0, pigActive=false, pigDir=0;
+    function startPiggy(){
+        if(pigActive)return;
+        pigActive=true;pigSc=0;pigPos=50;
+        document.getElementById('piggy_score').innerText=pigSc;
+        document.getElementById('piggy_overlay').style.display='none';
+        document.querySelectorAll('.drop-item').forEach(e=>e.remove());
+        pigInt=requestAnimationFrame(loopPig);
+        pigSpawnInt=setInterval(spawnPig,600);
+        document.getElementById('piggy_player').style.left=pigPos+'%';
+    }
+    function movePiggy(d){pigDir=d==='left'?-2:2;}
+    function stopPiggy(){pigDir=0;}
+    function spawnPig(){
+        if(!pigActive)return;
+        const el=document.createElement('div');
+        el.className='drop-item';
+        el.innerText=Math.random()>0.3?'💰':'🔨';
+        el.dataset.type=el.innerText==='💰'?'good':'bad';
+        el.style.left=(Math.random()*90+5)+'%';
+        el.style.top='-50px';
+        el.dataset.y=-50;
+        document.getElementById('piggy_container').appendChild(el);
+    }
     function loopPig(){
-        if(!pigAct)return; if(pigDir!==0){pigPos+=pigDir;if(pigPos<10)pigPos=10;if(pigPos>90)pigPos=90;document.getElementById('piggy_player').style.left=pigPos+'%';}
+        if(!pigActive)return;
+        if(pigDir!==0){
+            pigPos+=pigDir;
+            if(pigPos<10)pigPos=10;
+            if(pigPos>90)pigPos=90;
+            document.getElementById('piggy_player').style.left=pigPos+'%';
+        }
         document.querySelectorAll('.drop-item').forEach(e=>{
             let y=parseFloat(e.dataset.y)+4; e.dataset.y=y; e.style.top=y+'px';
             if(y>350&&y<400&&Math.abs(parseFloat(e.style.left)-pigPos)<15){
-                if(e.dataset.type==='good'){pigSc+=100;document.getElementById('piggy_score').innerText=pigSc;e.remove();}
-                else{pigAct=false;clearInterval(pigSpawn);document.getElementById('piggy_overlay').style.display='flex';}
-            } if(y>460)e.remove();
-        }); requestAnimationFrame(loopPig);
+                if(e.dataset.type==='good'){
+                    pigSc+=100;document.getElementById('piggy_score').innerText=pigSc;e.remove();
+                } else {
+                    pigActive=false;
+                    clearInterval(pigSpawnInt);
+                    document.getElementById('piggy_overlay').style.display='flex';
+                }
+            }
+            if(y>460)e.remove();
+        });
+        requestAnimationFrame(loopPig);
     }
 
+    // INIT
     setupInput('sip_amt'); setupInput('sip_years'); setupInput('sip_rate');
     setupInput('emi_amt'); setupInput('emi_years'); setupInput('emi_rate');
     setupInput('arb_amt'); setupInput('arb_loan_rate'); setupInput('arb_inv_rate');
