@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WealthVerse | High Roller v14</title>
+    <title>WealthVerse | v15 Pro Tools</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -25,16 +25,16 @@
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; user-select: none; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg-dark); color: var(--text-main); font-family: 'Outfit', sans-serif; min-height: 100vh; padding-bottom: 3rem; overflow-x: hidden; transition: background 0.3s ease; }
         
-        /* BACKGROUND MODES */
+        /* MODES */
         body.mode-tools { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
-        body.mode-trader { background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%); }
-        body.mode-run { background: linear-gradient(to bottom, #2e1065 0%, #0f172a 100%); }
-        body.mode-kids { background: linear-gradient(120deg, #0ea5e9 0%, #8b5cf6 100%); }
+        body.mode-trader { background: radial-gradient(circle at center, #020617 0%, #000000 100%); }
+        body.mode-run { background: linear-gradient(to bottom, #111827 0%, #374151 100%); }
+        body.mode-kids { background: linear-gradient(120deg, #3b82f6 0%, #8b5cf6 100%); }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
 
         header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-glass); }
-        .brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; background: linear-gradient(to right, #6366f1, #00f3ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; }
+        .brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; background: linear-gradient(to right, #6366f1, #00f3ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* NAV */
         .nav-dock { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 1.5rem; }
@@ -57,13 +57,8 @@
         .input-val { font-weight: 700; color: var(--primary); }
         input[type=range] { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-appearance: none; cursor: pointer; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #fff; margin-top: -6px; }
-        
         .big-value { font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .chart-wrapper { position: relative; height: 300px; width: 100%; display: flex; justify-content: center; }
-
-        .details-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-glass); }
-        .detail-item { font-size: 0.9rem; color: var(--text-sub); }
-        .detail-item strong { display: block; color: #fff; font-size: 1.1rem; margin-top: 4px; }
+        .chart-wrapper { position: relative; height: 300px; width: 100%; }
 
         /* GAMES UI */
         .game-screen { background: #020617; height: 450px; border-radius: 12px; border: 1px solid #334155; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -75,24 +70,28 @@
         .btn-red { background: var(--accent); color: #fff; }
         .reset-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
 
-        /* WEALTH RUN */
-        #run_game { width: 100%; height: 100%; position: relative; background: linear-gradient(#1e1b4b, #be185d); perspective: 600px; overflow: hidden; }
-        .road { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotateX(50deg); width: 300px; height: 120%; background: #1e293b; border-left: 10px solid var(--neon-blue); border-right: 10px solid var(--neon-blue); }
-        .lane-marker { position: absolute; top: 0; left: 33%; width: 4px; height: 100%; background: repeating-linear-gradient(to bottom, #fff 0%, #fff 20%, transparent 20%, transparent 40%); background-size: 10px 60px; animation: roadMove 0.2s linear infinite; }
-        .lane-marker.right { left: 66%; }
-        @keyframes roadMove { from { background-position: 0 0; } to { background-position: 0 60px; } }
-        .player-car { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 4rem; z-index: 10; transition: left 0.1s; }
-        .obstacle { position: absolute; width: 70px; height: 35px; background: #000; border: 3px solid #ef4444; border-radius: 50%; transform: translateX(-50%); display:flex; justify-content:center; align-items:center; }
-        .coin { position: absolute; width: 50px; height: 50px; background: gold; border-radius: 50%; transform: translateX(-50%); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; box-shadow: 0 0 15px gold; }
+        /* FINANCIAL RACE */
+        #run_game { width: 100%; height: 100%; position: relative; background: linear-gradient(#1e1b4b, #be185d); overflow: hidden; }
+        .road { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 300px; height: 100%; background: #334155; border-left: 10px solid #fff; border-right: 10px solid #fff; perspective: 100px;}
+        .lane-marker { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; background: repeating-linear-gradient(to bottom, #fff 0%, #fff 10%, transparent 10%, transparent 20%); animation: roadMove 0.5s linear infinite; }
+        @keyframes roadMove { from { background-position: 0 0; } to { background-position: 0 100px; } }
+        
+        .player-car { position: absolute; bottom: 20px; width: 50px; height: 80px; background: var(--neon-blue); border-radius: 10px; z-index: 10; transition: left 0.1s; box-shadow: 0 0 20px var(--neon-blue); }
+        .player-car::after { content:'🏎️'; font-size: 3rem; position:absolute; left:-10px; top:-10px;}
+
+        .game-obj { position: absolute; width: 80px; height: 40px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; color: white; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+        .obj-bad { background: var(--accent); border: 2px solid white; }
+        .obj-good { background: var(--gold); color: black; border: 2px solid white; }
 
         /* PIGGY DASH */
         #piggy_container { width: 100%; height: 100%; position: relative; background: #1e293b; overflow: hidden; }
-        .piggy { position: absolute; bottom: 10px; width: 80px; height: 80px; background: #ec4899; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 3px solid #fff; transition: left 0.1s; }
+        .piggy { position: absolute; bottom: 10px; width: 80px; height: 80px; background: #ec4899; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 3px solid #fff; transition: left 0.1s; z-index: 10; }
         .drop-item { position: absolute; font-size: 3.5rem; transition: top 0.05s linear; }
 
         /* TRADER */
         .candle-timer { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px; border: 1px solid var(--primary); font-family: monospace; }
-        .pattern-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px; color: var(--gold); border: 1px solid var(--gold); }
+        .trade-controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; }
+        .qty-input { background: rgba(0,0,0,0.3); border: 1px solid #555; color: white; text-align: center; padding: 10px; border-radius: 8px; width: 100%; }
 
         @media (max-width: 900px) { .dashboard-grid, .game-grid { grid-template-columns: 1fr; } }
     </style>
@@ -101,71 +100,58 @@
 
 <div class="container">
     <header>
-        <div class="brand"><i class="ph-fill ph-currency-inr"></i> WealthVerse v14</div>
+        <div class="brand"><i class="ph-fill ph-currency-inr"></i> WealthVerse v15</div>
     </header>
 
     <nav class="nav-dock">
-        <button class="menu-btn active" onclick="showSection('tools', this)">🛠️ Calculators</button>
-        <button class="menu-btn" onclick="showSection('arcade', this)">🕹️ Arcade</button>
-        <button class="menu-btn" onclick="showSection('kids', this)">👶 Kids Zone</button>
+        <button class="menu-btn active" onclick="showSection('tools', this)">Calculators</button>
+        <button class="menu-btn" onclick="showSection('arcade', this)">Arcade</button>
+        <button class="menu-btn" onclick="showSection('kids', this)">Kids</button>
     </nav>
 
     <div id="section-tools" class="app-view active-view">
         <div style="display:flex; gap:10px; margin-bottom:1rem; overflow-x:auto;">
             <button class="reset-btn" onclick="openTool('sip')">SIP (Tax)</button>
-            <button class="reset-btn" onclick="openTool('emi')">EMI</button>
+            <button class="reset-btn" onclick="openTool('emi')">EMI (Yearly)</button>
             <button class="reset-btn" onclick="openTool('arb')">Arbitrage</button>
         </div>
 
         <div id="tool-sip" class="tool-content dashboard-grid">
             <div class="glass-card">
                 <h3>SIP Calculator</h3><br>
-                <div class="input-wrap"><div class="input-header"><label>Monthly Investment</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div><input type="range" id="sip_amt" min="500" max="1000000" step="500" value="25000"></div>
-                <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="sip_years_val">10 Yrs</span></div><input type="range" id="sip_years" min="1" max="50" step="1" value="10"></div>
-                <div class="input-wrap"><div class="input-header"><label>Exp. Return</label><span class="input-val" id="sip_rate_val">12 %</span></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div>
+                <div class="input-wrap"><div class="input-header"><label>Monthly</label><span class="input-val" id="sip_amt_val">25K</span></div><input type="range" id="sip_amt" min="1000" max="1000000" step="1000" value="25000"></div>
+                <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="sip_years_val">10Y</span></div><input type="range" id="sip_years" min="1" max="40" step="1" value="10"></div>
+                <div class="input-wrap"><div class="input-header"><label>Return</label><span class="input-val" id="sip_rate_val">12%</span></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div>
             </div>
             <div class="glass-card">
                 <div class="big-value" id="sip_final">₹ 0</div>
-                <div class="details-box">
-                    <div class="detail-item">Invested <strong id="sip_inv">₹ 0</strong></div>
-                    <div class="detail-item">Gain <strong id="sip_gain" style="color:var(--success)">₹ 0</strong></div>
-                    <div class="detail-item">Tax (12.5%) <strong id="sip_tax" style="color:var(--accent)">₹ 0</strong></div>
-                    <div class="detail-item">Net Profit <strong id="sip_net">₹ 0</strong></div>
-                </div>
                 <div class="chart-wrapper"><canvas id="sipChart"></canvas></div>
             </div>
         </div>
 
         <div id="tool-emi" class="tool-content dashboard-grid" style="display:none;">
             <div class="glass-card">
-                <h3>EMI Calculator</h3><br>
-                <div class="input-wrap"><div class="input-header"><label>Loan Amount</label><span class="input-val" id="emi_amt_val">₹ 50 L</span></div><input type="range" id="emi_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
-                <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20 Yrs</span></div><input type="range" id="emi_years" min="1" max="40" step="1" value="20"></div>
-                <div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5 %</span></div><input type="range" id="emi_rate" min="1" max="20" step="0.1" value="8.5"></div>
+                <h3>EMI Breakdown</h3><br>
+                <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="emi_amt_val">50L</span></div><input type="range" id="emi_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
+                <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20Y</span></div><input type="range" id="emi_years" min="1" max="40" step="1" value="20"></div>
+                <div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5%</span></div><input type="range" id="emi_rate" min="1" max="20" step="0.1" value="8.5"></div>
             </div>
             <div class="glass-card">
                 <div class="big-value" id="emi_monthly">₹ 0</div>
-                <div class="details-box">
-                    <div class="detail-item">Total Interest <strong id="emi_interest" style="color:var(--accent)">₹ 0</strong></div>
-                    <div class="detail-item">Total Payable <strong id="emi_total">₹ 0</strong></div>
-                </div>
-                <div class="chart-wrapper" style="height:220px;"><canvas id="emiChart"></canvas></div>
+                <div class="chart-wrapper"><canvas id="emiChart"></canvas></div>
             </div>
         </div>
 
         <div id="tool-arb" class="tool-content dashboard-grid" style="display:none;">
             <div class="glass-card">
-                <h3>Arbitrage Strategy</h3><br>
-                <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="arb_amt_val">₹ 50 L</span></div><input type="range" id="arb_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
-                
-                <div class="input-wrap"><div class="input-header"><label>Duration</label><span class="input-val" id="arb_years_val">10 Yrs</span></div><input type="range" id="arb_years" min="1" max="50" step="1" value="10"></div>
-                
-                <div class="input-wrap"><div class="input-header"><label>Loan Rate</label><span class="input-val" id="arb_loan_rate_val">8 %</span></div><input type="range" id="arb_loan_rate" min="1" max="20" step="0.1" value="8"></div>
-                <div class="input-wrap"><div class="input-header"><label>Inv Return</label><span class="input-val" id="arb_inv_rate_val">12 %</span></div><input type="range" id="arb_inv_rate" min="1" max="30" step="0.1" value="12"></div>
+                <h3>Arbitrage</h3><br>
+                <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="arb_amt_val">50L</span></div><input type="range" id="arb_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
+                <div class="input-wrap"><div class="input-header"><label>Duration</label><span class="input-val" id="arb_years_val">10Y</span></div><input type="range" id="arb_years" min="1" max="50" step="1" value="10"></div>
+                <div class="input-wrap"><div class="input-header"><label>Loan Rate</label><span class="input-val" id="arb_loan_rate_val">8%</span></div><input type="range" id="arb_loan_rate" min="1" max="20" step="0.1" value="8"></div>
+                <div class="input-wrap"><div class="input-header"><label>Inv Return</label><span class="input-val" id="arb_inv_rate_val">12%</span></div><input type="range" id="arb_inv_rate" min="1" max="30" step="0.1" value="12"></div>
             </div>
             <div class="glass-card">
                 <div class="big-value" id="arb_net">₹ 0</div>
-                <div id="arb_status" style="font-weight:bold; margin-top:5px;"></div>
                 <div class="chart-wrapper"><canvas id="arbChart"></canvas></div>
             </div>
         </div>
@@ -175,71 +161,37 @@
         <div style="display:flex; gap:10px; margin-bottom:1rem; overflow-x:auto;">
             <button class="reset-btn" onclick="openArcade('trader')">Trader Pro</button>
             <button class="reset-btn" onclick="openArcade('defense')">Defense</button>
-            <button class="reset-btn" onclick="openArcade('run')">Wealth Run</button>
+            <button class="reset-btn" onclick="openArcade('run')">Financial Race</button>
         </div>
 
         <div id="game-trader" class="arcade-content game-grid">
             <div class="glass-card">
-                <div style="display:flex; justify-content:space-between;">
-                    <h3>Trader Pro</h3>
-                    <button class="reset-btn" onclick="toggleChartType()">Line/Candle</button>
-                </div>
+                <div style="display:flex; justify-content:space-between;"><h3>Terminal</h3><button class="reset-btn" onclick="resetMM()">New Stock</button></div>
                 <div class="game-screen">
                     <div class="candle-timer" id="trader_timer">5s</div>
-                    <div style="position:absolute; top:10px; left:10px; color:#10b981; font-size:1.2rem;">NIFTY: <span id="trader_price">20000</span></div>
-                    <div class="pattern-badge" id="trader_pattern">Scanning...</div>
+                    <div style="position:absolute; top:10px; left:10px; color:#10b981; font-size:1.2rem;">PRICE: <span id="trader_price">...</span></div>
                     <canvas id="traderChart"></canvas>
                 </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
-                    <button class="kid-btn btn-green" onclick="traderAction(1)">BUY CALL</button>
-                    <button class="kid-btn btn-red" onclick="traderAction(-1)">BUY PUT</button>
+                <div class="trade-controls">
+                    <select id="trader_qty" class="qty-input"><option value="1">Qty: 1</option><option value="10">Qty: 10</option><option value="100">Qty: 100</option></select>
+                    <button class="kid-btn btn-green" onclick="traderAction(1)">BUY</button>
+                    <button class="kid-btn btn-red" onclick="traderAction(-1)">SELL</button>
                 </div>
             </div>
-            <div class="glass-card">
-                <h4>Portfolio</h4>
-                <div class="big-value" id="trader_eq">₹ 10.0 L</div>
-                <p>Cash: <span id="trader_cash">10.0 L</span></p>
-                <button class="reset-btn" onclick="resetTrader()" style="margin-top:10px; width:100%">Reset Account</button>
-            </div>
-        </div>
-
-        <div id="game-defense" class="arcade-content game-grid" style="display:none;">
-            <div class="glass-card">
-                <h3>Defense Strategy</h3>
-                <div style="text-align:center; margin-top:20px; padding:20px; background:rgba(255,255,255,0.05); border-radius:12px;">
-                    <h2 style="color:var(--primary)" id="def_year">Year 1</h2>
-                    <div style="background:#000; color:var(--gold); display:inline-block; padding:5px; margin:10px 0;">📰 BREAKING NEWS</div>
-                    <h3 id="def_news">Market is Stable</h3>
-                    <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
-                        <button class="kid-btn btn-green" onclick="defAction('invest')">Invest</button>
-                        <button class="kid-btn btn-red" onclick="defAction('hold')">Hold</button>
-                    </div>
-                </div>
-            </div>
-            <div class="glass-card">
-                <h4>Net Worth</h4>
-                <div class="big-value" id="def_val">₹ 10.0 L</div>
-                <div id="def_log" style="margin-top:10px; color:var(--text-sub); height:100px; overflow-y:auto;"></div>
-                <button class="reset-btn" onclick="resetDefense()" style="margin-top:10px; width:100%">Restart Game</button>
-            </div>
+            <div class="glass-card"><h4>Portfolio</h4><div class="big-value" id="trader_eq">₹ 10.0 L</div><p>Cash: <span id="trader_cash">10.0 L</span></p><p>Stocks: <span id="trader_hold">0</span></p></div>
         </div>
 
         <div id="game-run" class="arcade-content" style="display:none;">
             <div class="glass-card" style="border-color:var(--neon-blue);">
-                <div style="display:flex; justify-content:space-between;"><h3>Wealth Run</h3><div class="big-value" style="font-size:1.5rem;" id="run_score">0</div></div>
-                <div class="game-screen" style="height:350px; margin-top:10px;">
+                <div style="display:flex; justify-content:space-between;"><h3>Financial Race</h3><div class="big-value" style="font-size:1.5rem;" id="run_score">0</div></div>
+                <div class="game-screen" style="height:400px; margin-top:10px;">
                     <div id="run_game">
-                        <div class="road"><div class="lane-marker"></div><div class="lane-marker right"></div></div>
-                        <div id="run_player" class="player-car">🏎️</div>
-                        <div id="run_overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; flex-direction:column; justify-content:center; align-items:center;">
-                            <h2>CRASHED!</h2><button class="kid-btn btn-green" onclick="startRun()">Try Again</button>
-                        </div>
+                        <div class="road"><div class="lane-marker"></div></div>
+                        <div id="run_player" class="player-car"></div>
+                        <div id="run_overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; flex-direction:column; justify-content:center; align-items:center;"><h2>CRASHED!</h2><button class="kid-btn btn-green" onclick="startRun()">Try Again</button></div>
                     </div>
                 </div>
-                <div class="control-pad">
-                    <button class="ctrl-btn" onclick="moveRun(-1)"><i class="ph-bold ph-arrow-left"></i></button>
-                    <button class="ctrl-btn" onclick="moveRun(1)"><i class="ph-bold ph-arrow-right"></i></button>
-                </div>
+                <div class="control-pad"><button class="ctrl-btn" onclick="moveRun(-1)"><</button><button class="ctrl-btn" onclick="moveRun(1)">></button></div>
             </div>
         </div>
     </div>
@@ -249,21 +201,21 @@
             <button class="reset-btn" onclick="openKid('coin')">Coin Quest</button>
             <button class="reset-btn" onclick="openKid('piggy')">Piggy Dash</button>
         </div>
-
-        <div id="kid-coin" class="kid-content">
-            <div class="glass-card" style="border-color:var(--success); background:rgba(16,185,129,0.1);">
+        
+        <div id="kid-coin" class="kid-content game-grid">
+            <div class="glass-card" style="background:rgba(14,165,233,0.1); border-color:var(--success);">
                 <div style="text-align:center;">
                     <h3>Coin Quest</h3>
-                    <div style="font-size:1.5rem; margin:10px;">Score: <span id="kq_score">0</span> / 20</div>
+                    <div style="font-size:1.5rem; margin:10px;">Item: <span id="kq_idx">1</span>/20</div>
                     <div style="font-size:6rem; margin:20px 0;" id="kq_icon">🍎</div>
                     <h2 id="kq_name">Apple</h2>
                     <div style="display:flex; gap:20px; justify-content:center; margin-top:20px;">
-                        <button class="kid-btn btn-green" onclick="checkKQ('need')">NEED ✅</button>
-                        <button class="kid-btn btn-red" onclick="checkKQ('want')">WANT 🎁</button>
+                        <button class="kid-btn btn-green" onclick="checkKQ('need')">NEED</button><button class="kid-btn btn-red" onclick="checkKQ('want')">WANT</button>
                     </div>
-                    <div id="kq_msg" style="height:30px; margin-top:10px; font-weight:bold;"></div>
+                    <div id="kq_res" style="margin-top:15px; font-weight:bold;"></div>
                 </div>
             </div>
+            <div class="glass-card"><h4>Score</h4><div class="big-value" id="kq_score">0</div></div>
         </div>
 
         <div id="kid-piggy" class="kid-content" style="display:none;">
@@ -271,15 +223,9 @@
                 <div style="display:flex; justify-content:space-between;"><h3>Piggy Dash</h3><div style="color:var(--gold); font-weight:bold;">₹ <span id="pig_score">0</span></div></div>
                 <div class="game-screen" id="piggy_container" style="margin-top:15px; border:2px solid var(--neon-pink);">
                     <div id="piggy_player" class="piggy">🐷</div>
-                    <div id="pig_overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                        <h2>Catch Money!</h2>
-                        <button class="kid-btn btn-green" onclick="startPiggy()">START</button>
-                    </div>
+                    <div id="pig_overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; flex-direction:column; justify-content:center; align-items:center;"><h2>Catch Money!</h2><button class="kid-btn btn-green" onclick="startPiggy()">START</button></div>
                 </div>
-                <div class="control-pad">
-                    <button class="ctrl-btn" onmousedown="movePig(-1)" onmouseup="stopPig()" ontouchstart="movePig(-1)" ontouchend="stopPig()"><i class="ph-bold ph-arrow-left"></i></button>
-                    <button class="ctrl-btn" onmousedown="movePig(1)" onmouseup="stopPig()" ontouchstart="movePig(1)" ontouchend="stopPig()"><i class="ph-bold ph-arrow-right"></i></button>
-                </div>
+                <div class="control-pad"><button class="ctrl-btn" onclick="movePig(-1)"><</button><button class="ctrl-btn" onclick="movePig(1)">></button></div>
             </div>
         </div>
     </div>
@@ -296,11 +242,7 @@
         btn.classList.add('active');
         document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active-view'));
         document.getElementById('section-' + id).classList.add('active-view');
-        
         stopAllGames();
-
-        document.body.className = id==='arcade'?'mode-trader':(id==='kids'?'mode-kids':'mode-tools');
-
         if(id === 'tools') setTimeout(calcAll, 50);
         if(id === 'arcade') openArcade('trader');
         if(id === 'kids') openKid('coin');
@@ -321,7 +263,7 @@
 
     function openKid(id) {
         document.querySelectorAll('.kid-content').forEach(d => d.style.display='none');
-        document.getElementById('kid-' + id).style.display='block';
+        document.getElementById('kid-' + id).style.display='grid';
         stopAllGames();
         if(id === 'coin') loadKQ();
     }
@@ -334,7 +276,6 @@
     }
 
     // --- CALCULATORS ---
-    // Added 'arb_years' to the listener list
     ['sip_amt','sip_years','sip_rate','emi_amt','emi_years','emi_rate','arb_amt','arb_loan_rate','arb_inv_rate','arb_years'].forEach(id => {
         document.getElementById(id).addEventListener('input', (e) => {
             let val = parseFloat(e.target.value);
@@ -346,183 +287,150 @@
     });
 
     function calcAll() {
-        // SIP + TAX
+        // SIP (Tax)
         if(document.getElementById('tool-sip').style.display !== 'none') {
             const P=parseFloat(document.getElementById('sip_amt').value), N=parseFloat(document.getElementById('sip_years').value), R=parseFloat(document.getElementById('sip_rate').value);
-            let val=0, invested=P*N*12, mR=R/1200; for(let i=0;i<N*12;i++) val=(val+P)*(1+mR);
-            let gain = val - invested;
-            let tax = gain > 125000 ? (gain - 125000) * 0.125 : 0;
-            document.getElementById('sip_final').innerText = formatCurrency(val);
-            document.getElementById('sip_inv').innerText = formatCurrency(invested);
-            document.getElementById('sip_gain').innerText = formatCurrency(gain);
-            document.getElementById('sip_tax').innerText = formatCurrency(tax);
-            document.getElementById('sip_net').innerText = formatCurrency(val - tax);
+            let val=0, mR=R/1200; for(let i=0;i<N*12;i++) val=(val+P)*(1+mR);
+            let invested = P*N*12; let gain = val - invested;
+            let tax = gain > 125000 ? (gain-125000)*0.125 : 0;
+            document.getElementById('sip_final').innerText = formatCurrency(val - tax);
             drawChart('sipChart', 'line', Array.from({length:N},(_,i)=>i+1), Array.from({length:N},(_,i)=>{let t=0;for(let m=0;m<(i+1)*12;m++)t=(t+P)*(1+mR);return t}), '#6366f1');
         }
-        // EMI
+        // EMI (Stacked Bar)
         if(document.getElementById('tool-emi').style.display !== 'none') {
-            const L=parseFloat(document.getElementById('emi_amt').value), Y=parseFloat(document.getElementById('emi_years').value)*12, I=parseFloat(document.getElementById('emi_rate').value)/1200;
-            const emi=(L*I*Math.pow(1+I,Y))/(Math.pow(1+I,Y)-1);
-            let total = emi * Y;
+            const L=parseFloat(document.getElementById('emi_amt').value), Y=parseFloat(document.getElementById('emi_years').value), I=parseFloat(document.getElementById('emi_rate').value)/1200;
+            const emi=(L*I*Math.pow(1+I,Y*12))/(Math.pow(1+I,Y*12)-1);
             document.getElementById('emi_monthly').innerText=formatCurrency(emi);
-            document.getElementById('emi_interest').innerText=formatCurrency(total-L);
-            document.getElementById('emi_total').innerText=formatCurrency(total);
-            drawChart('emiChart', 'doughnut', ['Principal','Interest'], [L, total-L], ['#6366f1', '#f43f5e']);
-        }
-        // ARBITRAGE (UPDATED WITH DURATION)
-        if(document.getElementById('tool-arb').style.display !== 'none') {
-            const A=parseFloat(document.getElementById('arb_amt').value), lR=parseFloat(document.getElementById('arb_loan_rate').value)/100, iR=parseFloat(document.getElementById('arb_inv_rate').value)/100;
-            // Get duration from new slider
-            const Dur = parseFloat(document.getElementById('arb_years').value);
-            
-            let c=A, l=A, lbs=[], d1=[], d2=[];
-            for(let i=1; i<=Dur; i++){ 
-                c*=(1+iR); l*=(1+lR); 
-                lbs.push("Yr "+i); d1.push(c); d2.push(l); 
+            // Gen Yearly Breakdown
+            let bal=L, prinData=[], intData=[];
+            for(let i=1; i<=Y; i++) {
+                let yP=0, yI=0;
+                for(let m=0; m<12; m++) {
+                    let int=bal*I; let prin=emi-int;
+                    yI+=int; yP+=prin; bal-=prin;
+                }
+                prinData.push(yP); intData.push(yI);
             }
+            drawStackedBar('emiChart', Array.from({length:Y},(_,i)=>'Y'+(i+1)), prinData, intData);
+        }
+        // ARBITRAGE (Loan on Top)
+        if(document.getElementById('tool-arb').style.display !== 'none') {
+            const A=parseFloat(document.getElementById('arb_amt').value), Dur=parseFloat(document.getElementById('arb_years').value), lR=parseFloat(document.getElementById('arb_loan_rate').value)/100, iR=parseFloat(document.getElementById('arb_inv_rate').value)/100;
+            let c=A, l=A, lbs=[], d1=[], d2=[];
+            for(let i=1;i<=Dur;i++){ c*=(1+iR); l*=(1+lR); lbs.push("Y"+i); d1.push(c); d2.push(l); }
             document.getElementById('arb_net').innerText=formatCurrency(c-l);
-            document.getElementById('arb_status').innerText=(c-l)>0?"✅ Profit":"❌ Loss";
-            
-            const ctx = document.getElementById('arbChart').getContext('2d');
-            if(charts['arbChart']) charts['arbChart'].destroy();
-            charts['arbChart'] = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: lbs,
-                    datasets: [
-                        { label:'Investment', data:d1, borderColor:'#10b981', backgroundColor:'rgba(16,185,129,0.1)', fill:true, order:2 },
-                        { label:'Loan', data:d2, borderColor:'#f43f5e', backgroundColor:'transparent', borderDash:[5,5], borderWidth:2, fill:false, order:1 }
-                    ]
-                },
-                options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true}}, scales:{x:{grid:{display:false}}, y:{grid:{color:'#333'}}} }
-            });
+            drawChart('arbChart', 'line', lbs, d1, '#10b981', d2);
         }
     }
 
-    function drawChart(id, type, labels, d1, c1) {
+    function drawChart(id, type, labels, d1, c1, d2=null) {
         const ctx = document.getElementById(id).getContext('2d');
         if(charts[id]) charts[id].destroy();
-        charts[id] = new Chart(ctx, { type, data:{labels,datasets:[{data:d1, backgroundColor:c1, borderColor:Array.isArray(c1)?undefined:c1, fill:type==='line'}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{display:type!=='doughnut', color:'#333'}}}} });
+        let datasets = [{ label:'Invest', data:d1, borderColor:c1, backgroundColor:'rgba(16,185,129,0.2)', fill:true, order:2 }];
+        if(d2) datasets.push({ label:'Loan', data:d2, borderColor:'#f43f5e', borderDash:[5,5], fill:false, order:1 });
+        charts[id] = new Chart(ctx, { type, data:{labels,datasets}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}},scales:{x:{grid:{display:false}},y:{grid:{color:'#333'}}}} });
     }
 
-    // --- GAME 1: TRADER PRO ---
-    let traderInt, traderPrice=20000, traderEquity=1000000, traderStocks=0, currentCandle=null, candleEnd=0, chartType='bar';
-    const patterns = [{n:"Bull Run 🚀", t:1.02}, {n:"Crash 📉", t:0.98}, {n:"Sideways", t:1.00}];
-    let currentPattern = patterns[0];
+    function drawStackedBar(id, labels, prin, int) {
+        const ctx = document.getElementById(id).getContext('2d');
+        if(charts[id]) charts[id].destroy();
+        charts[id] = new Chart(ctx, {
+            type: 'bar',
+            data: { labels, datasets: [{ label:'Principal', data:prin, backgroundColor:'#6366f1' }, { label:'Interest', data:int, backgroundColor:'#f43f5e' }] },
+            options: { responsive:true, maintainAspectRatio:false, scales:{x:{stacked:true, grid:{display:false}}, y:{stacked:true, grid:{color:'#333'}}} }
+        });
+    }
+
+    // --- GAME 1: TRADER PRO (FIXED SCALING & QTY) ---
+    let traderInt, traderPrice=20000, traderEquity=1000000, traderHold=0, candleTime=0;
+    let candleOpen=0, candleHigh=0, candleLow=0, candleClose=0;
+    const MAX_CANDLES = 20;
 
     function initTrader() {
+        traderPrice = 100 + Math.random() * 5000; // Random Start
+        candleOpen = traderPrice;
         if(charts['trader']) charts['trader'].destroy();
         const ctx = document.getElementById('traderChart').getContext('2d');
         charts['trader'] = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: Array(20).fill(''),
+                labels: Array(MAX_CANDLES).fill(''),
                 datasets: [
-                    { label:'Wick', data:Array(20).fill(null), backgroundColor:'#64748b', barThickness:2, grouped:false },
-                    { label:'Body', data:Array(20).fill(null), backgroundColor:(c)=>c.raw&&c.raw[1]>=c.raw[0]?'#10b981':'#f43f5e', barThickness:10, grouped:false },
-                    { type:'line', label:'Line', data:Array(20).fill(null), borderColor:'#00f3ff', tension:0.1, hidden:true }
+                    { label:'Wick', data:Array(MAX_CANDLES).fill(null), backgroundColor:'#64748b', barThickness:2, grouped:false, order:1 },
+                    { label:'Body', data:Array(MAX_CANDLES).fill(null), backgroundColor:(c)=>c.raw&&c.raw[1]>=c.raw[0]?'#10b981':'#f43f5e', barThickness:8, grouped:false, order:2 }
                 ]
             },
-            options: { animation: false, responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { position: 'right', grid: { color: '#333' } } } }
+            options: { 
+                animation: false, responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, 
+                scales: { 
+                    x: { display: false }, 
+                    y: { position: 'right', grid: { color: '#333' }, min: (ctx) => {
+                        // Auto-Zoom Logic
+                        const data = ctx.chart.data.datasets[0].data.filter(v => v !== null).flat();
+                        return data.length ? Math.min(...data) * 0.99 : undefined;
+                    }} 
+                } 
+            }
         });
         startCandle();
         traderInt = setInterval(tickTrader, 100);
     }
 
     function startCandle() {
-        let prev = currentCandle ? currentCandle.c : 20000;
-        currentCandle = { o:prev, h:prev, l:prev, c:prev };
-        candleEnd = Date.now() + 5000; 
-        currentPattern = patterns[Math.floor(Math.random()*patterns.length)];
-        document.getElementById('trader_pattern').innerText = currentPattern.n;
-        
+        candleOpen = traderPrice; candleHigh = traderPrice; candleLow = traderPrice; candleClose = traderPrice;
+        candleTime = Date.now() + 5000;
         let c = charts['trader'];
-        if(c.data.datasets[0].data[19] !== null) {
+        if(c.data.datasets[0].data[MAX_CANDLES-1] !== null) {
             c.data.datasets[0].data.shift(); c.data.datasets[0].data.push(null);
             c.data.datasets[1].data.shift(); c.data.datasets[1].data.push(null);
-            c.data.datasets[2].data.shift(); c.data.datasets[2].data.push(null);
         }
     }
 
     function tickTrader() {
-        let timeLeft = Math.ceil((candleEnd - Date.now())/1000);
+        let timeLeft = Math.ceil((candleTime - Date.now())/1000);
         document.getElementById('trader_timer').innerText = timeLeft + "s";
-        let target = currentCandle.o * currentPattern.t;
-        let move = (target - traderPrice) * 0.1;
-        traderPrice += move + (Math.random() - 0.5) * 20;
+        let noise = (Math.random() - 0.5) * (traderPrice * 0.005);
+        traderPrice += noise;
+        
+        if(traderPrice > candleHigh) candleHigh = traderPrice;
+        if(traderPrice < candleLow) candleLow = traderPrice;
+        candleClose = traderPrice;
 
-        currentCandle.c = traderPrice;
-        if(traderPrice > currentCandle.h) currentCandle.h = traderPrice;
-        if(traderPrice < currentCandle.l) currentCandle.l = traderPrice;
-
-        document.getElementById('trader_price').innerText = traderPrice.toFixed(0);
+        document.getElementById('trader_price').innerText = traderPrice.toFixed(2);
         
         let c = charts['trader'];
-        let idx = 19; for(let i=0;i<20;i++) if(c.data.datasets[0].data[i]===null){idx=i; break;}
-        c.data.datasets[0].data[idx] = [currentCandle.l, currentCandle.h]; 
-        c.data.datasets[1].data[idx] = [currentCandle.o, currentCandle.c];
-        c.data.datasets[2].data[idx] = currentCandle.c;
+        let idx = MAX_CANDLES - 1;
+        for(let i=0; i<MAX_CANDLES; i++) if(c.data.datasets[0].data[i]===null) { idx=i; break; }
+        
+        c.data.datasets[0].data[idx] = [candleLow, candleHigh];
+        c.data.datasets[1].data[idx] = [candleOpen, candleClose];
         c.update('none');
 
-        if(Date.now() >= candleEnd) startCandle();
-        document.getElementById('trader_eq').innerText = formatCurrency(traderEquity + (traderStocks*traderPrice));
-    }
+        document.getElementById('trader_eq').innerText = formatCurrency(traderEquity + (traderHold * traderPrice));
 
-    function toggleChartType() {
-        let c = charts['trader'];
-        let isLine = !c.data.datasets[2].hidden;
-        c.data.datasets[0].hidden = !isLine; c.data.datasets[1].hidden = !isLine; c.data.datasets[2].hidden = isLine;
-        c.update();
+        if(Date.now() >= candleTime) startCandle();
     }
 
     function traderAction(dir) {
-        if(dir===1 && traderEquity > traderPrice) { traderStocks++; traderEquity -= traderPrice; }
-        if(dir===-1 && traderStocks > 0) { traderStocks--; traderEquity += traderPrice; }
+        let qty = parseInt(document.getElementById('trader_qty').value);
+        if(dir===1 && traderEquity >= traderPrice*qty) { traderHold+=qty; traderEquity -= traderPrice*qty; }
+        if(dir===-1 && traderHold >= qty) { traderHold-=qty; traderEquity += traderPrice*qty; }
         document.getElementById('trader_cash').innerText = formatCurrency(traderEquity);
+        document.getElementById('trader_hold').innerText = traderHold;
     }
-    function resetTrader() { traderEquity=1000000; traderStocks=0; traderPrice=20000; document.getElementById('trader_cash').innerText = formatCurrency(traderEquity); }
+    function resetTrader() { traderEquity=1000000; traderHold=0; initTrader(); }
 
-    // --- GAME 2: DEFENSE ---
-    let defVal=1000000, defYear=1;
-    const defEvents = [ {t:"Tech Boom",m:1.2},{t:"Recession",m:0.8},{t:"Stable",m:1.05},{t:"Inflation",m:0.9},{t:"Recovery",m:1.15} ];
-    let curEvent = defEvents[0];
-
-    function defAction(type) {
-        let change = type==='invest' ? curEvent.m : (curEvent.m>1?1.02:0.98);
-        let profit = defVal * (change - 1);
-        defVal *= change;
-        
-        let log = document.getElementById('def_log');
-        log.innerHTML = `<div>Yr ${defYear}: ${curEvent.t} -> ${profit>0?'+':''}${formatCurrency(profit)}</div>` + log.innerHTML;
-        
-        defYear++;
-        document.getElementById('def_year').innerText = "Year " + defYear;
-        document.getElementById('def_val').innerText = formatCurrency(defVal);
-        
-        curEvent = defEvents[Math.floor(Math.random()*defEvents.length)];
-        document.getElementById('def_news').innerText = curEvent.t;
-    }
-    function resetDefense() { defVal=1000000; defYear=1; document.getElementById('def_val').innerText = formatCurrency(defVal); document.getElementById('def_log').innerHTML=""; }
-
-    // --- GAME 3: WEALTH RUN ---
-    let runAnim, runActive=false, runLane=1, runScore=0; const lanes=[20,50,80];
-    function startRun() {
-        if(runActive) return;
-        runActive=true; runScore=0; 
-        document.getElementById('run_score').innerText=0;
-        document.getElementById('run_overlay').style.display='none';
-        document.querySelectorAll('.obstacle, .coin').forEach(e=>e.remove());
-        spawnObj(); loopRun();
-    }
-    function moveRun(dir) {
-        runLane += dir; if(runLane<0)runLane=0; if(runLane>2)runLane=2;
-        document.getElementById('run_player').style.left = lanes[runLane] + '%';
-    }
+    // --- GAME 3: FINANCIAL RACE (Wealth Run Remake) ---
+    let runActive=false, runLane=1, runScore=0, runAnim; const lanes=[20,50,80];
+    function startRun(){ if(runActive)return; runActive=true; runScore=0; document.getElementById('run_score').innerText=0; document.getElementById('run_overlay').style.display='none'; document.querySelectorAll('.game-obj').forEach(e=>e.remove()); spawnObj(); loopRun(); }
+    function moveRun(dir) { runLane+=dir; if(runLane<0)runLane=0; if(runLane>2)runLane=2; document.getElementById('run_player').style.left=lanes[runLane]+'%'; }
     function spawnObj() {
-        if(!runActive) return;
-        const el = document.createElement('div');
-        el.className = Math.random()>0.4 ? 'obstacle' : 'coin';
-        if(el.className==='coin') el.innerText = "₹";
+        if(!runActive)return;
+        const el=document.createElement('div'); el.classList.add('game-obj');
+        let type = Math.random();
+        if(type > 0.6) { el.classList.add('obj-good'); el.innerText = type>0.8 ? "BONUS" : "PROFIT"; } 
+        else { el.classList.add('obj-bad'); el.innerText = type>0.3 ? "DEBT" : "TAX"; }
+        
         let l = Math.floor(Math.random()*3);
         el.style.left = lanes[l] + '%'; el.dataset.lane=l; el.dataset.y=0;
         document.getElementById('run_game').appendChild(el);
@@ -530,10 +438,10 @@
     }
     function loopRun() {
         if(!runActive) return;
-        document.querySelectorAll('.obstacle, .coin').forEach(el => {
-            let y = parseFloat(el.dataset.y) + 2.5; el.dataset.y=y; el.style.top=y+'%';
+        document.querySelectorAll('.game-obj').forEach(el => {
+            let y=parseFloat(el.dataset.y)+3; el.dataset.y=y; el.style.top=y+'%';
             if(y>80 && y<90 && parseInt(el.dataset.lane)===runLane) {
-                if(el.className==='obstacle') { runActive=false; document.getElementById('run_overlay').style.display='flex'; }
+                if(el.classList.contains('obj-bad')) { runActive=false; document.getElementById('run_overlay').style.display='flex'; }
                 else { runScore+=100; document.getElementById('run_score').innerText=runScore; el.remove(); }
             }
             if(y>100) el.remove();
@@ -541,60 +449,31 @@
         runAnim = requestAnimationFrame(loopRun);
     }
 
-    // --- KID 1: COIN QUEST ---
+    // --- KID 1: COIN QUEST (FIXED LOOP) ---
     let kqI=0, kqS=0; 
-    const kqList=[{n:"Apple",t:"need",i:"🍎"}, {n:"PS5",t:"want",i:"🎮"}, {n:"Water",t:"need",i:"💧"}, {n:"Toy",t:"want",i:"🧸"}, {n:"Medicine",t:"need",i:"💊"}];
+    const kqList=[{n:"Apple",t:"need",i:"🍎"}, {n:"PS5",t:"want",i:"🎮"}, {n:"Water",t:"need",i:"💧"}, {n:"Toy",t:"want",i:"🧸"}, {n:"Medicine",t:"need",i:"💊"}, {n:"Candy",t:"want",i:"🍬"}, {n:"Book",t:"need",i:"📚"}, {n:"Gold",t:"want",i:"💍"}, {n:"Rice",t:"need",i:"🍚"}, {n:"Car",t:"want",i:"🏎️"}];
     function loadKQ() {
-        if(kqI>=kqList.length) { document.getElementById('kq_name').innerText="Game Over"; return; }
+        if(kqI>=kqList.length) { document.getElementById('kq_name').innerText="Complete!"; document.getElementById('kq_icon').innerText="🏆"; return; }
         let i = kqList[kqI];
         document.getElementById('kq_icon').innerText = i.i;
         document.getElementById('kq_name').innerText = i.n;
+        document.getElementById('kq_idx').innerText = (kqI+1);
     }
     function checkKQ(t) {
-        let i = kqList[kqI % kqList.length];
-        if(t===i.t) { kqS++; document.getElementById('kq_msg').innerText="✅ Correct!"; document.getElementById('kq_msg').style.color='#10b981'; }
-        else { document.getElementById('kq_msg').innerText="❌ Wrong!"; document.getElementById('kq_msg').style.color='#ef4444'; }
+        if(t===kqList[kqI].t) { kqS++; document.getElementById('kq_res').innerText="✅ Correct!"; } else { document.getElementById('kq_res').innerText="❌ Wrong!"; }
         document.getElementById('kq_score').innerText=kqS;
         kqI++; setTimeout(loadKQ, 500);
     }
     function resetKQ() { kqS=0; kqI=0; document.getElementById('kq_score').innerText=0; loadKQ(); }
 
-    // --- KID 2: PIGGY DASH ---
-    let pigAnim, pigSpawnInt, pigPos=50, pigSc=0, pigActive=false, pigMove=0;
-    function startPiggy() {
-        if(pigActive) return;
-        pigActive=true; pigSc=0; pigPos=50; document.getElementById('pig_score').innerText=0;
-        document.getElementById('pig_overlay').style.display='none';
-        document.querySelectorAll('.drop-item').forEach(e=>e.remove());
-        updatePig();
-        pigAnim = requestAnimationFrame(loopPiggy);
-        pigSpawnInt = setInterval(spawnPig, 600);
-    }
+    // --- KID 2: PIGGY (FIXED) ---
+    let pigInt, pigSpawnInt, pigPos=50, pigSc=0, pigActive=false, pigMove=0;
+    function startPiggy() { if(pigActive)return; pigActive=true; pigSc=0; pigPos=50; document.getElementById('pig_overlay').style.display='none'; document.querySelectorAll('.drop-item').forEach(e=>e.remove()); updatePig(); pigInt=requestAnimationFrame(loopPig); pigSpawnInt=setInterval(spawnPig, 600); }
     function movePig(d) { pigMove=d*2; } function stopPig() { pigMove=0; }
     function updatePig() { document.getElementById('piggy_player').style.left=pigPos+'%'; }
-    function spawnPig() {
-        if(!pigActive) return;
-        const el = document.createElement('div'); el.className='drop-item';
-        el.innerText = Math.random()>0.3 ? '💰' : '🔨';
-        el.dataset.type = el.innerText==='💰'?'good':'bad';
-        el.style.left = (Math.random()*90+5)+'%'; el.style.top='-50px'; el.dataset.y=-50;
-        document.getElementById('piggy_container').appendChild(el);
-    }
-    function loopPiggy() {
-        if(!pigActive) return;
-        if(pigMove!==0) { pigPos+=pigMove; if(pigPos<10)pigPos=10; if(pigPos>90)pigPos=90; updatePig(); }
-        document.querySelectorAll('.drop-item').forEach(e => {
-            let y=parseFloat(e.dataset.y)+4; e.dataset.y=y; e.style.top=y+'px';
-            if(y>350 && y<400 && Math.abs(parseFloat(e.style.left)-pigPos)<15) {
-                if(e.dataset.type==='good') { pigSc+=100; document.getElementById('pig_score').innerText=pigSc; e.remove(); }
-                else { pigActive=false; clearInterval(pigSpawnInt); document.getElementById('pig_overlay').style.display='flex'; }
-            }
-            if(y>460) e.remove();
-        });
-        pigAnim = requestAnimationFrame(loopPiggy);
-    }
+    function spawnPig() { if(!pigActive)return; const el=document.createElement('div'); el.className='drop-item'; el.innerText=Math.random()>0.3?'💰':'🔨'; el.dataset.type=el.innerText==='💰'?'good':'bad'; el.style.left=(Math.random()*90+5)+'%'; el.style.top='-50px'; el.dataset.y=-50; document.getElementById('piggy_container').appendChild(el); }
+    function loopPig() { if(!pigActive)return; if(pigMove!==0){pigPos+=pigMove;if(pigPos<10)pigPos=10;if(pigPos>90)pigPos=90;updatePig();} document.querySelectorAll('.drop-item').forEach(e=>{ let y=parseFloat(e.dataset.y)+4; e.dataset.y=y; e.style.top=y+'px'; if(y>350&&y<400&&Math.abs(parseFloat(e.style.left)-pigPos)<15){ if(e.dataset.type==='good'){pigSc+=100;document.getElementById('pig_score').innerText=pigSc;e.remove();} else{pigActive=false;clearInterval(pigSpawnInt);document.getElementById('pig_overlay').style.display='flex';} } if(y>460)e.remove(); }); pigInt=requestAnimationFrame(loopPig); }
 
-    // Initial Load
     setTimeout(() => { calcAll(); }, 100);
 </script>
 </body>
