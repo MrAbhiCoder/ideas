@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calc Learn Play India | Ultimate Arcade</title>
+    <title>WealthVerse | Interface X</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
             --text-sub: #94a3b8;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; user-select: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; user-select: none; -webkit-tap-highlight-color: transparent; }
         
         body { 
             background-color: var(--bg-dark);
@@ -35,7 +35,7 @@
             transition: background 0.5s ease;
         }
 
-        /* DYNAMIC BACKGROUNDS */
+        /* BACKGROUND MODES */
         body.mode-default { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
         body.mode-trader { background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%); }
         body.mode-run { background: linear-gradient(to bottom, #2e1065 0%, #0f172a 100%); }
@@ -46,29 +46,69 @@
         /* HEADER */
         header { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 1.5rem 0; margin-bottom: 1rem; border-bottom: 1px solid var(--border-glass);
+            padding: 1.5rem 0; margin-bottom: 1.5rem;
         }
         .brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; background: linear-gradient(to right, #6366f1, #00f3ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; }
 
-        /* MENU STRIP */
-        .arcade-menu-bar {
-            display: flex; gap: 10px; padding: 10px;
-            background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass);
-            border-radius: 16px; margin-bottom: 2rem; overflow-x: auto; white-space: nowrap;
+        /* --- NEW DROPDOWN NAVIGATION SYSTEM --- */
+        .nav-dock {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+            margin-bottom: 2rem; position: relative; z-index: 100;
         }
-        .arcade-menu-bar::-webkit-scrollbar { display: none; }
-        .menu-divider { width: 1px; height: 25px; background: var(--border-glass); align-self: center; margin: 0 10px; }
 
-        .list-btn {
-            background: transparent; border: 1px solid transparent;
-            color: var(--text-sub); padding: 8px 16px; border-radius: 10px;
-            font-size: 0.9rem; font-weight: 600; cursor: pointer;
-            transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+        .dropdown-container { position: relative; }
+
+        /* The Main Category Button */
+        .drop-trigger {
+            width: 100%; padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px; color: var(--text-sub);
+            font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.3s;
         }
-        .list-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .list-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
-        .list-btn.game-active { background: linear-gradient(135deg, var(--gold), #d97706); color: black; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
-        .list-btn.run-active { background: linear-gradient(135deg, var(--neon-blue), #0ea5e9); color: black; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4); }
+        .drop-trigger:hover { background: rgba(255,255,255,0.1); color: white; }
+        .drop-trigger i.caret { font-size: 0.7rem; transition: transform 0.3s; }
+        
+        /* Active State (Category Selected) */
+        .drop-trigger.active-category {
+            background: var(--primary); color: white;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            border-color: var(--primary);
+        }
+        .drop-trigger.open i.caret { transform: rotate(180deg); }
+
+        /* The Dropdown Menu */
+        .drop-menu {
+            position: absolute; top: 110%; left: 0; width: 100%; min-width: 200px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px; padding: 8px;
+            display: none; flex-direction: column; gap: 5px;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            animation: dropIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes dropIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .dropdown-container:last-child .drop-menu { right: 0; left: auto; } /* Align last menu to right */
+
+        /* Menu Items */
+        .menu-btn {
+            background: transparent; border: none; padding: 12px;
+            color: var(--text-sub); text-align: left;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer;
+            border-radius: 8px; display: flex; align-items: center; gap: 10px;
+            transition: 0.2s;
+        }
+        .menu-btn:hover { background: rgba(255,255,255,0.05); color: white; padding-left: 15px; }
+        .menu-btn.active { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
+        .menu-btn i { font-size: 1.1rem; }
+
+        /* Show Class */
+        .show-menu { display: flex; }
+
 
         /* LAYOUTS */
         .dashboard, .game-layout, .kid-layout { display: none; animation: slideUp 0.3s ease-out; }
@@ -78,7 +118,7 @@
         .dashboard.active, .game-layout.active, .kid-layout.active { display: grid; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* CARDS & UI */
+        /* UI */
         .glass-card { background: var(--card-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-glass); border-radius: 20px; padding: 2rem; position: relative; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
         .input-wrap { margin-bottom: 1.5rem; }
         .input-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-sub); }
@@ -87,14 +127,13 @@
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #fff; margin-top: -6px; }
         .big-value { font-size: 3rem; font-weight: 800; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .chart-main { height: 280px; width: 100%; }
-        .reset-btn { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #fca5a5; padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; }
         
+        .reset-btn { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #fca5a5; padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; }
         .kid-btn { padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; width: 48%; transition: transform 0.1s; }
         .kid-btn:active { transform: scale(0.95); }
         .btn-need { background: var(--success); color: white; box-shadow: 0 4px 0 #065f46; }
         .btn-want { background: var(--accent); color: white; box-shadow: 0 4px 0 #9f1239; }
 
-        /* GAME SCREEN COMMONS */
         .game-screen { background: #000; height: 400px; border-radius: 16px; position: relative; border: 1px solid #333; overflow: hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; }
         .game-over-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 20; display:none; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; }
 
@@ -102,15 +141,13 @@
         .defense-card { text-align: center; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255,255,255,0.05); margin-top: 10px; }
         .news-ticker { background: #000; color: var(--gold); padding: 5px 10px; font-family: monospace; border-radius: 4px; margin-bottom: 10px; display: inline-block; }
 
-        /* --- WEALTH RUN (ROAD RASH STYLE) --- */
+        /* --- WEALTH RUN --- */
         #run_game_container { width: 100%; height: 100%; position: relative; background: linear-gradient(to bottom, #1e1b4b 0%, #4c1d95 50%, #db2777 100%); perspective: 600px; overflow: hidden; }
         #run_game_container::after { content:''; position: absolute; bottom:0; left:0; width:100%; height:50%; background: linear-gradient(90deg, transparent 95%, rgba(0,243,255,0.2) 95%); background-size: 40px 40px; transform: perspective(500px) rotateX(60deg); pointer-events: none; }
-        
         .road { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotateX(60deg); width: 340px; height: 120%; background: #0f172a; border-left: 8px solid var(--neon-blue); border-right: 8px solid var(--neon-blue); box-shadow: 0 0 40px rgba(0, 243, 255, 0.3); }
         .lane-marker { position: absolute; top: 0; left: 33%; width: 4px; height: 100%; background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.5) 50%, transparent 50%, transparent 100%); background-size: 10px 40px; animation: moveRoad 0.2s linear infinite; }
         .lane-marker.right { left: 66%; }
         @keyframes moveRoad { from { background-position: 0 0; } to { background-position: 0 40px; } }
-
         .player-ball { 
             position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); 
             font-size: 3.5rem; line-height: 1; z-index: 10; 
@@ -119,34 +156,37 @@
         }
         .player-ball.lean-left { transform: translateX(-50%) rotate(-15deg); }
         .player-ball.lean-right { transform: translateX(-50%) rotate(15deg); }
-
         .obstacle, .coin { position: absolute; transform: translateX(-50%); display: flex; justify-content: center; align-items: center; z-index: 5; }
-        .obstacle { 
-            background: #111; border: 2px solid #ef4444; border-radius: 50%; 
-            width: 100%; height: 20px; /* Flat oval look */
-            box-shadow: inset 0 0 10px #000; 
-        }
-        .coin { 
-            font-size: 0px; background: radial-gradient(circle, #fbbf24, #d97706); 
-            border: 2px solid #fff; border-radius: 50%; 
-            box-shadow: 0 0 15px #fbbf24; 
-        }
-
+        .obstacle { background: #111; border: 2px solid #ef4444; border-radius: 50%; width: 100%; height: 20px; box-shadow: inset 0 0 10px #000; }
+        .coin { font-size: 0px; background: radial-gradient(circle, #fbbf24, #d97706); border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 15px #fbbf24; }
         .control-pad { display: flex; gap: 30px; margin-top: 15px; width: 100%; justify-content: center; }
         .control-btn { width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.1); color: white; font-size: 2rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); transition: transform 0.05s; display:flex; align-items:center; justify-content:center;}
         .control-btn:active { background: var(--primary); transform: scale(0.9); }
 
-        /* --- PIGGY DASH --- */
-        #piggy_container { width: 100%; height: 100%; position: relative; background: #0f172a; overflow: hidden; }
-        .piggy { 
-            position: absolute; bottom: 10px; width: 60px; height: 60px; 
-            background: #ec4899; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; font-size: 2rem;
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5); transition: left 0.1s;
+        /* --- PIGGY DASH UPDATED --- */
+        #piggy_container { 
+            width: 100%; height: 450px; 
+            position: relative; background: #1e293b; overflow: hidden; 
+            border: 3px solid var(--neon-pink); border-radius: 16px;
         }
-        .drop-item { position: absolute; font-size: 1.5rem; transition: top 0.05s linear; }
+        .piggy { 
+            position: absolute; bottom: 20px; width: 80px; height: 80px; 
+            background: #ec4899; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 3rem;
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.6); transition: left 0.1s;
+            border: 3px solid white; z-index: 10;
+        }
+        .drop-item { 
+            position: absolute; font-size: 3rem; 
+            transition: top 0.05s linear; 
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5));
+        }
 
-        @media (max-width: 900px) { .dashboard, .game-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { 
+            .dashboard, .game-layout { grid-template-columns: 1fr; }
+            .nav-dock { gap: 5px; }
+            .drop-trigger { font-size: 0.8rem; padding: 10px; }
+        }
     </style>
 </head>
 <body class="mode-default">
@@ -156,21 +196,41 @@
         <div class="brand"><i class="ph-fill ph-currency-inr"></i> WealthVerse <span style="font-weight:300; color:white;">Arcade</span></div>
     </header>
 
-    <div class="arcade-menu-bar">
-        <span class="menu-label">Tools</span>
-        <button class="list-btn active" onclick="setTab('sip', this)"><i class="ph-bold ph-trend-up"></i> SIP</button>
-        <button class="list-btn" onclick="setTab('emi', this)"><i class="ph-bold ph-house"></i> EMI</button>
-        <button class="list-btn" onclick="setTab('arb', this)"><i class="ph-bold ph-scales"></i> Arb</button>
-        <div class="menu-divider"></div>
-        <span class="menu-label">Arcade</span>
-        <button class="list-btn" onclick="setTab('game1', this)"><i class="ph-fill ph-chart-line-up"></i> Trader</button>
-        <button class="list-btn" onclick="setTab('game2', this)"><i class="ph-fill ph-shield-check"></i> Defense</button>
-        <button class="list-btn" onclick="setTab('game3', this)"><i class="ph-fill ph-person-simple-run"></i> Run 3D</button>
-        <div class="menu-divider"></div>
-        <span class="menu-label">Kids</span>
-        <button class="list-btn" onclick="setTab('kid1', this)">🪙 Coins</button>
-        <button class="list-btn" onclick="setTab('kid2', this)">🐷 Piggy</button>
-    </div>
+    <nav class="nav-dock">
+        
+        <div class="dropdown-container">
+            <button class="drop-trigger active-category" onclick="toggleDrop('menu-tools', this)">
+                <i class="ph-fill ph-wrench"></i> Tools <i class="ph-bold ph-caret-down caret"></i>
+            </button>
+            <div id="menu-tools" class="drop-menu">
+                <button class="menu-btn active" onclick="setTab('sip', this, 'tools')"><i class="ph-bold ph-trend-up"></i> SIP Calculator</button>
+                <button class="menu-btn" onclick="setTab('emi', this, 'tools')"><i class="ph-bold ph-house"></i> EMI Calculator</button>
+                <button class="menu-btn" onclick="setTab('arb', this, 'tools')"><i class="ph-bold ph-scales"></i> Arbitrage</button>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="drop-trigger" onclick="toggleDrop('menu-arcade', this)">
+                <i class="ph-fill ph-game-controller"></i> Arcade <i class="ph-bold ph-caret-down caret"></i>
+            </button>
+            <div id="menu-arcade" class="drop-menu">
+                <button class="menu-btn" onclick="setTab('game1', this, 'arcade')"><i class="ph-fill ph-chart-candlestick"></i> Trader Pro</button>
+                <button class="menu-btn" onclick="setTab('game2', this, 'arcade')"><i class="ph-fill ph-shield-check"></i> Defense</button>
+                <button class="menu-btn" onclick="setTab('game3', this, 'arcade')"><i class="ph-fill ph-person-simple-run"></i> Wealth Run 3D</button>
+            </div>
+        </div>
+
+        <div class="dropdown-container">
+            <button class="drop-trigger" onclick="toggleDrop('menu-kids', this)">
+                <i class="ph-fill ph-baby"></i> Kids <i class="ph-bold ph-caret-down caret"></i>
+            </button>
+            <div id="menu-kids" class="drop-menu">
+                <button class="menu-btn" onclick="setTab('kid1', this, 'kids')"><i class="ph-fill ph-coins"></i> Coin Quest</button>
+                <button class="menu-btn" onclick="setTab('kid2', this, 'kids')"><i class="ph-fill ph-piggy-bank"></i> Piggy Dash</button>
+            </div>
+        </div>
+
+    </nav>
 
     <div id="sip" class="dashboard active"><div class="glass-card"><h3><i class="ph ph-sliders"></i> SIP</h3><div class="input-wrap"><div class="input-header"><label>Monthly</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div><input type="range" id="sip_amt" min="1000" max="200000" step="500" value="25000"></div><div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="sip_years_val">10 Yrs</span></div><input type="range" id="sip_years" min="1" max="40" step="1" value="10"></div><div class="input-wrap"><div class="input-header"><label>Return</label><span class="input-val" id="sip_rate_val">12 %</span></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div></div><div class="glass-card"><div class="big-number-block"><div class="big-label">Value</div><div class="big-value" id="sip_final">₹ 0</div></div><div class="chart-main"><canvas id="sipLineChart"></canvas></div></div></div>
     <div id="emi" class="dashboard"><div class="glass-card"><h3>EMI</h3><div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="emi_amt_val">₹ 50 L</span></div><input type="range" id="emi_amt" min="500000" max="10000000" step="100000" value="5000000"></div><div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20 Yrs</span></div><input type="range" id="emi_years" min="1" max="30" step="1" value="20"></div><div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5 %</span></div><input type="range" id="emi_rate" min="6" max="15" step="0.1" value="8.5"></div></div><div class="glass-card"><div class="big-number-block"><div class="big-label">EMI</div><div class="big-value" id="emi_monthly">₹ 0</div></div><div class="chart-main"><canvas id="emiChart"></canvas></div></div></div>
@@ -213,8 +273,8 @@
                 <h3 id="pd_event_title" style="margin-bottom:10px; font-weight:800;">Market is Stable</h3>
                 <p id="pd_event_desc" style="color:var(--text-sub); margin-bottom:20px; font-size:0.9rem;">Analysts predict steady growth. Inflation is under control.</p>
                 <div id="pd_buttons" style="display:flex; gap:10px; justify-content:center;">
-                    <button class="kid-btn btn-need" onclick="pdResolve('invest')">Invest Aggressively</button>
-                    <button class="kid-btn btn-want" onclick="pdResolve('hold')">Play Safe</button>
+                    <button class="kid-btn btn-need" onclick="pdResolve('invest')">Invest</button>
+                    <button class="kid-btn btn-want" onclick="pdResolve('hold')">Hold</button>
                 </div>
             </div>
         </div>
@@ -256,7 +316,7 @@
             </div>
             
             <div id="kq_game_area" style="text-align:center;">
-                <div style="font-size:1.2rem; font-weight:800; margin:10px 0; color:var(--gold);">Score: <span id="kq_score">0</span> / <span id="kq_total">15</span></div>
+                <div style="font-size:1.2rem; font-weight:800; margin:10px 0; color:var(--gold);">Score: <span id="kq_score">0</span> / 15</div>
                 <div style="font-size:5rem; margin:20px 0; animation:bounce 2s infinite;" id="kq_icon">🍎</div>
                 <h3 id="kq_item" style="font-size:2rem; margin-bottom:20px;">Apple</h3>
                 <div style="display:flex; justify-content:center; gap:20px;">
@@ -286,8 +346,9 @@
             <div class="game-screen" id="piggy_container" style="margin-top:15px; border:2px solid var(--neon-pink);">
                 <div id="piggy_player" class="piggy">🐷</div>
                 <div id="piggy_overlay" class="game-over-overlay" style="display:flex;">
-                    <h2>Catch the Cash!</h2>
-                    <p>Avoid Hammers 🔨</p>
+                    <h2>Catch Money!</h2>
+                    <p style="font-size:1.5rem">💰 🪙 💵 💎</p>
+                    <p>Avoid: 💣 🔨</p>
                     <button class="kid-btn btn-need" onclick="startPiggy()">Start</button>
                 </div>
             </div>
@@ -304,6 +365,57 @@
     const formatCurrency = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
 
     let charts = {};
+
+    // --- NAVIGATION LOGIC ---
+    function toggleDrop(menuId, btn) {
+        // Close all others
+        document.querySelectorAll('.drop-menu').forEach(m => {
+            if(m.id !== menuId) m.classList.remove('show-menu');
+        });
+        document.querySelectorAll('.drop-trigger').forEach(b => {
+            if(b !== btn) b.classList.remove('open');
+        });
+
+        // Toggle current
+        document.getElementById(menuId).classList.toggle('show-menu');
+        btn.classList.toggle('open');
+    }
+
+    function setTab(id, btn, category) {
+        // Close Menu
+        document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('show-menu'));
+        document.querySelectorAll('.drop-trigger').forEach(b => b.classList.remove('open'));
+
+        // Set Active Category Button
+        document.querySelectorAll('.drop-trigger').forEach(b => b.classList.remove('active-category'));
+        btn.parentElement.parentElement.previousElementSibling.classList.add('active-category');
+
+        // Set Active Content
+        document.querySelectorAll('.dashboard, .game-layout, .kid-layout').forEach(e => e.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+
+        // Set Active Menu Item Style
+        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Mode Logic
+        document.body.className = 'mode-default';
+        if(category === 'arcade') {
+            if(id === 'game1') { document.body.classList.add('mode-trader'); initMM(); }
+            if(id === 'game2') { /* Defense */ }
+            if(id === 'game3') { document.body.classList.add('mode-run'); }
+        }
+        else if(category === 'kids') {
+            document.body.classList.add('mode-kids');
+            if(id === 'kid1') loadKQ();
+        }
+        else {
+            calcAll();
+        }
+
+        if(runActive) gameOverRun();
+        if(pigActive) { pigActive=false; clearInterval(pigSpawnInt); }
+    }
 
     // --- CALCULATORS ---
     function setupInput(id, type='currency') {
@@ -372,7 +484,7 @@
     function mmTrade(t) { if(t==='buy' && mmC>mmP) {mmS++; mmC-=mmP;} if(t==='sell' && mmS>0) {mmS--; mmC+=mmP;} updateMM(); }
     function resetMM() { mmC=1000000; mmS=0; mmP=20000; startNewCandle(); updateMM(); }
 
-    // --- GAME 2: DEFENSE (NEW SCENARIOS) ---
+    // --- GAME 2: DEFENSE ---
     let pdN=1000000, pdY=1;
     const scenarios = [
         {t:"Tech Boom AI", d:"Tech stocks skyrocket! Safe assets lag.", buy:1.30, hold:1.05},
@@ -402,21 +514,15 @@
 
     function pdResolve(choice) {
         if(pdY>10) return;
-        
         let multiplier = choice === 'invest' ? currentScenario.buy : currentScenario.hold;
-        // Add slight randomness
         multiplier += (Math.random() - 0.5) * 0.1;
-        
         pdN *= multiplier;
-        
         let gain = multiplier >= 1;
         document.getElementById('pd_feedback').innerText = (gain?"+":"") + Math.round((multiplier-1)*100) + "% Return";
         document.getElementById('pd_feedback').style.color = gain ? 'var(--success)' : 'var(--accent)';
-
         pdY++;
         document.getElementById('pd_networth').innerText = formatCurrency(pdN); 
         document.getElementById('pd_year').innerText = "Year " + pdY;
-        
         if(pdY > 10) {
             document.getElementById('pd_buttons').innerHTML = `<div style='font-size:1.2rem; color:white;'>Game Over! Final: ${formatCurrency(pdN)}</div>`;
             document.getElementById('pd_event_title').innerText = "Retirement";
@@ -427,24 +533,22 @@
     }
     function resetPD() { pdN=1000000; pdY=1; document.getElementById('pd_networth').innerText=formatCurrency(pdN); document.getElementById('pd_year').innerText="Year 1"; document.getElementById('pd_buttons').innerHTML=`<button class="kid-btn btn-need" onclick="pdResolve('invest')">Invest</button><button class="kid-btn btn-want" onclick="pdResolve('hold')">Hold</button>`; document.getElementById('pd_feedback').innerText=""; nextYearScenario(); }
 
-
-    // --- GAME 3: WEALTH RUN (ROAD RASH STYLE) ---
+    // --- GAME 3: WEALTH RUN ---
     let runGameInterval, spawnInterval, runLane=1, runIsJumping=false, runScore=0, runSpeed=5, runActive=false;
     const lanes = [15, 50, 85]; const avatars = ['🏎️', '🏍️'];
-
     function startRunGame() {
         if(runActive) return;
-        runActive=true; runScore=0; runSpeed=3.5; // Faster start
+        runActive=true; runScore=0; runSpeed=3.5;
         document.getElementById('run_score').innerText=0; document.getElementById('run_start_overlay').style.display='none'; document.getElementById('run_game_over').style.display='none'; document.querySelectorAll('.obstacle, .coin').forEach(e=>e.remove());
         const p=document.getElementById('run_player'); p.innerText=avatars[Math.floor(Math.random()*avatars.length)]; runLane=1; p.style.left=lanes[1]+'%'; p.className="player-ball";
-        runGameInterval=requestAnimationFrame(gameLoopRun); spawnInterval=setInterval(spawnObject, 600); // Faster spawn
+        runGameInterval=requestAnimationFrame(gameLoopRun); spawnInterval=setInterval(spawnObject, 600);
     }
     function moveRun(dir) {
         if(!runActive) return; const p=document.getElementById('run_player');
         if(dir==='left'&&runLane>0) { runLane--; p.className="player-ball lean-left"; setTimeout(()=>p.className="player-ball", 200); } 
         if(dir==='right'&&runLane<2) { runLane++; p.className="player-ball lean-right"; setTimeout(()=>p.className="player-ball", 200); }
         p.style.left=lanes[runLane]+'%';
-        if(dir==='jump'&&!runIsJumping) { runIsJumping=true; p.style.bottom='120px'; p.style.transform='translateX(-50%) scale(1.5)'; setTimeout(()=>{p.style.bottom='30px'; p.style.transform='translateX(-50%) scale(1)'; runIsJumping=false;},500); }
+        if(dir==='jump'&&!runIsJumping) { runIsJumping=true; p.style.bottom='120px'; p.style.transform='translateX(-50%) scale(1.5)'; setTimeout(()=>{p.style.bottom='20px'; p.style.transform='translateX(-50%) scale(1)'; runIsJumping=false;},500); }
     }
     function spawnObject() {
         if(!runActive) return;
@@ -463,45 +567,28 @@
     function gameLoopRun() { if(runActive){runSpeed+=0.002; requestAnimationFrame(gameLoopRun);} }
     function gameOverRun() { runActive=false; clearInterval(spawnInterval); cancelAnimationFrame(runGameInterval); document.getElementById('run_game_over').style.display='flex'; }
 
-
-    // --- KID 1: COIN QUEST (15 ITEMS + RESULT) ---
+    // --- KID 1: COIN QUEST ---
     let kqS=0, kqIdx=0; 
-    const kqItems=[
-        {n:"Vegetables",i:"🥦",t:"need"},{n:"PS5",i:"🎮",t:"want"},{n:"School Fees",i:"🎒",t:"need"},{n:"Candy",i:"🍬",t:"want"},
-        {n:"Medicine",i:"💊",t:"need"},{n:"New Phone",i:"📱",t:"want"},{n:"Water",i:"💧",t:"need"},{n:"Designer Shoes",i:"👟",t:"want"},
-        {n:"Electricity",i:"💡",t:"need"},{n:"Ice Cream",i:"🍦",t:"want"},{n:"Books",i:"📚",t:"need"},{n:"Movie Ticket",i:"🎟️",t:"want"},
-        {n:"Rent",i:"🏠",t:"need"},{n:"Jewelry",i:"💍",t:"want"},{n:"Bus Ticket",i:"🚌",t:"need"}
-    ];
+    const kqItems=[ {n:"Vegetables",i:"🥦",t:"need"},{n:"PS5",i:"🎮",t:"want"},{n:"School Fees",i:"🎒",t:"need"},{n:"Candy",i:"🍬",t:"want"}, {n:"Medicine",i:"💊",t:"need"},{n:"New Phone",i:"📱",t:"want"},{n:"Water",i:"💧",t:"need"},{n:"Designer Shoes",i:"👟",t:"want"}, {n:"Electricity",i:"💡",t:"need"},{n:"Ice Cream",i:"🍦",t:"want"},{n:"Books",i:"📚",t:"need"},{n:"Movie Ticket",i:"🎟️",t:"want"}, {n:"Rent",i:"🏠",t:"need"},{n:"Jewelry",i:"💍",t:"want"},{n:"Bus Ticket",i:"🚌",t:"need"} ];
     function checkKQ(c) {
         let item=kqItems[kqIdx];
         if(c===item.t) {kqS++; document.getElementById('kq_msg').innerText="✅ Correct!"; document.getElementById('kq_msg').style.color='var(--success)';} 
         else {document.getElementById('kq_msg').innerText="❌ Oops!"; document.getElementById('kq_msg').style.color='var(--accent)';}
-        
-        kqIdx++;
-        document.getElementById('kq_score').innerText=kqS;
-        
-        if(kqIdx >= kqItems.length) {
-            setTimeout(showKQResult, 500);
-        } else {
-            setTimeout(loadKQ, 800);
-        }
+        kqIdx++; document.getElementById('kq_score').innerText=kqS;
+        if(kqIdx >= kqItems.length) { setTimeout(showKQResult, 500); } else { setTimeout(loadKQ, 800); }
     }
     function loadKQ() { let i=kqItems[kqIdx]; document.getElementById('kq_icon').innerText=i.i; document.getElementById('kq_item').innerText=i.n; document.getElementById('kq_msg').innerText=""; }
     function showKQResult() {
-        document.getElementById('kq_game_area').style.display = 'none';
-        document.getElementById('kq_result_area').style.display = 'block';
-        let rank = "";
-        if(kqS >= 13) rank = "🌟 Money Master 🌟";
-        else if(kqS >= 8) rank = "👍 Smart Saver";
-        else rank = "👶 Learner";
-        document.getElementById('kq_rank').innerText = rank;
-        document.getElementById('kq_final_score').innerText = `You got ${kqS} out of 15 correct!`;
+        document.getElementById('kq_game_area').style.display = 'none'; document.getElementById('kq_result_area').style.display = 'block';
+        let rank = ""; if(kqS >= 13) rank = "🌟 Money Master 🌟"; else if(kqS >= 8) rank = "👍 Smart Saver"; else rank = "👶 Learner";
+        document.getElementById('kq_rank').innerText = rank; document.getElementById('kq_final_score').innerText = `You got ${kqS} out of 15 correct!`;
     }
     function resetKQ() { kqS=0; kqIdx=0; document.getElementById('kq_score').innerText=0; document.getElementById('kq_game_area').style.display='block'; document.getElementById('kq_result_area').style.display='none'; loadKQ(); }
 
-
-    // --- KID 2: PIGGY DASH (NEW GAME) ---
+    // --- KID 2: PIGGY DASH ---
     let pigInt, pigSpawnInt, pigPos=50, pigScore=0, pigActive=false, pigMoveDir=0;
+    const pigGood = ['💰','🪙','💵','💎','🏦'];
+    const pigBad = ['🔨','💣','🧾','📉'];
     function startPiggy() {
         if(pigActive) return;
         pigActive=true; pigScore=0; pigPos=50; document.getElementById('piggy_score').innerText="0";
@@ -513,79 +600,31 @@
     }
     function movePiggy(dir) { pigMoveDir = dir === 'left' ? -2 : 2; }
     function stopPiggy() { pigMoveDir = 0; }
-    function updatePiggyPos() {
-        const p = document.getElementById('piggy_player');
-        p.style.left = pigPos + "%";
-        p.style.transform = 'translateX(-50%)';
-    }
+    function updatePiggyPos() { const p = document.getElementById('piggy_player'); p.style.left = pigPos + "%"; p.style.transform = 'translateX(-50%)'; }
     function spawnPiggyItem() {
         if(!pigActive) return;
         const type = Math.random() > 0.3 ? 'money' : 'bad';
-        const el = document.createElement('div');
-        el.className = 'drop-item';
-        el.innerText = type === 'money' ? (Math.random()>0.5?'💰':'💎') : '🔨';
-        el.style.left = (Math.random() * 90 + 5) + "%";
-        el.style.top = "-50px";
-        el.dataset.y = -50;
-        el.dataset.type = type;
+        const el = document.createElement('div'); el.className = 'drop-item';
+        if(type === 'money') el.innerText = pigGood[Math.floor(Math.random()*pigGood.length)];
+        else el.innerText = pigBad[Math.floor(Math.random()*pigBad.length)];
+        el.style.left = (Math.random() * 90 + 5) + "%"; el.style.top = "-50px"; el.dataset.y = -50; el.dataset.type = type;
         document.getElementById('piggy_container').appendChild(el);
     }
     function loopPiggy() {
         if(!pigActive) return;
-        if(pigMoveDir !== 0) {
-            pigPos += pigMoveDir;
-            if(pigPos < 10) pigPos = 10;
-            if(pigPos > 90) pigPos = 90;
-            updatePiggyPos();
-        }
-
-        // Move Items
+        if(pigMoveDir !== 0) { pigPos += pigMoveDir; if(pigPos < 10) pigPos = 10; if(pigPos > 90) pigPos = 90; updatePiggyPos(); }
         document.querySelectorAll('.drop-item').forEach(item => {
-            let y = parseFloat(item.dataset.y);
-            y += 4; // Fall speed
-            item.dataset.y = y;
-            item.style.top = y + "px";
-
-            // Collision
-            // Piggy is roughly at bottom 10px to 70px (height 60). Container height 400.
-            // Y is top position. Piggy Top is approx 330px.
-            if(y > 330 && y < 380) {
+            let y = parseFloat(item.dataset.y); y += 4; item.dataset.y = y; item.style.top = y + "px";
+            if(y > 350 && y < 400) {
                 let itemLeft = parseFloat(item.style.left);
-                if(Math.abs(itemLeft - pigPos) < 10) { // Hit
-                    if(item.dataset.type === 'money') {
-                        pigScore += 100;
-                        document.getElementById('piggy_score').innerText = pigScore;
-                        item.remove();
-                    } else {
-                        // Game Over
-                        pigActive = false;
-                        clearInterval(pigSpawnInt);
-                        document.getElementById('piggy_overlay').style.display = 'flex';
-                        document.getElementById('piggy_overlay').innerHTML = `<h2>Ouch! Debt!</h2><p>Score: ₹${pigScore}</p><button class="kid-btn btn-need" onclick="startPiggy()">Try Again</button>`;
-                    }
+                if(Math.abs(itemLeft - pigPos) < 15) {
+                    if(item.dataset.type === 'money') { pigScore += 100; document.getElementById('piggy_score').innerText = pigScore; item.remove(); } 
+                    else { pigActive = false; clearInterval(pigSpawnInt); document.getElementById('piggy_overlay').style.display = 'flex'; document.getElementById('piggy_overlay').innerHTML = `<h2>Ouch! Debt!</h2><p>Score: ₹${pigScore}</p><button class="kid-btn btn-need" onclick="startPiggy()">Try Again</button>`; }
                 }
             }
-            if(y > 420) item.remove();
+            if(y > 460) item.remove();
         });
-
         requestAnimationFrame(loopPiggy);
-    }
-
-    // --- TABS & BACKGROUNDS ---
-    function setTab(id, btn) {
-        document.querySelectorAll('.dashboard, .game-layout, .kid-layout').forEach(e => e.classList.remove('active'));
-        document.querySelectorAll('.list-btn').forEach(e => { e.classList.remove('active', 'game-active', 'run-active'); });
-        document.getElementById(id).classList.add('active');
-        
-        document.body.className = 'mode-default';
-        if(id === 'game1') { document.body.classList.add('mode-trader'); btn.classList.add('game-active'); initMM(); }
-        else if(id === 'game2') { btn.classList.add('game-active'); }
-        else if(id === 'game3') { document.body.classList.add('mode-run'); btn.classList.add('run-active'); }
-        else if(id.startsWith('kid')) { document.body.classList.add('mode-kids'); btn.classList.add('active'); if(id==='kid1') loadKQ(); }
-        else { btn.classList.add('active'); calcAll(); }
-
-        if(runActive) gameOverRun();
-        if(pigActive) { pigActive=false; clearInterval(pigSpawnInt); }
     }
 
     setupInput('sip_amt'); setupInput('sip_years','years'); setupInput('sip_rate','percent');
