@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CalcIndiaPlay | Ultimate</title>
+    <title>CalcIndiaPlayLearn</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -60,17 +60,16 @@
         }
         .drop-trigger:hover { background: rgba(255,255,255,0.1); color: white; }
         .drop-trigger.active-category { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); border-color: var(--primary); }
-        .drop-trigger i.caret { font-size: 0.7rem; transition: transform 0.3s; }
-        .drop-trigger.open i.caret { transform: rotate(180deg); }
-
+        
         .drop-menu {
             position: absolute; top: 110%; left: 0; width: 100%; min-width: 200px;
             background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-glass); border-radius: 16px; padding: 8px;
             display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
-            animation: dropIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 200;
         }
         .dropdown-container:last-child .drop-menu { right: 0; left: auto; }
+        .show-menu { display: flex; animation: dropIn 0.2s ease-out; }
         @keyframes dropIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
         .menu-btn {
@@ -79,14 +78,13 @@
         }
         .menu-btn:hover { background: rgba(255,255,255,0.05); color: white; padding-left: 15px; }
         .menu-btn.active { background: rgba(99, 102, 241, 0.2); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3); }
-        .show-menu { display: flex; }
 
         /* LAYOUTS */
-        /* Use !important to override JS toggles during animation frames if needed */
-        .dashboard, .game-layout, .kid-layout { display: none; opacity: 0; transition: opacity 0.3s; }
-        .dashboard.active, .game-layout.active, .kid-layout.active { display: grid; opacity: 1; }
+        .section-view { display: none; opacity: 0; transition: opacity 0.3s; }
+        .section-view.active { display: grid; opacity: 1; }
         
-        .dashboard { grid-template-columns: 1fr 1.5fr; gap: 1.5rem; }
+        /* Specific Grids */
+        .tool-layout { grid-template-columns: 1fr 1.5fr; gap: 1.5rem; }
         .game-layout { grid-template-columns: 1fr 350px; gap: 1.5rem; }
         .kid-layout { grid-template-columns: 1fr; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
 
@@ -98,7 +96,7 @@
         input[type=range] { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-appearance: none; cursor: pointer; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #fff; margin-top: -6px; }
         .big-value { font-size: 3rem; font-weight: 800; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .chart-main { height: 280px; width: 100%; }
+        .chart-main { height: 280px; width: 100%; position: relative; }
         
         .reset-btn { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #fca5a5; padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; }
         .kid-btn { padding: 15px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; width: 48%; transition: transform 0.1s; }
@@ -153,12 +151,18 @@
         .control-btn { width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.1); color: white; font-size: 2rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); transition: transform 0.05s; display:flex; align-items:center; justify-content:center;}
         .control-btn:active { background: var(--primary); transform: scale(0.9); }
 
-        /* --- PIGGY DASH --- */
+        /* --- OTHER ASSETS --- */
+        .candle-toggle { position: absolute; top: 10px; right: 10px; z-index: 10; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+        .pattern-badge { position: absolute; bottom: 10px; left: 10px; z-index: 10; background: rgba(0,0,0,0.6); color: var(--gold); padding: 5px 10px; border-radius: 6px; font-family: monospace; border: 1px solid var(--gold); }
+        .candle-timer { position: absolute; top: 10px; right: 10px; z-index: 10; background: rgba(59, 130, 246, 0.2); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; border: 1px solid rgba(59, 130, 246, 0.4); }
+        .defense-card { text-align: center; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; background: rgba(255,255,255,0.05); margin-top: 10px; }
+        .news-ticker { background: #000; color: var(--gold); padding: 5px 10px; font-family: monospace; border-radius: 4px; margin-bottom: 10px; display: inline-block; }
+        
         #piggy_container { width: 100%; height: 450px; position: relative; background: #1e293b; overflow: hidden; border: 3px solid var(--neon-pink); border-radius: 16px; }
         .piggy { position: absolute; bottom: 20px; width: 80px; height: 80px; background: #ec4899; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 0 30px rgba(236, 72, 153, 0.6); transition: left 0.1s; border: 3px solid white; z-index: 10; }
         .drop-item { position: absolute; font-size: 3rem; transition: top 0.05s linear; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); }
 
-        @media (max-width: 900px) { .dashboard, .game-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .dashboard, .game-layout, .kid-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body class="mode-default">
@@ -200,22 +204,31 @@
         </div>
     </nav>
 
-    <div id="sip" class="dashboard active"><div class="glass-card"><h3><i class="ph ph-sliders"></i> SIP</h3><div class="input-wrap"><div class="input-header"><label>Monthly</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div><input type="range" id="sip_amt" min="1000" max="200000" step="500" value="25000"></div><div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="sip_years_val">10 Yrs</span></div><input type="range" id="sip_years" min="1" max="40" step="1" value="10"></div><div class="input-wrap"><div class="input-header"><label>Return</label><span class="input-val" id="sip_rate_val">12 %</span></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div></div><div class="glass-card"><div class="big-number-block"><div class="big-label">Value</div><div class="big-value" id="sip_final">₹ 0</div></div><div class="chart-main"><canvas id="sipLineChart"></canvas></div></div></div>
+    <div id="sip" class="section-view tool-layout active">
+        <div class="glass-card"><h3><i class="ph ph-sliders"></i> SIP</h3><div class="input-wrap"><div class="input-header"><label>Monthly</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div><input type="range" id="sip_amt" min="1000" max="200000" step="500" value="25000"></div><div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="sip_years_val">10 Yrs</span></div><input type="range" id="sip_years" min="1" max="40" step="1" value="10"></div><div class="input-wrap"><div class="input-header"><label>Return</label><span class="input-val" id="sip_rate_val">12 %</span></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div></div>
+        <div class="glass-card"><div class="big-number-block"><div class="big-label">Value</div><div class="big-value" id="sip_final">₹ 0</div></div><div class="chart-main"><canvas id="sipLineChart"></canvas></div></div>
+    </div>
     
-    <div id="emi" class="dashboard"><div class="glass-card"><h3>EMI</h3><div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="emi_amt_val">₹ 50 L</span></div><input type="range" id="emi_amt" min="500000" max="10000000" step="100000" value="5000000"></div><div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20 Yrs</span></div><input type="range" id="emi_years" min="1" max="30" step="1" value="20"></div><div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5 %</span></div><input type="range" id="emi_rate" min="6" max="15" step="0.1" value="8.5"></div></div><div class="glass-card"><div class="big-number-block"><div class="big-label">EMI</div><div class="big-value" id="emi_monthly">₹ 0</div></div><div class="chart-main"><canvas id="emiChart"></canvas></div></div></div>
+    <div id="emi" class="section-view tool-layout">
+        <div class="glass-card"><h3>EMI</h3><div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="emi_amt_val">₹ 50 L</span></div><input type="range" id="emi_amt" min="500000" max="10000000" step="100000" value="5000000"></div><div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20 Yrs</span></div><input type="range" id="emi_years" min="1" max="30" step="1" value="20"></div><div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5 %</span></div><input type="range" id="emi_rate" min="6" max="15" step="0.1" value="8.5"></div></div>
+        <div class="glass-card"><div class="big-number-block"><div class="big-label">EMI</div><div class="big-value" id="emi_monthly">₹ 0</div></div><div class="chart-main"><canvas id="emiChart"></canvas></div></div>
+    </div>
     
-    <div id="arb" class="dashboard"><div class="glass-card"><h3>Arbitrage</h3><div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="arb_amt_val">₹ 50 L</span></div><input type="range" id="arb_amt" min="500000" max="10000000" step="100000" value="5000000"></div><div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="arb_loan_rate_val">8 %</span></div><input type="range" id="arb_loan_rate" min="1" max="15" step="0.1" value="8"></div><div class="input-wrap"><div class="input-header"><label>Return</label><span class="input-val" id="arb_inv_rate_val">12 %</span></div><input type="range" id="arb_inv_rate" min="1" max="20" step="0.1" value="12"></div></div><div class="glass-card"><div class="big-number-block"><div class="big-label">Profit</div><div class="big-value" id="arb_net">₹ 0</div><div id="arb_status" style="font-weight:700;"></div></div><div class="chart-main"><canvas id="arbChart"></canvas></div></div></div>
+    <div id="arb" class="section-view tool-layout">
+        <div class="glass-card"><h3>Arbitrage</h3><div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="arb_amt_val">₹ 50 L</span></div><input type="range" id="arb_amt" min="500000" max="10000000" step="100000" value="5000000"></div><div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="arb_loan_rate_val">8 %</span></div><input type="range" id="arb_loan_rate" min="1" max="15" step="0.1" value="8"></div><div class="input-wrap"><div class="input-header"><label>Return</label><span class="input-val" id="arb_inv_rate_val">12 %</span></div><input type="range" id="arb_inv_rate" min="1" max="20" step="0.1" value="12"></div></div>
+        <div class="glass-card"><div class="big-number-block"><div class="big-label">Profit</div><div class="big-value" id="arb_net">₹ 0</div><div id="arb_status" style="font-weight:700;"></div></div><div class="chart-main"><canvas id="arbChart"></canvas></div></div>
+    </div>
 
-    <div id="game1" class="game-layout">
+    <div id="game1" class="section-view game-layout">
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <h3>Live Market</h3>
                 <button class="reset-btn" onclick="resetMM()">Restart</button>
             </div>
             <div class="game-screen">
-                <div style="position:absolute; top:10px; right:10px; z-index:10; background:rgba(0,0,0,0.5); padding:5px; border-radius:5px;">Candle: 5s</div>
+                <div class="candle-timer" id="candle_timer">New Candle: 5s</div>
                 <div style="position:absolute; top:10px; left:10px; z-index:10; color:var(--success); font-family:monospace; font-size:1.2rem;">NIFTY: <span id="mm_price">20000</span></div>
-                <div style="position:absolute; bottom:10px; left:10px; z-index:10; background:rgba(0,0,0,0.5); padding:5px; border:1px solid var(--gold); border-radius:5px; color:var(--gold);" id="mm_pattern_name">Scanning...</div>
+                <div class="pattern-badge" id="mm_pattern_name">Scanning...</div>
                 <canvas id="mmChart"></canvas>
             </div>
             <div style="margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
@@ -231,7 +244,7 @@
         </div>
     </div>
 
-    <div id="game2" class="game-layout">
+    <div id="game2" class="section-view game-layout">
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h3>Defense Strategy</h3>
@@ -255,7 +268,7 @@
         </div>
     </div>
 
-    <div id="game3" class="kid-layout">
+    <div id="game3" class="section-view kid-layout">
         <div class="glass-card" style="border-color: var(--neon-blue);">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h3 style="color:var(--neon-blue)">Wealth Run 3D</h3>
@@ -278,7 +291,7 @@
         </div>
     </div>
 
-    <div id="kid1" class="kid-layout">
+    <div id="kid1" class="section-view kid-layout">
         <div class="glass-card" style="border-color: var(--kid-blue); background: rgba(14, 165, 233, 0.1);">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h2 style="color:var(--kid-blue)">🪙 Coin Quest</h2>
@@ -304,7 +317,7 @@
         </div>
     </div>
 
-    <div id="kid2" class="kid-layout">
+    <div id="kid2" class="section-view kid-layout">
         <div class="glass-card" style="border-color: var(--neon-pink); background: rgba(236, 72, 153, 0.1);">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h2 style="color:var(--neon-pink)">🐷 Piggy Dash</h2>
@@ -340,14 +353,17 @@
     }
 
     function setTab(id, btn, category) {
-        // UI Reset
+        // Close Menus
         document.querySelectorAll('.drop-menu').forEach(m => m.classList.remove('show-menu'));
         document.querySelectorAll('.drop-trigger').forEach(b => { b.classList.remove('open', 'active-category'); });
         btn.parentElement.parentElement.previousElementSibling.classList.add('active-category');
-        document.querySelectorAll('.dashboard, .game-layout, .kid-layout').forEach(e => {
+        
+        // Hide All Content
+        document.querySelectorAll('.section-view').forEach(e => {
             e.classList.remove('active');
-            e.style.display = 'none'; // Ensure reset
+            e.style.display = 'none'; // HARD HIDE
         });
+        
         document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
@@ -359,24 +375,24 @@
         if(pigActive) { pigActive=false; clearInterval(pigSpawnInt); cancelAnimationFrame(pigInt); }
         if(mmInt) { clearInterval(mmInt); mmInt = null; }
 
-        // Show Content
+        // Show Content with Delay for Rendering
         const target = document.getElementById(id);
         if(target) {
-            target.style.display = 'grid'; // Force Layout
-            setTimeout(() => {
-                target.classList.add('active'); // Fade In
-                
-                if(category === 'tools') {
-                    // Force Chart Update (Fix for blank charts)
-                    calcAll(); 
-                } else if(category === 'arcade') {
-                    if(id === 'game1') { document.body.classList.add('mode-trader'); initMM(); }
-                    if(id === 'game3') { document.body.classList.add('mode-run'); }
-                } else if(category === 'kids') {
-                    document.body.classList.add('mode-kids');
-                    if(id === 'kid1') loadKQ();
-                }
-            }, 50);
+            target.style.display = 'grid'; // Layout
+            // Force Reflow
+            void target.offsetWidth; 
+            target.classList.add('active'); // Fade In
+            
+            if(category === 'tools') {
+                // IMPORTANT: Re-render charts after layout is visible
+                setTimeout(calcAll, 50); 
+            } else if(category === 'arcade') {
+                if(id === 'game1') { document.body.classList.add('mode-trader'); initMM(); }
+                if(id === 'game3') { document.body.classList.add('mode-run'); }
+            } else if(category === 'kids') {
+                document.body.classList.add('mode-kids');
+                if(id === 'kid1') loadKQ();
+            }
         }
     }
 
@@ -394,24 +410,29 @@
         update();
     }
     function calcAll() {
+        // Only run if a tool section is actually visible to prevent chartjs errors
+        if(!document.querySelector('.tool-layout.active')) return;
+
         const P = parseFloat(document.getElementById('sip_amt').value), N = parseFloat(document.getElementById('sip_years').value), R = parseFloat(document.getElementById('sip_rate').value);
         let val=0, mR=R/1200; for(let i=0; i<N*12; i++) val=(val+P)*(1+mR);
         document.getElementById('sip_final').innerText = formatCurrency(val);
-        newChart('sipLineChart', 'line', { labels:Array.from({length:N},(_,i)=>i+1), datasets:[{data:Array.from({length:N},(_,i)=>{let v=0;for(let m=0;m<(i+1)*12;m++)v=(v+P)*(1+mR);return v}), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.2)', fill:true}] });
+        if(document.getElementById('sip').style.display !== 'none') newChart('sipLineChart', 'line', { labels:Array.from({length:N},(_,i)=>i+1), datasets:[{data:Array.from({length:N},(_,i)=>{let v=0;for(let m=0;m<(i+1)*12;m++)v=(v+P)*(1+mR);return v}), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.2)', fill:true}] });
 
         const L = parseFloat(document.getElementById('emi_amt').value), Y = parseFloat(document.getElementById('emi_years').value)*12, I = parseFloat(document.getElementById('emi_rate').value)/1200;
         const emi = (L*I*Math.pow(1+I,Y))/(Math.pow(1+I,Y)-1);
         document.getElementById('emi_monthly').innerText = formatCurrency(emi);
-        newChart('emiChart', 'bar', { labels:['Principal','Interest'], datasets:[{data:[L,(emi*Y)-L], backgroundColor:['#6366f1','#f43f5e']}] }, {indexAxis:'y'});
+        if(document.getElementById('emi').style.display !== 'none') newChart('emiChart', 'bar', { labels:['Principal','Interest'], datasets:[{data:[L,(emi*Y)-L], backgroundColor:['#6366f1','#f43f5e']}] }, {indexAxis:'y'});
 
         const arbA=parseFloat(document.getElementById('arb_amt').value), lR=parseFloat(document.getElementById('arb_loan_rate').value)/100, iR=parseFloat(document.getElementById('arb_inv_rate').value)/100;
         let c=arbA, l=arbA, lbs=[], d1=[], d2=[]; for(let i=1; i<=10; i++){c*=(1+iR); l*=(1+lR); lbs.push(i); d1.push(c); d2.push(l);}
         document.getElementById('arb_net').innerText = formatCurrency(c-l);
         document.getElementById('arb_status').innerText = (c-l)>0 ? "✅ Profitable" : "❌ Loss";
-        newChart('arbChart', 'line', { labels:lbs, datasets:[{label:'Inv',data:d1,borderColor:'#10b981'}, {label:'Loan',data:d2,borderColor:'#f43f5e',borderDash:[5,5]}] });
+        if(document.getElementById('arb').style.display !== 'none') newChart('arbChart', 'line', { labels:lbs, datasets:[{label:'Inv',data:d1,borderColor:'#10b981'}, {label:'Loan',data:d2,borderColor:'#f43f5e',borderDash:[5,5]}] });
     }
     function newChart(id, type, data, opts={}) {
-        const ctx = document.getElementById(id).getContext('2d');
+        const canvas = document.getElementById(id);
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
         if(charts[id]) charts[id].destroy();
         charts[id] = new Chart(ctx, { type, data, options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}}, ...opts } });
     }
@@ -466,8 +487,7 @@
     }
     function gameOverRun() { runActive=false; clearInterval(spawnInterval); cancelAnimationFrame(runGameInterval); document.getElementById('run_game_over').style.display='flex'; }
 
-    // --- OTHER GAMES (Simplified for integrity) ---
-    // Trader
+    // --- OTHER GAMES ---
     let mmInt, mmP=20000, mmC=1000000, mmS=0, currentCandle={o:0,h:0,l:0,c:0}, candleEndTime=0;
     const patterns = [{n:"Bull Run 🚀",target:1.05},{n:"Bear Crash 📉",target:0.95}];
     function initMM() {
@@ -482,7 +502,6 @@
     function mmTrade(t){if(t==='buy'&&mmC>mmP){mmS++;mmC-=mmP;}if(t==='sell'&&mmS>0){mmS--;mmC+=mmP;}updateMM();}
     function resetMM(){mmC=1000000;mmS=0;mmP=20000;startNewCandle();updateMM();}
 
-    // Defense & Kids logic remains standard
     let pdN=1000000, pdY=1; const scenarios=[{t:"Boom",d:"Good times.",buy:1.3,hold:1.05},{t:"Crash",d:"Bad times.",buy:0.7,hold:0.95}]; let curScen=scenarios[0];
     function pdResolve(c){if(pdY>10)return;pdN*=(c==='invest'?curScen.buy:curScen.hold);pdY++;document.getElementById('pd_networth').innerText=formatCurrency(pdN);document.getElementById('pd_year').innerText="Year "+pdY;if(pdY>10)document.getElementById('pd_buttons').innerHTML="Over";else{curScen=scenarios[Math.floor(Math.random()*2)];document.getElementById('pd_event_title').innerText=curScen.t;document.getElementById('pd_event_desc').innerText=curScen.d;}}
     function resetPD(){pdN=1000000;pdY=1;document.getElementById('pd_buttons').innerHTML=`<button class="kid-btn btn-need" onclick="pdResolve('invest')">Invest</button><button class="kid-btn btn-want" onclick="pdResolve('hold')">Hold</button>`;document.getElementById('pd_networth').innerText=formatCurrency(pdN);document.getElementById('pd_year').innerText="Year 1";}
@@ -491,7 +510,6 @@
     function loadKQ(){let i=kqItems[kqIdx%2];document.getElementById('kq_icon').innerText=i.i;document.getElementById('kq_item').innerText=i.n;}
     function resetKQ(){kqS=0;kqIdx=0;document.getElementById('kq_score').innerText=0;document.getElementById('kq_game_area').style.display='block';document.getElementById('kq_result_area').style.display='none';loadKQ();}
     
-    // Piggy
     let pigInt, pigSpawnInt, pigPos=50, pigScore=0, pigActive=false, pigMoveDir=0;
     const pigGood = ['💰','🪙','💵','💎','🏦'];
     const pigBad = ['🔨','💣','🧾','📉'];
@@ -502,11 +520,15 @@
     function spawnPiggyItem() { if(!pigActive) return; const type = Math.random() > 0.3 ? 'money' : 'bad'; const el = document.createElement('div'); el.className = 'drop-item'; if(type === 'money') el.innerText = pigGood[Math.floor(Math.random()*pigGood.length)]; else el.innerText = pigBad[Math.floor(Math.random()*pigBad.length)]; el.style.left = (Math.random() * 90 + 5) + "%"; el.style.top = "-50px"; el.dataset.y = -50; el.dataset.type = type; document.getElementById('piggy_container').appendChild(el); }
     function loopPiggy() { if(!pigActive) return; if(pigMoveDir !== 0) { pigPos += pigMoveDir; if(pigPos < 10) pigPos = 10; if(pigPos > 90) pigPos = 90; updatePiggyPos(); } document.querySelectorAll('.drop-item').forEach(item => { let y = parseFloat(item.dataset.y); y += 4; item.dataset.y = y; item.style.top = y + "px"; if(y > 350 && y < 400) { let itemLeft = parseFloat(item.style.left); if(Math.abs(itemLeft - pigPos) < 15) { if(item.dataset.type === 'money') { pigScore += 100; document.getElementById('piggy_score').innerText = pigScore; item.remove(); } else { pigActive = false; clearInterval(pigSpawnInt); document.getElementById('piggy_overlay').style.display = 'flex'; document.getElementById('piggy_overlay').innerHTML = `<h2>Ouch! Debt!</h2><p>Score: ₹${pigScore}</p><button class="kid-btn btn-need" onclick="startPiggy()">Try Again</button>`; } } } if(y > 460) item.remove(); }); requestAnimationFrame(loopPiggy); }
 
-    // Init
     setupInput('sip_amt'); setupInput('sip_years','years'); setupInput('sip_rate','percent');
     setupInput('emi_amt'); setupInput('emi_years','years'); setupInput('emi_rate','percent');
     setupInput('arb_amt'); setupInput('arb_loan_rate','percent'); setupInput('arb_inv_rate','percent');
-    setTimeout(calcAll, 100);
+    // Ensure chart renders initially
+    setTimeout(() => {
+        document.getElementById('sip').style.display = 'grid';
+        document.getElementById('sip').classList.add('active');
+        calcAll();
+    }, 100);
 </script>
 </body>
 </html>
