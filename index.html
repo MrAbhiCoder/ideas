@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WealthVerse India | Family Edition</title>
+    <title>WealthVerse India | Arcade Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
@@ -11,12 +11,12 @@
     <style>
         :root {
             --bg-dark: #0f172a;
-            --card-glass: rgba(30, 41, 59, 0.75);
+            --card-glass: rgba(30, 41, 59, 0.8);
             --border-glass: rgba(255, 255, 255, 0.1);
-            --primary: #6366f1; /* Indigo */
-            --accent: #f43f5e;  /* Rose */
-            --success: #10b981; /* Emerald */
-            --gold: #f59e0b;    /* Amber */
+            --primary: #6366f1;
+            --accent: #f43f5e;
+            --success: #10b981;
+            --gold: #f59e0b;
             --kid-blue: #0ea5e9;
             --kid-orange: #f97316;
             --text-main: #f8fafc;
@@ -42,30 +42,84 @@
         /* HEADER */
         header { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 1.5rem 0; margin-bottom: 2rem; border-bottom: 1px solid var(--border-glass);
+            padding: 1.5rem 0; margin-bottom: 1rem; border-bottom: 1px solid var(--border-glass);
         }
         .brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; background: linear-gradient(to right, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; }
-        .tagline { font-size: 0.8rem; color: var(--text-sub); margin-left: 10px; border-left: 1px solid #333; padding-left: 10px; }
 
-        /* NAVIGATION */
-        .nav-dock {
-            display: flex; gap: 0.8rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center;
-        }
-        .nav-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); 
-            padding: 0.8rem 1.2rem; border-radius: 12px; color: var(--text-sub); 
+        /* --- NAVIGATION SECTION --- */
+        .nav-container { margin-bottom: 2rem; }
+        .section-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-sub); margin-bottom: 10px; display:block; }
+
+        /* Tool Tabs (Simple Pills) */
+        .tool-dock { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .tool-btn {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); 
+            padding: 0.6rem 1.2rem; border-radius: 50px; color: var(--text-sub); 
             cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.9rem;
             display: flex; align-items: center; gap: 8px;
         }
-        .nav-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
-        .nav-btn.game-btn-style.active { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); color: #000; }
-        .nav-btn.kid-btn-style.active { background: var(--kid-blue); border-color: var(--kid-blue); box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); color: white; }
+        .tool-btn:hover { background: rgba(255,255,255,0.1); color: white; transform: translateY(-2px); }
+        .tool-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
 
-        /* DASHBOARD GRID */
-        .dashboard { display: none; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; animation: slideUp 0.4s ease-out; }
+        /* GAME GRID (Attractive Buttons) */
+        .game-dock { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; 
+        }
+        
+        .game-tile {
+            position: relative;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 15px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            aspect-ratio: 2.5/1; /* Keeps them looking like buttons/cards */
+            text-align: center;
+        }
+
+        /* Game Button Colors & Glows */
+        .game-tile.adult { border-bottom: 3px solid var(--gold); }
+        .game-tile.kid { border-bottom: 3px solid var(--kid-blue); }
+
+        .game-tile i { font-size: 1.8rem; margin-bottom: 5px; transition: transform 0.3s; }
+        .game-tile span { font-weight: 700; font-size: 0.95rem; color: var(--text-main); z-index: 2; }
+        .game-tile .sub-text { font-size: 0.7rem; color: var(--text-sub); font-weight: 400; }
+
+        /* Animations */
+        .game-tile:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.5);
+        }
+        
+        .game-tile.adult:hover { box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); border-color: var(--gold); }
+        .game-tile.kid:hover { box-shadow: 0 0 20px rgba(14, 165, 233, 0.3); border-color: var(--kid-blue); }
+        
+        .game-tile:hover i { transform: scale(1.2) rotate(5deg); }
+
+        .game-tile.active {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-color: #fff;
+            transform: scale(0.98);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Shine Effect */
+        .game-tile::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: skewX(-25deg); transition: 0.5s; pointer-events: none;
+        }
+        .game-tile:hover::before { left: 150%; transition: 0.7s; }
+
+
+        /* --- DASHBOARD & LAYOUT --- */
+        .dashboard { display: none; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; animation: fadeScale 0.4s ease-out; }
         .dashboard.active { display: grid; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeScale { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
         /* GLASS CARDS */
         .glass-card {
@@ -74,168 +128,158 @@
             position: relative; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
 
-        /* INPUTS */
+        /* INPUTS & STATS */
         .input-wrap { margin-bottom: 1.5rem; }
         .input-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-sub); }
         .input-val { font-weight: 700; color: var(--primary); }
-        
-        input[type=range] {
-            width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-appearance: none; cursor: pointer;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
-            background: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); margin-top: -6px;
-        }
+        input[type=range] { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-appearance: none; cursor: pointer; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); margin-top: -6px; transition: transform 0.1s; }
+        input[type=range]:active::-webkit-slider-thumb { transform: scale(1.3); background: var(--primary); }
 
-        /* STATS & BIG NUMBERS */
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
-        .stat-box { background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; text-align: center; border: 1px solid var(--border-glass); }
-        .stat-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-sub); letter-spacing: 1px; }
-        .stat-value { font-size: 1.2rem; font-weight: 700; margin-top: 5px; }
-        
         .big-number-block { margin-bottom: 2rem; text-align: left; }
         .big-label { font-size: 1rem; color: var(--text-sub); display: flex; align-items: center; gap: 5px; }
         .big-value { font-size: 3rem; font-weight: 800; line-height: 1.1; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .tax-alert { font-size: 0.85rem; color: var(--accent); background: rgba(244, 63, 94, 0.1); padding: 5px 10px; border-radius: 6px; display: inline-block; margin-top: 5px; border: 1px solid rgba(244, 63, 94, 0.3); }
 
-        /* GAME STYLES */
-        .game-layout { display: none; grid-template-columns: 1fr 350px; gap: 1.5rem; }
+        /* GAME LAYOUTS */
+        .game-layout { display: none; grid-template-columns: 1fr 350px; gap: 1.5rem; animation: fadeScale 0.4s ease-out; }
         .game-layout.active { display: grid; }
-        
         .game-screen { background: #000; height: 400px; border-radius: 16px; position: relative; border: 1px solid #333; overflow: hidden; display:flex; flex-direction:column; justify-content:center; align-items:center; }
         
-        /* KID GAME SPECIFICS */
-        .kid-layout { display: none; grid-template-columns: 1fr; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
+        .reset-btn { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #fca5a5; padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+        .reset-btn:hover { background: rgba(239, 68, 68, 0.4); color: white; }
+
+        .kid-layout { display: none; grid-template-columns: 1fr; gap: 1.5rem; max-width: 800px; margin: 0 auto; animation: fadeScale 0.4s ease-out; }
         .kid-layout.active { display: grid; }
         .kid-card { text-align: center; border: 2px solid var(--kid-blue); background: rgba(14, 165, 233, 0.1); }
-        
-        .item-box { font-size: 4rem; margin: 20px 0; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .kid-btn { 
-            padding: 15px 30px; border-radius: 15px; border: none; font-size: 1.2rem; font-weight: 800; cursor: pointer; margin: 10px; width: 45%; 
-            transition: transform 0.1s;
-        }
+        .kid-btn { padding: 15px 30px; border-radius: 15px; border: none; font-size: 1.2rem; font-weight: 800; cursor: pointer; margin: 10px; width: 45%; transition: transform 0.1s; }
         .kid-btn:active { transform: scale(0.95); }
         .btn-need { background: var(--success); color: white; box-shadow: 0 5px 0 #065f46; }
         .btn-want { background: var(--accent); color: white; box-shadow: 0 5px 0 #9f1239; }
 
-        .score-board { font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; color: var(--gold); }
-        .learning-tip { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; font-size: 0.9rem; margin-top: 20px; color: var(--text-sub); }
-
-        /* PIZZA GAME */
-        .pizza-stats { display: flex; justify-content: space-around; margin: 20px 0; width: 100%; }
-        .customer-queue { height: 60px; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 1.5rem; margin-bottom: 20px; }
-
         .chart-main { height: 280px; width: 100%; }
-        .chart-mini { height: 180px; width: 100%; margin-top: 1rem; }
 
-        @media (max-width: 900px) { .dashboard, .game-layout { grid-template-columns: 1fr; } .big-value { font-size: 2.2rem; } }
+        @media (max-width: 900px) { .dashboard, .game-layout { grid-template-columns: 1fr; } .big-value { font-size: 2.2rem; } .game-dock { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <div class="brand">
-            <i class="ph-fill ph-currency-inr"></i> WealthVerse <span style="font-weight:300; color:white;">India</span>
-        </div>
-        <div style="font-size: 0.9rem; color: var(--text-sub);">
-            Family Finance Hub
-        </div>
+        <div class="brand"><i class="ph-fill ph-currency-inr"></i> WealthVerse <span style="font-weight:300; color:white;">India</span></div>
+        <div style="font-size: 0.9rem; color: var(--text-sub);">Arcade Edition</div>
     </header>
 
-    <nav class="nav-dock">
-        <button class="nav-btn active" onclick="setTab('sip')"><i class="ph ph-trend-up"></i> SIP & Tax</button>
-        <button class="nav-btn" onclick="setTab('emi')"><i class="ph ph-house"></i> Smart EMI</button>
-        <button class="nav-btn game-btn-style" onclick="setTab('game1')"><i class="ph-fill ph-chart-bar"></i> Trading</button>
-        <button class="nav-btn game-btn-style" onclick="setTab('game2')"><i class="ph-fill ph-shield-check"></i> Defense</button>
-        <button class="nav-btn kid-btn-style" onclick="setTab('kid1')"><i class="ph-fill ph-coins"></i> Coin Quest</button>
-        <button class="nav-btn kid-btn-style" onclick="setTab('kid2')"><i class="ph-fill ph-pizza"></i> Pizza Tycoon</button>
-    </nav>
+    <div class="nav-container">
+        <span class="section-title">Tools & Calculators</span>
+        <div class="tool-dock">
+            <button class="tool-btn active" onclick="setTab('sip', this)"><i class="ph ph-trend-up"></i> SIP (Tax-Smart)</button>
+            <button class="tool-btn" onclick="setTab('emi', this)"><i class="ph ph-house"></i> Loan / EMI</button>
+            <button class="tool-btn" onclick="setTab('arb', this)"><i class="ph ph-scales"></i> Arbitrage</button>
+        </div>
+
+        <span class="section-title">The Arcade (Interactive Learning)</span>
+        <div class="game-dock">
+            <button class="game-tile adult" onclick="setTab('game1', this)">
+                <i class="ph-fill ph-chart-line-up" style="color: var(--gold);"></i>
+                <span>Trader Pro</span>
+                <span class="sub-text">Buy Low, Sell High</span>
+            </button>
+            <button class="game-tile adult" onclick="setTab('game2', this)">
+                <i class="ph-fill ph-shield-check" style="color: var(--gold);"></i>
+                <span>Portfolio Defense</span>
+                <span class="sub-text">Survive the Crash</span>
+            </button>
+            
+            <button class="game-tile kid" onclick="setTab('kid1', this)">
+                <i class="ph-fill ph-coins" style="color: var(--kid-blue);"></i>
+                <span>Coin Quest</span>
+                <span class="sub-text">Needs vs Wants</span>
+            </button>
+            <button class="game-tile kid" onclick="setTab('kid2', this)">
+                <i class="ph-fill ph-pizza" style="color: var(--kid-orange);"></i>
+                <span>Pizza Tycoon</span>
+                <span class="sub-text">Business Sim</span>
+            </button>
+        </div>
+    </div>
 
     <div id="sip" class="dashboard active">
         <div class="glass-card">
-            <h3><i class="ph ph-sliders"></i> Investment Config</h3>
-            <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 1.5rem;">FY24-25 Rules: LTCG > 1.25L Taxed @ 12.5%</p>
-            <div class="input-wrap">
-                <div class="input-header"><label>Monthly SIP</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div>
-                <input type="range" id="sip_amt" min="1000" max="200000" step="500" value="25000">
-            </div>
-            <div class="input-wrap">
-                <div class="input-header"><label>Duration</label><span class="input-val" id="sip_years_val">10 Yrs</span></div>
-                <input type="range" id="sip_years" min="1" max="40" step="1" value="10">
-            </div>
-            <div class="input-wrap">
-                <div class="input-header"><label>Exp. Return (CAGR)</label><span class="input-val" id="sip_rate_val">12 %</span></div>
-                <input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12">
-            </div>
+            <h3><i class="ph ph-sliders"></i> SIP Config</h3>
+            <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 1.5rem;">FY24-25: LTCG > 1.25L @ 12.5%</p>
+            <div class="input-wrap"><div class="input-header"><label>Monthly SIP</label><span class="input-val" id="sip_amt_val">₹ 25 K</span></div><input type="range" id="sip_amt" min="1000" max="200000" step="500" value="25000"></div>
+            <div class="input-wrap"><div class="input-header"><label>Duration</label><span class="input-val" id="sip_years_val">10 Yrs</span></div><input type="range" id="sip_years" min="1" max="40" step="1" value="10"></div>
+            <div class="input-wrap"><div class="input-header"><label>Exp. Return</label><span class="input-val" id="sip_rate_val">12 %</span></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div>
         </div>
         <div class="glass-card">
-            <div class="big-number-block">
-                <div class="big-label">Post-Tax Maturity Value</div>
-                <div class="big-value" id="sip_final">₹ 0</div>
-                <div class="tax-alert" id="sip_tax_alert">Tax: ₹ 0</div>
-            </div>
+            <div class="big-number-block"><div class="big-label">Post-Tax Value</div><div class="big-value" id="sip_final">₹ 0</div><div style="color:var(--accent); font-size:0.9rem;" id="sip_tax_alert">Tax: ₹ 0</div></div>
             <div class="chart-main"><canvas id="sipLineChart"></canvas></div>
         </div>
     </div>
 
     <div id="emi" class="dashboard">
         <div class="glass-card">
-            <h3><i class="ph ph-house-line"></i> Home Loan / EMI</h3><br>
-            <div class="input-wrap">
-                <div class="input-header"><label>Loan Amount</label><span class="input-val" id="emi_amt_val">₹ 50 L</span></div>
-                <input type="range" id="emi_amt" min="500000" max="10000000" step="100000" value="5000000">
-            </div>
-            <div class="input-wrap">
-                <div class="input-header"><label>Tenure</label><span class="input-val" id="emi_years_val">20 Yrs</span></div>
-                <input type="range" id="emi_years" min="1" max="30" step="1" value="20">
-            </div>
-            <div class="input-wrap">
-                <div class="input-header"><label>Interest Rate</label><span class="input-val" id="emi_rate_val">8.5 %</span></div>
-                <input type="range" id="emi_rate" min="6" max="15" step="0.1" value="8.5">
-            </div>
+            <h3><i class="ph ph-house-line"></i> Home Loan</h3><br>
+            <div class="input-wrap"><div class="input-header"><label>Loan Amount</label><span class="input-val" id="emi_amt_val">₹ 50 L</span></div><input type="range" id="emi_amt" min="500000" max="10000000" step="100000" value="5000000"></div>
+            <div class="input-wrap"><div class="input-header"><label>Tenure</label><span class="input-val" id="emi_years_val">20 Yrs</span></div><input type="range" id="emi_years" min="1" max="30" step="1" value="20"></div>
+            <div class="input-wrap"><div class="input-header"><label>Interest Rate</label><span class="input-val" id="emi_rate_val">8.5 %</span></div><input type="range" id="emi_rate" min="6" max="15" step="0.1" value="8.5"></div>
         </div>
         <div class="glass-card">
-            <div class="big-number-block">
-                <div class="big-label">Monthly EMI</div>
-                <div class="big-value" id="emi_monthly" style="-webkit-text-fill-color: var(--accent);">₹ 0</div>
-            </div>
+            <div class="big-number-block"><div class="big-label">Monthly EMI</div><div class="big-value" id="emi_monthly" style="-webkit-text-fill-color: var(--accent);">₹ 0</div></div>
             <div class="chart-main"><canvas id="emiChart"></canvas></div>
+        </div>
+    </div>
+
+    <div id="arb" class="dashboard">
+        <div class="glass-card">
+            <h3><i class="ph ph-scales"></i> Arbitrage</h3>
+            <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 1.5rem;">Borrow Low, Invest High?</p>
+            <div class="input-wrap"><div class="input-header"><label>Loan Amount</label><span class="input-val" id="arb_amt_val">₹ 50 L</span></div><input type="range" id="arb_amt" min="500000" max="10000000" step="100000" value="5000000"></div>
+            <div class="input-wrap"><div class="input-header"><label>Loan Interest</label><span class="input-val" id="arb_loan_rate_val">8 %</span></div><input type="range" id="arb_loan_rate" min="1" max="15" step="0.1" value="8"></div>
+            <div class="input-wrap"><div class="input-header"><label>Inv. Return</label><span class="input-val" id="arb_inv_rate_val">12 %</span></div><input type="range" id="arb_inv_rate" min="1" max="20" step="0.1" value="12"></div>
+        </div>
+        <div class="glass-card">
+            <div class="big-number-block"><div class="big-label">Net Profit (10Y)</div><div class="big-value" id="arb_net">₹ 0</div><div id="arb_status" style="font-weight:700;"></div></div>
+            <div class="chart-main"><canvas id="arbChart"></canvas></div>
         </div>
     </div>
 
     <div id="game1" class="game-layout">
         <div class="glass-card">
-            <h3>Trader Mode</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3>Trader Pro</h3>
+                <button class="reset-btn" onclick="resetMM()">Restart</button>
+            </div>
             <div class="game-screen">
-                <div style="position:absolute; top:10; left:10; z-index:10; color:var(--success)">NIFTY: <span id="mm_price">20000</span></div>
+                <div style="position:absolute; top:10px; left:10px; z-index:10; color:var(--success); font-family:monospace; font-size:1.2rem;">NIFTY: <span id="mm_price">20000</span></div>
                 <canvas id="mmChart"></canvas>
             </div>
             <div style="margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                <button class="kid-btn btn-need" onclick="mmTrade('buy')">BUY CALL</button>
-                <button class="kid-btn btn-want" onclick="mmTrade('sell')">SELL PUT</button>
+                <button class="kid-btn btn-need" style="width:100%" onclick="mmTrade('buy')">BUY</button>
+                <button class="kid-btn btn-want" style="width:100%" onclick="mmTrade('sell')">SELL</button>
             </div>
         </div>
         <div class="glass-card">
             <h4>Portfolio</h4>
             <div class="big-value" id="mm_equity" style="font-size:2rem;">₹ 10.00 L</div>
-            <div class="stat-box" style="margin-top:1rem;">
-                <div class="stat-label">Stocks Held</div>
-                <div class="stat-value" id="mm_stocks">0 Units</div>
-            </div>
+            <div style="margin-top:1rem; color:var(--text-sub);">Cash: <span id="mm_cash">₹ 10.00 L</span></div>
+            <div style="margin-top:0.5rem; color:var(--text-sub);">Stocks: <span id="mm_stocks">0</span></div>
         </div>
     </div>
 
     <div id="game2" class="game-layout">
         <div class="glass-card">
-            <h3>Portfolio Defense</h3>
-            <div style="background:#1e293b; padding:20px; border-radius:12px; text-align:center;">
-                <h2 id="pd_event_title" style="margin-bottom:10px;">Market Crash!</h2>
-                <p id="pd_event_desc" style="color:var(--text-sub); margin-bottom:20px;">Sensex is down 20%. What do you do?</p>
-                <button class="kid-btn btn-need" onclick="pdResolve('buy')">Buy Dip</button>
-                <button class="kid-btn btn-want" onclick="pdResolve('sell')">Panic Sell</button>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>Defense</h3>
+                <button class="reset-btn" onclick="resetPD()">Restart</button>
+            </div>
+            <div style="background:#1e293b; padding:20px; border-radius:12px; text-align:center; margin-top:20px; border:1px solid #334155;">
+                <h2 id="pd_event_title" style="margin-bottom:10px;">Year 1</h2>
+                <p id="pd_event_desc" style="color:var(--text-sub); margin-bottom:20px;">Market is stable. You have ₹10L.</p>
+                <div id="pd_buttons">
+                    <button class="kid-btn btn-need" onclick="pdResolve('buy')">Invest</button>
+                    <button class="kid-btn btn-want" onclick="pdResolve('sell')">Hold</button>
+                </div>
             </div>
         </div>
         <div class="glass-card">
@@ -247,54 +291,40 @@
 
     <div id="kid1" class="kid-layout">
         <div class="glass-card kid-card">
-            <h2 style="color:var(--kid-blue)">🪙 Coin Quest: Needs vs. Wants</h2>
-            <p style="color:var(--text-sub)">Is this item a MUST HAVE (Need) or a NICE TO HAVE (Want)?</p>
-            
-            <div class="score-board">Coins: <span id="kq_score">0</span></div>
-            
-            <div class="item-box" id="kq_icon">🍎</div>
-            <h3 id="kq_item" style="font-size:1.5rem; margin-bottom:20px;">Apple</h3>
-
-            <div>
-                <button class="kid-btn btn-need" onclick="checkKQ('need')">NEED ✅</button>
-                <button class="kid-btn btn-want" onclick="checkKQ('want')">WANT 🎁</button>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 style="color:var(--kid-blue)">🪙 Coin Quest</h2>
+                <button class="reset-btn" onclick="resetKQ()">Reset</button>
             </div>
-
-            <div class="learning-tip" id="kq_msg">Click a button to start!</div>
+            <p style="color:var(--text-sub)">Need vs Want?</p>
+            <div style="font-size:1.5rem; font-weight:800; margin:10px 0; color:var(--gold);">Score: <span id="kq_score">0</span></div>
+            <div style="font-size:4rem; margin:20px 0; animation:bounce 2s infinite;" id="kq_icon">🍎</div>
+            <h3 id="kq_item" style="font-size:1.5rem; margin-bottom:20px;">Apple</h3>
+            <div>
+                <button class="kid-btn btn-need" onclick="checkKQ('need')">NEED</button>
+                <button class="kid-btn btn-want" onclick="checkKQ('want')">WANT</button>
+            </div>
+            <div id="kq_msg" style="margin-top:15px; height:20px;"></div>
         </div>
     </div>
 
     <div id="kid2" class="kid-layout">
         <div class="glass-card kid-card">
-            <h2 style="color:var(--kid-orange)">🍕 Pizza Tycoon India</h2>
-            <p style="color:var(--text-sub)">Run your own Pizza Stall! Set the price carefully.</p>
-
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 style="color:var(--kid-orange)">🍕 Pizza Tycoon</h2>
+                <button class="reset-btn" onclick="resetPT()">Reset</button>
+            </div>
             <div style="background:#334155; padding:15px; border-radius:12px; margin:20px 0;">
-                <label style="display:block; margin-bottom:10px;">Price per Slice: ₹ <span id="pt_price_val">100</span></label>
-                <input type="range" id="pt_price" min="20" max="300" step="10" value="100" oninput="updatePTUI()">
-                <div style="font-size:0.8rem; color:#cbd5e1; margin-top:5px;">Cost to make: ₹ 50</div>
+                <label>Price: ₹ <span id="pt_price_val">100</span></label>
+                <input type="range" id="pt_price" min="20" max="300" step="10" value="100" oninput="document.getElementById('pt_price_val').innerText=this.value">
+                <div style="font-size:0.8rem; color:#cbd5e1; margin-top:5px;">Cost: ₹ 50</div>
             </div>
-
-            <div class="pizza-stats">
-                <div>
-                    <div class="stat-label">Profit</div>
-                    <div class="stat-value" id="pt_profit" style="color:var(--success)">₹ 0</div>
-                </div>
-                <div>
-                    <div class="stat-label">Customers</div>
-                    <div class="stat-value" id="pt_customers">0</div>
-                </div>
+            <div style="display:flex; justify-content:space-around; margin:20px 0;">
+                <div><div style="font-size:0.8rem;">Profit</div><div style="font-size:1.5rem; color:var(--success)" id="pt_profit">₹ 0</div></div>
+                <div><div style="font-size:0.8rem;">Sold</div><div style="font-size:1.5rem;" id="pt_customers">0</div></div>
             </div>
-
-            <div class="customer-queue" id="pt_queue">
-                👨‍🍳 Waiting for orders...
-            </div>
-
-            <button class="kid-btn" style="background:var(--kid-orange); color:white; width:100%;" onclick="runDayPT()">Open Shop for Today!</button>
-            
-            <div class="learning-tip" id="pt_msg">
-                Tip: If price is too high, customers walk away! If too low, you lose money.
-            </div>
+            <div style="height:50px; margin-bottom:10px;" id="pt_queue">👨‍🍳 Waiting...</div>
+            <button class="kid-btn" style="background:var(--kid-orange); color:white; width:100%;" onclick="runDayPT()">Open Shop</button>
+            <div id="pt_msg" style="margin-top:10px; font-size:0.9rem;"></div>
         </div>
     </div>
 
@@ -310,202 +340,133 @@
 
     let charts = {};
 
-    // --- FINANCIAL CALCULATOR LOGIC ---
+    // --- LOGIC ---
     function setupInput(id, type='currency') {
         const el = document.getElementById(id);
         const valEl = document.getElementById(id+'_val');
-        el.addEventListener('input', () => {
+        const update = () => {
             if(type === 'currency') valEl.innerText = formatCurrency(parseFloat(el.value));
             if(type === 'years') valEl.innerText = el.value + " Yrs";
             if(type === 'percent') valEl.innerText = el.value + " %";
             calcAll();
-        });
-        // Init logic
-        if(type === 'currency') valEl.innerText = formatCurrency(parseFloat(el.value));
+        };
+        el.addEventListener('input', update);
+        update();
     }
 
     function calcAll() {
-        // SIP Logic
+        // SIP
         const P = parseFloat(document.getElementById('sip_amt').value);
         const N = parseFloat(document.getElementById('sip_years').value);
         const R = parseFloat(document.getElementById('sip_rate').value);
-        let invested = P * N * 12;
-        let monthlyRate = R / 1200;
-        let value = P * ((Math.pow(1 + monthlyRate, N * 12) - 1) / monthlyRate) * (1 + monthlyRate);
-        let gain = value - invested;
-        let tax = Math.max(0, gain - 125000) * 0.125;
-        document.getElementById('sip_final').innerText = formatCurrency(value - tax);
+        let val = 0, mR = R/1200;
+        for(let i=0; i<N*12; i++) val = (val+P)*(1+mR);
+        let tax = Math.max(0, val - (P*N*12) - 125000) * 0.125;
+        document.getElementById('sip_final').innerText = formatCurrency(val - tax);
         document.getElementById('sip_tax_alert').innerText = "Tax: " + formatCurrency(tax);
-        renderLineChart('sipLineChart', N, P, monthlyRate);
+        renderLineChart('sipLineChart', N, P, mR);
 
-        // EMI Logic
+        // EMI
         const L = parseFloat(document.getElementById('emi_amt').value);
         const Y = parseFloat(document.getElementById('emi_years').value) * 12;
         const I = parseFloat(document.getElementById('emi_rate').value) / 1200;
         const emi = (L * I * Math.pow(1+I, Y)) / (Math.pow(1+I, Y) - 1);
         document.getElementById('emi_monthly').innerText = formatCurrency(emi);
         renderBarChart('emiChart', L, (emi*Y)-L);
+
+        // ARB
+        const arbAmt = parseFloat(document.getElementById('arb_amt').value);
+        const loanRate = parseFloat(document.getElementById('arb_loan_rate').value)/100;
+        const invRate = parseFloat(document.getElementById('arb_inv_rate').value)/100;
+        let c = arbAmt, l = arbAmt, labels=[], d1=[], d2=[];
+        for(let i=1; i<=10; i++) { c*=(1+invRate); l*=(1+loanRate); labels.push(i); d1.push(c); d2.push(l); }
+        let prof = c-l;
+        document.getElementById('arb_net').innerText = formatCurrency(prof);
+        document.getElementById('arb_status').innerText = prof>0 ? "✅ Profitable" : "❌ Loss";
+        document.getElementById('arb_status').style.color = prof>0 ? 'var(--success)' : 'var(--accent)';
+        renderArbChart(labels, d1, d2);
     }
 
-    function renderLineChart(id, years, P, monthlyRate) {
-        let labels=[], data=[];
-        let val = 0;
-        for(let i=1; i<=years; i++) {
-            labels.push(i);
-            for(let m=0; m<12; m++) val = (val + P) * (1 + monthlyRate);
-            data.push(val);
-        }
+    function renderLineChart(id, yrs, P, mR) {
+        let labels=[], data=[], v=0;
+        for(let i=1; i<=yrs; i++) { labels.push(i); for(let m=0; m<12; m++) v=(v+P)*(1+mR); data.push(v); }
+        newChart(id, 'line', { labels, datasets:[{data, borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,0.2)', fill:true}] });
+    }
+    function renderBarChart(id, P, I) {
+        newChart(id, 'bar', { labels:['Principal','Interest'], datasets:[{data:[P,I], backgroundColor:['#6366f1','#f43f5e']}] }, {indexAxis:'y'});
+    }
+    function renderArbChart(lbl, d1, d2) {
+        newChart('arbChart', 'line', { labels:lbl, datasets:[{label:'Inv',data:d1,borderColor:'#10b981'}, {label:'Loan',data:d2,borderColor:'#f43f5e',borderDash:[5,5]}] });
+    }
+    function newChart(id, type, data, opts={}) {
         const ctx = document.getElementById(id).getContext('2d');
         if(charts[id]) charts[id].destroy();
-        charts[id] = new Chart(ctx, {
-            type: 'line',
-            data: { labels, datasets: [{ data, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.2)', fill: true, tension:0.4 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales:{x:{grid:{display:false}}} }
-        });
+        charts[id] = new Chart(ctx, { type, data, options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}}, ...opts } });
     }
 
-    function renderBarChart(id, principal, interest) {
-        const ctx = document.getElementById(id).getContext('2d');
-        if(charts[id]) charts[id].destroy();
-        charts[id] = new Chart(ctx, {
-            type: 'bar',
-            data: { labels: ['Principal', 'Interest'], datasets: [{ data:[principal, interest], backgroundColor:['#6366f1', '#f43f5e'] }] },
-            options: { indexAxis:'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-        });
-    }
-
-    // --- GAME 1: TRADER ---
-    let mmInterval, mmPrice = 20000, mmCash = 1000000, mmStocks = 0;
+    // --- GAME LOGIC ---
+    // Trader
+    let mmInt, mmP=20000, mmC=1000000, mmS=0;
     function initMM() {
-        if(charts['mm']) return; // Don't reset if exists
-        const ctx = document.getElementById('mmChart').getContext('2d');
-        let data = Array(40).fill(null); data[39] = mmPrice;
-        charts['mm'] = new Chart(ctx, {
-            type: 'line',
-            data: { labels: Array(40).fill(''), datasets: [{ data, borderColor: '#10b981', tension: 0.1, pointRadius:0 }] },
-            options: { animation: false, responsive: true, maintainAspectRatio: false, scales: { x:{display:false}, y:{position:'right', grid:{color:'#333'}} }, plugins:{legend:{display:false}} }
-        });
-        mmInterval = setInterval(() => {
-            if(document.getElementById('game1').style.display !== 'grid') return;
-            let change = (Math.random() - 0.5) * 200;
-            mmPrice += change;
-            let chart = charts['mm'];
-            chart.data.datasets[0].data.shift();
-            chart.data.datasets[0].data.push(mmPrice);
-            chart.data.datasets[0].borderColor = change > 0 ? '#10b981' : '#f43f5e';
-            chart.update();
-            document.getElementById('mm_price').innerText = mmPrice.toFixed(0);
-            document.getElementById('mm_equity').innerText = formatCurrency(mmCash + (mmStocks*mmPrice));
+        if(charts['mm']) return;
+        newChart('mmChart', 'line', { labels:Array(40).fill(''), datasets:[{data:Array(40).fill(null), borderColor:'#10b981', tension:0.1, pointRadius:0}] });
+        mmInt = setInterval(() => {
+            if(!document.getElementById('game1').classList.contains('active')) return;
+            let chg = (Math.random()-0.5)*200; mmP+=chg;
+            let c = charts['mmChart']; c.data.datasets[0].data.shift(); c.data.datasets[0].data.push(mmP);
+            c.data.datasets[0].borderColor = chg>0 ? '#10b981' : '#f43f5e'; c.update();
+            document.getElementById('mm_price').innerText = mmP.toFixed(0);
+            updateMM();
         }, 800);
     }
-    function mmTrade(type) {
-        if(type === 'buy' && mmCash > mmPrice) { mmStocks++; mmCash -= mmPrice; }
-        if(type === 'sell' && mmStocks > 0) { mmStocks--; mmCash += mmPrice; }
-    }
+    function updateMM() { document.getElementById('mm_equity').innerText = formatCurrency(mmC + mmS*mmP); document.getElementById('mm_cash').innerText = formatCurrency(mmC); document.getElementById('mm_stocks').innerText = mmS; }
+    function mmTrade(t) { if(t==='buy' && mmC>mmP) {mmS++; mmC-=mmP;} if(t==='sell' && mmS>0) {mmS--; mmC+=mmP;} updateMM(); }
+    function resetMM() { mmC=1000000; mmS=0; mmP=20000; updateMM(); }
 
-    // --- GAME 2: DEFENSE ---
-    let pdNet = 1000000, pdYear = 1;
-    function pdResolve(choice) {
-        let change = (choice === 'buy') ? 1.2 : 0.9; // Simplified logic
-        pdNet *= change;
-        pdYear++;
-        document.getElementById('pd_networth').innerText = formatCurrency(pdNet);
-        document.getElementById('pd_year').innerText = pdYear;
-        // Reset event
-        document.getElementById('pd_event_title').innerText = "Year " + pdYear;
-        document.getElementById('pd_event_desc').innerText = "Market is stable... for now.";
+    // Defense
+    let pdN=1000000, pdY=1;
+    function pdResolve(c) {
+        if(pdY>10) return;
+        pdN *= (c==='buy' ? (Math.random()>0.4?1.25:0.8) : 1.06); pdY++;
+        document.getElementById('pd_networth').innerText = formatCurrency(pdN); document.getElementById('pd_year').innerText = pdY;
+        document.getElementById('pd_event_title').innerText = pdY>10 ? "Retired" : "Year "+pdY;
+        if(pdY>10) document.getElementById('pd_buttons').innerHTML = "<b>Final: "+formatCurrency(pdN)+"</b>";
     }
+    function resetPD() { pdN=1000000; pdY=1; document.getElementById('pd_networth').innerText=formatCurrency(pdN); document.getElementById('pd_year').innerText=1; document.getElementById('pd_buttons').innerHTML=`<button class="kid-btn btn-need" onclick="pdResolve('buy')">Invest</button><button class="kid-btn btn-want" onclick="pdResolve('sell')">Hold</button>`; }
 
-    // --- KID GAME 1: COIN QUEST ---
-    const kqItems = [
-        { n: "Vegetables", i: "🥦", t: "need", msg: "Healthy food is a Need!" },
-        { n: "Video Game", i: "🎮", t: "want", msg: "Games are fun, but not essential." },
-        { n: "School Fees", i: "🎒", t: "need", msg: "Education is a Must!" },
-        { n: "Expensive Watch", i: "⌚", t: "want", msg: "A cheap watch tells time too!" },
-        { n: "Medicine", i: "💊", t: "need", msg: "Health always comes first." },
-        { n: "Chocolate", i: "🍫", t: "want", msg: "Treats are wants." },
-        { n: "Electricity", i: "💡", t: "need", msg: "We need lights to study!" }
-    ];
-    let kqIdx = 0, kqScore = 0;
+    // Kids
+    let kqS=0; const kqI=[{n:"Veggie",i:"🥦",t:"need"},{n:"Game",i:"🎮",t:"want"},{n:"School",i:"🎒",t:"need"}];
+    function checkKQ(c) { let item=kqI[kqS%3]; if(c===item.t) {kqS+=10; document.getElementById('kq_msg').innerText="✅ Correct!";} else document.getElementById('kq_msg').innerText="❌ Try again"; document.getElementById('kq_score').innerText=kqS; setTimeout(()=>{document.getElementById('kq_msg').innerText=""; loadKQ()},1000); }
+    function loadKQ() { let i=kqI[(kqS/10)%3]; document.getElementById('kq_icon').innerText=i.i; document.getElementById('kq_item').innerText=i.n; }
+    function resetKQ() { kqS=0; document.getElementById('kq_score').innerText=0; loadKQ(); }
 
-    function loadKQ() {
-        let item = kqItems[kqIdx];
-        document.getElementById('kq_icon').innerText = item.i;
-        document.getElementById('kq_item').innerText = item.n;
-    }
-
-    function checkKQ(choice) {
-        let item = kqItems[kqIdx];
-        if(choice === item.t) {
-            kqScore += 10;
-            document.getElementById('kq_msg').innerText = "✅ Correct! " + item.msg;
-            document.getElementById('kq_msg').style.color = "var(--success)";
-        } else {
-            document.getElementById('kq_msg').innerText = "❌ Oops! " + item.msg;
-            document.getElementById('kq_msg').style.color = "var(--accent)";
-        }
-        document.getElementById('kq_score').innerText = kqScore;
-        kqIdx = (kqIdx + 1) % kqItems.length;
-        setTimeout(loadKQ, 1500);
-    }
-
-    // --- KID GAME 2: PIZZA TYCOON ---
-    const ptCost = 50;
-    function updatePTUI() {
-        document.getElementById('pt_price_val').innerText = document.getElementById('pt_price').value;
-    }
-    
     function runDayPT() {
-        let price = parseInt(document.getElementById('pt_price').value);
-        let queue = document.getElementById('pt_queue');
-        
-        // Logic: Lower price = more customers, but lower margin
-        // Max willingness to pay ~ 200
-        let demand = Math.max(0, 200 - price); 
-        // Randomize slightly
-        let customers = Math.floor(demand / 10 * (0.8 + Math.random()*0.4));
-        
-        let profitPerPizza = price - ptCost;
-        let totalProfit = customers * profitPerPizza;
-
-        // Visualize
-        queue.innerHTML = "";
-        let icons = ["😋","👨","👩","👧","👦"];
-        for(let i=0; i<Math.min(customers, 10); i++) {
-            queue.innerHTML += icons[Math.floor(Math.random()*icons.length)];
-        }
-        if(customers > 10) queue.innerHTML += ` + ${customers-10} more...`;
-        if(customers === 0) queue.innerHTML = "🍃 No customers! Price too high?";
-
-        document.getElementById('pt_customers').innerText = customers;
-        document.getElementById('pt_profit').innerText = "₹ " + totalProfit;
-        
-        let msg = "";
-        if(profitPerPizza <= 0) msg = "⚠️ You are selling at a loss! Increase price.";
-        else if(customers === 0) msg = "⚠️ Too expensive! Lower the price.";
-        else if(totalProfit > 500) msg = "🎉 Great Strategy! You made money.";
-        else msg = "👍 Good, but try to earn more.";
-        
-        document.getElementById('pt_msg').innerText = msg;
+        let p = parseInt(document.getElementById('pt_price').value);
+        let c = Math.floor(Math.max(0, 200-p)/10 * (0.8+Math.random()));
+        let prof = c*(p-50);
+        document.getElementById('pt_customers').innerText = c;
+        document.getElementById('pt_profit').innerText = "₹ "+prof;
+        document.getElementById('pt_queue').innerText = c>0 ? "😋".repeat(Math.min(c,10)) : "🍃 Empty";
+        document.getElementById('pt_msg').innerText = prof>500 ? "🎉 Profit!" : "⚠️ Adjust Price";
     }
+    function resetPT() { document.getElementById('pt_price').value=100; document.getElementById('pt_profit').innerText="₹ 0"; document.getElementById('pt_customers').innerText="0"; document.getElementById('pt_queue').innerText="Waiting..."; }
 
-    // --- NAVIGATION ---
-    function setTab(id) {
+    // --- TABS ---
+    function setTab(id, btn) {
         document.querySelectorAll('.dashboard, .game-layout, .kid-layout').forEach(e => e.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(e => e.classList.remove('active'));
-        
+        document.querySelectorAll('.tool-btn, .game-tile').forEach(e => e.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        event.currentTarget.classList.add('active');
-
-        if(id === 'game1') initMM();
-        if(id === 'kid1') loadKQ();
+        btn.classList.add('active');
+        if(id==='game1') initMM();
+        if(id==='kid1') loadKQ();
+        if(id==='arb') calcAll();
     }
 
     // Init
-    setupInput('sip_amt'); setupInput('sip_years', 'years'); setupInput('sip_rate', 'percent');
-    setupInput('emi_amt'); setupInput('emi_years', 'years'); setupInput('emi_rate', 'percent');
+    setupInput('sip_amt'); setupInput('sip_years','years'); setupInput('sip_rate','percent');
+    setupInput('emi_amt'); setupInput('emi_years','years'); setupInput('emi_rate','percent');
+    setupInput('arb_amt'); setupInput('arb_loan_rate','percent'); setupInput('arb_inv_rate','percent');
     calcAll();
-
 </script>
 </body>
 </html>
