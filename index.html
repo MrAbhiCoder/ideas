@@ -18,19 +18,18 @@
             --success: #10b981;
             --gold: #f59e0b;
             --neon-blue: #00f3ff;
-            --neon-pink: #d946ef;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg-dark); color: var(--text-main); font-family: 'Outfit', sans-serif; min-height: 100vh; padding-bottom: 3rem; overflow-x: hidden; transition: background 0.3s ease; }
         
         /* MODES */
         body.mode-tools { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
-        body.mode-trader { background: radial-gradient(circle at center, #172554 0%, #020617 100%); }
-        body.mode-run { background: linear-gradient(to bottom, #312e81 0%, #0f172a 100%); }
-        body.mode-kids { background: linear-gradient(120deg, #0ea5e9 0%, #8b5cf6 100%); }
+        body.mode-trader { background: radial-gradient(circle at center, #020617 0%, #0f172a 100%); }
+        body.mode-run { background: linear-gradient(to bottom, #2e1065 0%, #0f172a 100%); }
+        body.mode-kids { background: linear-gradient(120deg, #3b82f6 0%, #8b5cf6 100%); }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
 
@@ -51,8 +50,8 @@
         .menu-btn.active { background: rgba(99, 102, 241, 0.2); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3); }
 
         /* VIEWS */
-        .app-view { display: none; opacity: 0; transition: opacity 0.3s; }
-        .app-view.active-view { display: grid; opacity: 1; }
+        .app-view { display: none; }
+        .app-view.active-view { display: grid; }
         .tool-layout { grid-template-columns: 1fr 1.5fr; gap: 1.5rem; }
         .game-layout { grid-template-columns: 1fr 350px; gap: 1.5rem; }
         .kid-layout { grid-template-columns: 1fr; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
@@ -67,25 +66,26 @@
         .big-value { font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .chart-wrapper { position: relative; height: 300px; width: 100%; }
 
+        /* GAME UI */
+        .game-screen { background: #020617; height: 400px; border-radius: 16px; border: 1px solid #334155; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .game-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 20; display:none; flex-direction: column; justify-content: center; align-items: center; color: white; }
+        .control-pad { display: flex; gap: 20px; width: 100%; justify-content: center; margin-top: 15px; }
+        .ctrl-btn { width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 1.5rem; cursor: pointer; }
+        
         /* BUTTONS */
         .reset-btn { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #fca5a5; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
         .kid-btn { padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; border: none; font-size: 1rem; width: 100%; transition: transform 0.1s; }
         .kid-btn:active { transform: scale(0.95); }
         .btn-green { background: var(--success); color: #fff; }
         .btn-red { background: var(--accent); color: #fff; }
-        
-        .perc-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #aaa; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; flex: 1; transition: 0.2s; }
-        .perc-btn.selected { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
+        .perc-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #aaa; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; flex: 1; }
+        .perc-btn.selected { background: var(--primary); color: white; }
 
-        /* GAMES UI */
-        .game-screen { background: #020617; height: 400px; border-radius: 16px; border: 1px solid #334155; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .game-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 20; display:none; flex-direction: column; justify-content: center; align-items: center; color: white; }
-        
-        /* TRADER */
+        /* TRADER SPECIFIC */
         .candle-timer { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px; border: 1px solid var(--primary); font-family: monospace; }
         .trade-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .trade-percs { display: flex; gap: 5px; margin: 15px 0; justify-content: space-between; }
-        .learning-tip { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; border: 1px solid var(--gold); opacity: 0; transition: opacity 0.5s; pointer-events: none; white-space: nowrap; }
+        .strat-box { position: absolute; bottom: 10px; left: 10px; background: rgba(16, 185, 129, 0.2); padding: 5px 10px; border-radius: 6px; color: var(--success); border: 1px solid var(--success); font-size: 0.9rem; }
 
         /* WEALTH RUN */
         #run_game { width: 100%; height: 100%; position: relative; background: linear-gradient(#1e1b4b, #be185d); overflow: hidden; perspective: 600px; }
@@ -97,8 +97,6 @@
         .player-car div { transform: rotate(-90deg); } 
         .obstacle { position: absolute; width: 70px; height: 35px; background: #000; border: 3px solid #ef4444; border-radius: 50%; transform: translateX(-50%); display:flex; justify-content:center; align-items:center; color: #ef4444; font-weight:bold;}
         .coin { position: absolute; width: 50px; height: 50px; background: gold; border-radius: 50%; transform: translateX(-50%); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; box-shadow: 0 0 15px gold; }
-        .control-pad { display: flex; gap: 30px; width: 100%; justify-content: center; margin-top: 15px; }
-        .ctrl-btn { width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 2rem; cursor: pointer; display:flex; align-items:center; justify-content:center;}
 
         /* PIGGY DASH */
         #piggy_container { width: 100%; height: 500px; position: relative; background: #1e293b; overflow: hidden; border: 2px solid var(--neon-pink); border-radius: 12px; }
@@ -112,31 +110,31 @@
 
 <div class="container">
     <header>
-        <div class="brand"><i class="ph-fill ph-currency-inr"></i> CalcIndia | Play'n'Learn</div>
+        <div class="brand"><i class="ph-fill ph-currency-inr"></i> CalcIndia <span style="font-weight:300; color:white;">| Play'n'Learn</span></div>
     </header>
 
     <nav class="nav-dock">
         <div class="dropdown-container">
-            <button class="drop-trigger active-cat" onclick="toggleMenu('menu-tools', this)"><i class="ph-bold ph-wrench"></i> Tools <i class="ph-bold ph-caret-down"></i></button>
+            <button class="drop-trigger active-cat" onclick="toggleMenu('menu-tools', this)">🛠️ Tools</button>
             <div id="menu-tools" class="drop-menu">
-                <button class="menu-btn active" onclick="switchView('sip', this, 'tools')"><i class="ph-fill ph-trend-up"></i> SIP Calculator</button>
-                <button class="menu-btn" onclick="switchView('emi', this, 'tools')"><i class="ph-fill ph-house"></i> EMI Calculator</button>
-                <button class="menu-btn" onclick="switchView('arb', this, 'tools')"><i class="ph-fill ph-scales"></i> Arbitrage</button>
+                <button class="menu-btn active" onclick="switchView('sip', this, 'tools')">SIP Calculator</button>
+                <button class="menu-btn" onclick="switchView('emi', this, 'tools')">EMI Calculator</button>
+                <button class="menu-btn" onclick="switchView('arb', this, 'tools')">Arbitrage</button>
             </div>
         </div>
         <div class="dropdown-container">
-            <button class="drop-trigger" onclick="toggleMenu('menu-arcade', this)"><i class="ph-bold ph-game-controller"></i> Arcade <i class="ph-bold ph-caret-down"></i></button>
+            <button class="drop-trigger" onclick="toggleMenu('menu-arcade', this)">🕹️ Arcade</button>
             <div id="menu-arcade" class="drop-menu">
-                <button class="menu-btn" onclick="switchView('game1', this, 'arcade')"><i class="ph-fill ph-chart-candlestick"></i> Trader Pro</button>
-                <button class="menu-btn" onclick="switchView('game2', this, 'arcade')"><i class="ph-fill ph-shield-check"></i> Defense</button>
-                <button class="menu-btn" onclick="switchView('game3', this, 'arcade')"><i class="ph-fill ph-person-simple-run"></i> Financial Race</button>
+                <button class="menu-btn" onclick="switchView('game1', this, 'arcade')">Trader Pro</button>
+                <button class="menu-btn" onclick="switchView('game2', this, 'arcade')">Defense</button>
+                <button class="menu-btn" onclick="switchView('game3', this, 'arcade')">Financial Race</button>
             </div>
         </div>
         <div class="dropdown-container">
-            <button class="drop-trigger" onclick="toggleMenu('menu-kids', this)"><i class="ph-bold ph-baby"></i> Kids <i class="ph-bold ph-caret-down"></i></button>
+            <button class="drop-trigger" onclick="toggleMenu('menu-kids', this)">👶 Kids</button>
             <div id="menu-kids" class="drop-menu">
-                <button class="menu-btn" onclick="switchView('kid1', this, 'kids')"><i class="ph-fill ph-coins"></i> Coin Quest</button>
-                <button class="menu-btn" onclick="switchView('kid2', this, 'kids')"><i class="ph-fill ph-piggy-bank"></i> Piggy Dash</button>
+                <button class="menu-btn" onclick="switchView('kid1', this, 'kids')">Coin Quest</button>
+                <button class="menu-btn" onclick="switchView('kid2', this, 'kids')">Piggy Dash</button>
             </div>
         </div>
     </nav>
@@ -156,7 +154,7 @@
             <h3>EMI Calculator</h3><br>
             <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="emi_amt_val">50L</span></div><input type="range" id="emi_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
             <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20Y</span></div><input type="range" id="emi_years" min="1" max="30" step="1" value="20"></div>
-            <div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5%</span></div><input type="range" id="emi_rate" min="1" max="15" step="0.1" value="8.5"></div>
+            <div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5%</span></div><input type="range" id="emi_rate" min="6" max="15" step="0.1" value="8.5"></div>
         </div>
         <div class="glass-card"><div class="big-value" id="emi_monthly">₹ 0</div><div class="chart-wrapper"><canvas id="emiChart"></canvas></div></div>
     </div>
@@ -165,7 +163,6 @@
         <div class="glass-card">
             <h3>Arbitrage</h3><br>
             <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="arb_amt_val">50L</span></div><input type="range" id="arb_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
-            <div class="input-wrap"><div class="input-header"><label>Duration</label><span class="input-val" id="arb_years_val">10Y</span></div><input type="range" id="arb_years" min="1" max="50" step="1" value="10"></div>
             <div class="input-wrap"><div class="input-header"><label>Loan Rate</label><span class="input-val" id="arb_loan_rate_val">8%</span></div><input type="range" id="arb_loan_rate" min="1" max="15" step="0.1" value="8"></div>
             <div class="input-wrap"><div class="input-header"><label>Inv Return</label><span class="input-val" id="arb_inv_rate_val">12%</span></div><input type="range" id="arb_inv_rate" min="1" max="30" step="0.1" value="12"></div>
         </div>
@@ -177,14 +174,12 @@
             <div style="display:flex; justify-content:space-between; align-items:center;"><h3>Trader Pro</h3><button class="reset-btn" onclick="toggleCandles()">Chart</button></div>
             <div class="game-screen">
                 <div class="candle-timer" id="trader_timer">10s</div>
-                <div style="position:absolute; top:10px; left:10px; font-size:1.1rem;">
-                    <span style="color:#aaa" id="trader_stock">NIFTY</span>: <span id="trader_price" style="color:var(--success)">20000</span>
-                </div>
-                <div class="learning-tip" id="trader_tip">Market Opening...</div>
+                <div style="position:absolute; top:10px; left:10px; color:var(--success); font-size:1.2rem;">Price: <span id="trader_price">...</span></div>
+                <div class="strat-box" id="trader_strat">Strategy: Loading...</div>
                 <canvas id="traderChart"></canvas>
             </div>
             
-            <div style="text-align:center; margin-top:10px;">Select Amount:</div>
+            <div style="text-align:center; margin-top:10px;">Amount:</div>
             <div class="trade-percs">
                 <button class="perc-btn selected" onclick="setQty(0.1, this)">10%</button>
                 <button class="perc-btn" onclick="setQty(0.25, this)">25%</button>
@@ -196,7 +191,7 @@
                 <button class="kid-btn btn-red" onclick="traderAction(-1)">SELL</button>
             </div>
         </div>
-        <div class="glass-card"><h4>Portfolio</h4><div class="big-value" id="trader_eq">₹ 10.0 L</div><p>Cash: <span id="trader_cash">10.0 L</span></p><p>Held: <span id="trader_hold">0</span></p><button class="reset-btn" onclick="resetTrader()" style="margin-top:10px; width:100%">New Game</button></div>
+        <div class="glass-card"><h4>Portfolio</h4><div class="big-value" id="trader_eq">₹ 10.0 L</div><p>Cash: <span id="trader_cash">10.0 L</span></p><p>Held: <span id="trader_hold">0</span></p><button class="reset-btn" onclick="resetTrader()" style="margin-top:10px; width:100%">Reset Account</button></div>
     </div>
 
     <div id="game2" class="app-view game-grid">
@@ -206,18 +201,13 @@
                 <h2 id="pd_year" style="color:var(--primary)">Year 1</h2>
                 <div style="background:#000; color:var(--gold); display:inline-block; padding:5px; margin:10px 0;">📰 NEWS</div>
                 <h3 id="pd_news">Market is Stable</h3>
-                <p style="color:var(--text-sub); margin-bottom:20px;">Analysts predict steady growth.</p>
                 <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
                     <button class="kid-btn btn-green" onclick="pdAction('invest')">Invest</button>
                     <button class="kid-btn btn-red" onclick="pdAction('hold')">Hold</button>
                 </div>
             </div>
         </div>
-        <div class="glass-card">
-            <h4>Net Worth</h4>
-            <div class="big-value" id="pd_networth">₹ 10.0 L</div>
-            <div id="pd_feedback" style="margin-top:10px; color:var(--gold); font-weight:bold;"></div>
-        </div>
+        <div class="glass-card"><h4>Net Worth</h4><div class="big-value" id="pd_networth">₹ 10.0 L</div></div>
     </div>
 
     <div id="game3" class="app-view kid-layout">
@@ -295,13 +285,16 @@
 
         const target = document.getElementById(id);
         target.style.display = 'grid';
-        setTimeout(() => target.classList.add('active-view'), 10);
+        
+        // Wait for layout then show
+        requestAnimationFrame(() => {
+            target.classList.add('active-view');
+            if(cat === 'tools') calcAll();
+            if(id === 'game1') initTrader();
+            if(id === 'kid1') loadKQ();
+        });
 
         document.body.className = cat === 'arcade' ? 'mode-trader' : (cat==='kids'?'mode-kids':'mode-tools');
-
-        if(cat === 'tools') setTimeout(() => calcAll(), 50);
-        if(id === 'game1') setTimeout(initTrader, 50);
-        if(id === 'kid1') loadKQ();
     }
 
     function stopAllGames() {
@@ -312,7 +305,7 @@
     }
 
     // --- CALCULATORS ---
-    ['sip_amt','sip_years','sip_rate','emi_amt','emi_years','emi_rate','arb_amt','arb_loan_rate','arb_inv_rate','arb_years'].forEach(id => {
+    ['sip_amt','sip_years','sip_rate','emi_amt','emi_years','emi_rate','arb_amt','arb_loan_rate','arb_inv_rate'].forEach(id => {
         document.getElementById(id).addEventListener('input', (e) => {
             let val = parseFloat(e.target.value);
             let suff = id.includes('rate')?'%':(id.includes('years')?'Yrs':'');
@@ -333,12 +326,10 @@
             const L=parseFloat(document.getElementById('emi_amt').value), Y=parseFloat(document.getElementById('emi_years').value)*12, I=parseFloat(document.getElementById('emi_rate').value)/1200;
             const emi=(L*I*Math.pow(1+I,Y))/(Math.pow(1+I,Y)-1);
             document.getElementById('emi_monthly').innerText=formatCurrency(emi);
-            let prin=[], int=[], bal=L;
-            for(let i=0; i<Y/12; i++){ let p=0, inT=0; for(let m=0; m<12; m++) { let it=bal*I; let pr=emi-it; inT+=it; p+=pr; bal-=pr; } prin.push(p); int.push(inT); }
-            drawStacked('emiChart', Array.from({length:Y/12},(_,i)=>i+1), prin, int);
+            drawChart('emiChart', 'bar', ['Principal','Interest'], [L, (emi*Y)-L], '#6366f1');
         } else if(type==='arb') {
-            const A=parseFloat(document.getElementById('arb_amt').value), D=parseFloat(document.getElementById('arb_years').value), lR=parseFloat(document.getElementById('arb_loan_rate').value)/100, iR=parseFloat(document.getElementById('arb_inv_rate').value)/100;
-            let c=A, l=A, lbs=[], d1=[], d2=[]; for(let i=1;i<=D;i++){ c*=(1+iR); l*=(1+lR); lbs.push("Yr "+i); d1.push(c); d2.push(l); }
+            const A=parseFloat(document.getElementById('arb_amt').value), lR=parseFloat(document.getElementById('arb_loan_rate').value)/100, iR=parseFloat(document.getElementById('arb_inv_rate').value)/100;
+            let c=A, l=A, lbs=[], d1=[], d2=[]; for(let i=1;i<=10;i++){ c*=(1+iR); l*=(1+lR); lbs.push("Yr "+i); d1.push(c); d2.push(l); }
             document.getElementById('arb_net').innerText=formatCurrency(c-l);
             drawChart('arbChart', 'line', lbs, d1, '#10b981', d2);
         }
@@ -352,55 +343,40 @@
         charts[id] = new Chart(ctx, { type, data:{labels,datasets}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:d2!=null}},scales:{x:{grid:{display:false}},y:{grid:{color:'#333'}}}} });
     }
     
-    function drawStacked(id, labels, d1, d2) {
-        const ctx = document.getElementById(id).getContext('2d');
-        if(charts[id]) charts[id].destroy();
-        charts[id] = new Chart(ctx, { type:'bar', data:{labels,datasets:[{label:'Principal',data:d1,backgroundColor:'#6366f1'},{label:'Interest',data:d2,backgroundColor:'#f43f5e'}]}, options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#333'}}}} });
+    function calcAll() {
+        if(document.getElementById('sip').classList.contains('active-view')) calcTool('sip');
+        if(document.getElementById('emi').classList.contains('active-view')) calcTool('emi');
+        if(document.getElementById('arb').classList.contains('active-view')) calcTool('arb');
     }
 
-    // --- GAME 1: TRADER PRO (FIXED LOGIC) ---
+    // --- GAME 1: TRADER PRO (STRATEGIES) ---
     let traderInt, traderPrice=20000, traderEquity=1000000, traderStocks=0, currentCandle=null, candleEnd=0, isCandle=false, tradeQty=0.1;
-    
-    // Real Stock Data (Random Selection)
-    const stocks = [
-        {s:"MRF", p:130000}, {s:"NIFTY", p:24000}, {s:"RELIANCE", p:2500}, {s:"TCS", p:3500}, {s:"ZOMATO", p:260}, {s:"VODAFONE", p:15}
+    // Defined Strategies
+    const strategies = [
+        {name: "Bull Run", bias: 1}, // Trend Up
+        {name: "Bear Market", bias: -1}, // Trend Down
+        {name: "Volatile", bias: 0} // Flat/Random
     ];
-    // 8+ Patterns
-    const patterns = [
-        {n:"Bull Run 🚀", moves:[1, 2, 0.5, 1.5, 2], t:"Strong Buying Momentum"},
-        {n:"Bear Crash 📉", moves:[-1, -3, -1, -2, -4], t:"Panic Selling!"},
-        {n:"Doji Reversal 💫", moves:[0.1, -0.1, 0, 0.2, 1.5], t:"Indecision -> Breakout"},
-        {n:"Hammer 🔨", moves:[-1, -2, 1.5, 2, 0.5], t:"Price Rejected Lows"},
-        {n:"Pump & Dump 🤡", moves:[3, 4, -2, -5, -5], t:"Manipulation Detected"},
-        {n:"Bull Flag 🚩", moves:[2, -0.5, -0.2, 0.1, 3], t:"Consolidation then Up"},
-        {n:"Engulfing 🕯️", moves:[-0.5, -1, 2.5, 1, 1], t:"Buyers taking control"}
-    ];
-    let activePattern = patterns[0], patternStep = 0;
+    let activeStrategy = strategies[0];
     const MAX_BARS = 25;
 
     function initTrader() {
-        // Pick Random Stock
-        let stock = stocks[Math.floor(Math.random()*stocks.length)];
-        document.getElementById('trader_stock').innerText = stock.s;
-        traderPrice = stock.p;
-
         if(charts['trader']) charts['trader'].destroy();
-        const ctx = document.getElementById('traderChart').getContext('2d');
         
-        charts['trader'] = new Chart(ctx, {
+        // Pre-fill data so chart isn't empty on start
+        const initialData = Array(MAX_BARS).fill(traderPrice); 
+        
+        charts['trader'] = new Chart(document.getElementById('traderChart').getContext('2d'), {
             type: 'line',
             data: {
                 labels: Array(MAX_BARS).fill(''),
                 datasets: [
-                    { type: 'line', label:'Line', data:Array(MAX_BARS).fill(null), borderColor:'#00f3ff', tension:0.1, pointRadius:0, hidden: false },
+                    { type: 'line', label:'Line', data:[...initialData], borderColor:'#00f3ff', tension:0.1, pointRadius:0, hidden: false },
                     { type: 'bar', label:'Wick', data:Array(MAX_BARS).fill(null), backgroundColor:'#64748b', barThickness:2, grouped:false, hidden: true, order:1 },
                     { type: 'bar', label:'Body', data:Array(MAX_BARS).fill(null), backgroundColor:(c)=>c.raw&&c.raw[1]>=c.raw[0]?'#10b981':'#f43f5e', barThickness:10, grouped:false, hidden: true, order:2 }
                 ]
             },
-            options: { 
-                animation: false, responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, 
-                scales: { x: { display: false }, y: { position: 'right', grid: { color: '#333' } } } 
-            }
+            options: { animation: false, responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { position: 'right', grid: { color: '#333' } } } }
         });
         
         startCandle();
@@ -408,48 +384,38 @@
     }
 
     function startCandle() {
-        let prev = currentCandle ? currentCandle.c : traderPrice;
-        currentCandle = { o:prev, h:prev, l:prev, c:prev };
-        candleEnd = Date.now() + 10000; // 10s Candle
+        // Open at previous Close
+        let prevClose = currentCandle ? currentCandle.c : traderPrice;
+        currentCandle = { o:prevClose, h:prevClose, l:prevClose, c:prevClose };
+        candleEnd = Date.now() + 10000; // 10s
         
-        // Pick Pattern
-        if(patternStep >= activePattern.moves.length) {
-            activePattern = patterns[Math.floor(Math.random()*patterns.length)];
-            patternStep = 0;
-            document.getElementById('trader_pattern').innerText = activePattern.n;
-            showTip(activePattern.t);
-        }
-
-        // Shift Chart
+        // Pick Random Strategy for this candle
+        activeStrategy = strategies[Math.floor(Math.random() * strategies.length)];
+        document.getElementById('trader_strat').innerText = "Strategy: " + activeStrategy.name;
+        
+        // Shift Data
         let c = charts['trader'];
         c.data.datasets.forEach(d => { d.data.shift(); d.data.push(null); });
     }
 
-    function showTip(msg) {
-        let el = document.getElementById('trader_tip');
-        el.innerText = msg; el.style.opacity = 1;
-        setTimeout(() => el.style.opacity = 0, 3000);
-    }
-
     function tickTrader() {
         if(!document.getElementById('game1').classList.contains('active-view')) return;
+        
+        document.getElementById('trader_timer').innerText = Math.ceil((candleEnd - Date.now())/1000) + "s";
 
-        let timeLeft = Math.ceil((candleEnd - Date.now())/1000);
-        document.getElementById('trader_timer').innerText = timeLeft + "s";
+        // Movement Logic: Bias + Noise
+        let noise = (Math.random() - 0.5) * 20;
+        let trend = activeStrategy.bias * 10; 
+        traderPrice += trend + noise;
 
-        // Apply Pattern Logic (Scaled to Price)
-        let move = (activePattern.moves[patternStep] || 0) * (traderPrice * 0.002); 
-        let noise = (Math.random() - 0.5) * (traderPrice * 0.001);
-        traderPrice += move + noise;
-
-        // Update Candle
+        // Update Candle Stats
         currentCandle.c = traderPrice;
         if(traderPrice > currentCandle.h) currentCandle.h = traderPrice;
         if(traderPrice < currentCandle.l) currentCandle.l = traderPrice;
 
-        document.getElementById('trader_price').innerText = traderPrice.toFixed(2);
+        document.getElementById('trader_price').innerText = traderPrice.toFixed(0);
 
-        // Update Chart
+        // Update Chart (Last Point)
         let c = charts['trader'];
         let idx = MAX_BARS - 1;
         c.data.datasets[0].data[idx] = traderPrice; // Line
@@ -457,41 +423,24 @@
         c.data.datasets[2].data[idx] = [currentCandle.o, currentCandle.c]; // Body
         c.update('none');
 
-        // Update Portfolio
         document.getElementById('trader_eq').innerText = formatCurrency(traderEquity + (traderStocks*traderPrice));
-
-        if(Date.now() >= candleEnd) {
-            patternStep++;
-            startCandle();
-        }
-    }
-
-    function toggleCandles() {
-        isCandle = !isCandle;
-        let c = charts['trader'];
-        c.data.datasets[0].hidden = isCandle; 
-        c.data.datasets[1].hidden = !isCandle; 
-        c.data.datasets[2].hidden = !isCandle;
-        c.update();
+        
+        if(Date.now() >= candleEnd) startCandle();
     }
 
     function setQty(perc, btn) { tradeQty = perc; document.querySelectorAll('.perc-btn').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); }
     function traderAction(dir) {
-        let cost = traderEquity * tradeQty;
-        let qty = Math.floor(cost / traderPrice);
-        
+        let amt = traderEquity * tradeQty; let qty = Math.floor(amt / traderPrice);
         if(dir===1 && qty>0) { traderStocks += qty; traderEquity -= qty*traderPrice; }
-        if(dir===-1 && traderStocks>0) { 
-            let sellQty = Math.ceil(traderStocks * tradeQty);
-            traderStocks -= sellQty; traderEquity += sellQty*traderPrice; 
-        }
-        document.getElementById('trader_cash').innerText = formatCurrency(traderEquity); document.getElementById('trader_hold').innerText = traderStocks;
+        if(dir===-1 && traderStocks>0) { let s=Math.ceil(traderStocks*tradeQty); traderStocks-=s; traderEquity+=s*traderPrice; }
+        document.getElementById('trader_cash').innerText = formatCurrency(traderEquity); document.getElementById('trader_hold').innerText = traderStocks + " Units";
     }
-    function resetTrader() { traderEquity=1000000; traderStocks=0; initTrader(); document.getElementById('trader_cash').innerText=formatCurrency(traderEquity); }
+    function toggleCandles() { isCandle = !isCandle; let c = charts['trader']; c.data.datasets[0].hidden = isCandle; c.data.datasets[1].hidden = !isCandle; c.data.datasets[2].hidden = !isCandle; c.update(); }
+    function resetTrader() { traderEquity=1000000; traderStocks=0; traderPrice=20000; initTrader(); document.getElementById('trader_cash').innerText=formatCurrency(traderEquity); }
 
     // --- GAME 2: DEFENSE ---
     let defVal=1000000, defYr=1; 
-    const defEvents = [{t:"Boom",m:1.2,d:"Economy is growing!"},{t:"Crash",m:0.8,d:"Panic selling!"},{t:"Stable",m:1.05,d:"Slow growth."}]; 
+    const defEvents = [ {t:"Tech Boom",m:1.2},{t:"Recession",m:0.8},{t:"Stable",m:1.05},{t:"Inflation",m:0.9} ];
     let curDef=defEvents[0];
 
     function pdAction(type) {
@@ -500,23 +449,16 @@
         document.getElementById('pd_networth').innerText=formatCurrency(defVal);
         document.getElementById('pd_year').innerText="Year "+defYr;
         
-        // Pick Next Event
         curDef = defEvents[Math.floor(Math.random()*defEvents.length)];
         document.getElementById('pd_news').innerText = curDef.t;
-        document.getElementById('pd_desc').innerText = curDef.d;
     }
     function resetPD() { defVal=1000000; defYr=1; document.getElementById('pd_networth').innerText=formatCurrency(defVal); }
 
     // --- GAME 3: WEALTH RUN ---
     let runAnim, runActive=false, runLane=1, runScore=0; const lanes=[20,50,80];
-    function startRun(){ if(runActive)return; runActive=true; runScore=0; document.getElementById('run_score').innerText=0; document.getElementById('run_overlay').style.display='none'; document.getElementById('run_start').style.display='none'; document.querySelectorAll('.obstacle, .coin').forEach(e=>e.remove()); spawnObj(); loopRun(); }
+    function startRun(){ if(runActive)return; runActive=true; runScore=0; document.getElementById('run_score').innerText=0; document.getElementById('run_overlay').style.display='none'; document.getElementById('run_start').style.display='none'; document.querySelectorAll('.obstacle,.coin').forEach(e=>e.remove()); spawnObj(); loopRun(); }
     function moveRun(d) { runLane+=d; if(runLane<0)runLane=0; if(runLane>2)runLane=2; document.getElementById('run_player').style.left=lanes[runLane]+'%'; }
-    function spawnObj() {
-        if(!runActive)return; const el=document.createElement('div'); el.className=Math.random()>0.4?'obstacle':'coin';
-        if(el.className==='coin')el.innerText="₹"; else el.innerText="DEBT";
-        let l=Math.floor(Math.random()*3); el.style.left=lanes[l]+'%'; el.dataset.lane=l; el.dataset.y=0;
-        document.getElementById('run_game').appendChild(el); setTimeout(spawnObj, 800);
-    }
+    function spawnObj() { if(!runActive)return; const el=document.createElement('div'); el.className=Math.random()>0.4?'obstacle':'coin'; if(el.className==='coin')el.innerText="₹"; else el.innerText="TAX"; let l=Math.floor(Math.random()*3); el.style.left=lanes[l]+'%'; el.dataset.lane=l; el.dataset.y=0; document.getElementById('run_game').appendChild(el); setTimeout(spawnObj, 800); }
     function loopRun() {
         if(!runActive)return;
         document.querySelectorAll('.obstacle, .coin').forEach(el => {
@@ -525,14 +467,14 @@
                 if(el.className.includes('obstacle')) { runActive=false; document.getElementById('run_overlay').style.display='flex'; }
                 else { runScore+=100; document.getElementById('run_score').innerText=runScore; el.remove(); }
             }
-            if(y>100)el.remove();
+            if(y>100) el.remove();
         });
         runAnim = requestAnimationFrame(loopRun);
     }
 
     // --- KID 1: COIN QUEST ---
     let kqI=0, kqS=0; 
-    const kqList=[{n:"Apple",t:"need",i:"🍎"}, {n:"PS5",t:"want",i:"🎮"}, {n:"Water",t:"need",i:"💧"}, {n:"Toy",t:"want",i:"🧸"}, {n:"Pills",t:"need",i:"💊"}, {n:"Candy",t:"want",i:"🍬"}, {n:"Books",t:"need",i:"📚"}, {n:"Gold",t:"want",i:"💍"}];
+    const kqList=[{n:"Apple",t:"need",i:"🍎"}, {n:"PS5",t:"want",i:"🎮"}, {n:"Water",t:"need",i:"💧"}, {n:"Toy",t:"want",i:"🧸"}, {n:"Pills",t:"need",i:"💊"}, {n:"Candy",t:"want",i:"🍬"}, {n:"Books",t:"need",i:"📚"}, {n:"Gold",t:"want",i:"💍"}, {n:"Rice",t:"need",i:"🍚"}, {n:"Car",t:"want",i:"🏎️"}];
     function loadKQ() {
         if(kqI>=kqList.length) { 
             document.getElementById('kq_play_area').style.display = 'none';
@@ -541,11 +483,10 @@
             return; 
         }
         let i = kqList[kqI]; document.getElementById('kq_icon').innerText=i.i; document.getElementById('kq_name').innerText=i.n;
-        document.getElementById('kq_score').innerText = kqS + " / 10";
+        document.getElementById('kq_score').innerText = kqS + " / " + kqList.length;
     }
     function checkKQ(t) {
-        let i = kqList[kqI];
-        if(t===i.t) { kqS++; document.getElementById('kq_res').innerText="Correct!"; document.getElementById('kq_res').style.color='#10b981'; }
+        if(t===kqList[kqI].t) { kqS++; document.getElementById('kq_res').innerText="Correct!"; document.getElementById('kq_res').style.color='#10b981'; }
         else { document.getElementById('kq_res').innerText="Wrong!"; document.getElementById('kq_res').style.color='#ef4444'; }
         kqI++; setTimeout(loadKQ, 500);
     }
@@ -553,24 +494,25 @@
 
     // --- KID 2: PIGGY DASH ---
     let pigAnim, pigSpawnInt, pigPos=50, pigSc=0, pigActive=false, pigMove=0;
-    function startPiggy() { if(pigActive)return; pigActive=true; pigSc=0; pigPos=50; document.getElementById('pig_score').innerText=0; document.getElementById('pig_overlay').style.display='none'; document.querySelectorAll('.drop-item').forEach(e=>e.remove()); updatePig(); pigAnim=requestAnimationFrame(loopPiggy); pigSpawnInt=setInterval(spawnPig, 800); }
+    function startPiggy() { if(pigActive)return; pigActive=true; pigSc=0; pigPos=50; document.getElementById('pig_score').innerText=0; document.getElementById('pig_overlay').style.display='none'; document.querySelectorAll('.drop-item').forEach(e=>e.remove()); updatePig(); pigAnim=requestAnimationFrame(loopPiggy); pigSpawnInt=setInterval(spawnPig, 600); }
     function movePig(d) { pigMove=d*2; } function stopPig() { pigMove=0; }
     function updatePig() { document.getElementById('piggy_player').style.left=pigPos+'%'; }
-    function spawnPig() { if(!pigActive)return; const el=document.createElement('div'); el.className='drop-item'; el.innerText=Math.random()>0.3?'💰':'🔨'; el.dataset.type=el.innerText==='💰'?'good':'bad'; el.style.left=(Math.random()*80+10)+'%'; el.style.top='-50px'; el.dataset.y=-50; document.getElementById('piggy_container').appendChild(el); }
+    function spawnPig() { if(!pigActive)return; const el=document.createElement('div'); el.className='drop-item'; el.innerText=Math.random()>0.3?'💰':'🔨'; el.dataset.type=el.innerText==='💰'?'good':'bad'; el.style.left=(Math.random()*90+5)+'%'; el.style.top='-50px'; el.dataset.y=-50; document.getElementById('piggy_container').appendChild(el); }
     function loopPiggy() {
         if(!pigActive)return; if(pigMove!==0){pigPos+=pigMove; if(pigPos<10)pigPos=10; if(pigPos>90)pigPos=90; updatePig();}
         document.querySelectorAll('.drop-item').forEach(e => {
-            let y=parseFloat(e.dataset.y)+4; e.dataset.y=y; e.style.top=y+'px';
+            let y=parseFloat(e.dataset.y)+5; e.dataset.y=y; e.style.top=y+'px';
             if(y>420 && y<480 && Math.abs(parseFloat(e.style.left)-pigPos)<15) {
                 if(e.dataset.type==='good') { pigSc+=100; document.getElementById('pig_score').innerText=pigSc; e.remove(); }
                 else { pigActive=false; clearInterval(pigSpawnInt); document.getElementById('pig_overlay').style.display='flex'; }
             }
-            if(y>520) e.remove();
+            if(y>460) e.remove();
         });
         pigAnim = requestAnimationFrame(loopPiggy);
     }
 
-    setTimeout(calcAll, 100);
+    // Init
+    setTimeout(() => { switchView('sip', document.querySelector('.menu-btn'), 'tools'); }, 100);
 </script>
 </body>
 </html>
