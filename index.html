@@ -3,246 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WealthVerse | Neon Future</title>
+    <title>CalcIndia | Play 'n'Learn</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-color: #030712;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --neon-primary: #3b82f6;
-            --neon-accent: #f43f5e;
-            --neon-success: #10b981;
-            --neon-gold: #f59e0b;
-            --text-main: #e2e8f0;
-            --text-muted: #64748b;
+            --bg-dark: #0f172a;
+            --card-glass: rgba(15, 23, 42, 0.95);
+            --border-glass: rgba(255, 255, 255, 0.15);
+            --primary: #6366f1;
+            --accent: #f43f5e;
+            --success: #10b981;
+            --gold: #f59e0b;
+            --neon-blue: #00f3ff;
+            --neon-pink: #d946ef;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Outfit', sans-serif; min-height: 100vh; padding-bottom: 3rem; overflow-x: hidden; transition: background 0.3s ease; }
         
-        body { 
-            background-color: var(--bg-color);
-            color: var(--text-main); 
-            font-family: 'Outfit', sans-serif;
-            min-height: 100vh;
-            padding-bottom: 4rem;
-            overflow-x: hidden;
-            transition: background 0.5s ease;
-        }
-
-        /* --- FUTURISTIC BACKGROUNDS --- */
-        /* Tools: Cyber Grid */
-        body.mode-tools { 
-            background: 
-                linear-gradient(rgba(3, 7, 18, 0.9), rgba(3, 7, 18, 0.9)),
-                linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px),
-                linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-        /* Trader: Matrix/Terminal */
-        body.mode-trader { 
-            background: radial-gradient(circle at 50% 50%, #022c22 0%, #000000 100%);
-        }
-        /* Defense: War Room */
-        body.mode-defense { 
-            background: radial-gradient(circle at top, #312e81 0%, #0f172a 100%);
-        }
-        /* Race: Synthwave */
-        body.mode-run { 
-            background: linear-gradient(to bottom, #4c1d95 0%, #be185d 100%);
-        }
-        /* Kids: Candy */
-        body.mode-kids { 
-            background: linear-gradient(135deg, #0ea5e9 0%, #d946ef 100%);
-        }
+        /* BACKGROUND MODES */
+        body.mode-tools { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        body.mode-trader { background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%); }
+        body.mode-run { background: linear-gradient(to bottom, #2e1065 0%, #0f172a 100%); }
+        body.mode-kids { background: linear-gradient(120deg, #0ea5e9 0%, #8b5cf6 100%); }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
 
-        /* --- HEADER --- */
-        header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 1.5rem 0; margin-bottom: 2rem;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        .brand { 
-            font-family: 'Orbitron', sans-serif; font-size: 1.8rem; letter-spacing: 2px;
-            background: linear-gradient(to right, #fff, var(--neon-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-        }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-glass); }
+        .brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; background: linear-gradient(to right, #6366f1, #00f3ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; }
 
-        /* --- NAV DOCK --- */
-        .nav-dock { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 2rem; z-index: 100; position: relative; }
+        /* NAV */
+        .nav-dock { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 1.5rem; }
         .dropdown-container { position: relative; }
-        
         .drop-trigger {
-            width: 100%; padding: 15px; 
-            background: rgba(255,255,255,0.05); 
-            border: 1px solid var(--glass-border);
-            border-radius: 16px; color: var(--text-main); 
-            font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 1px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-            backdrop-filter: blur(10px); transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass);
+            border-radius: 12px; color: var(--text-sub); font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s;
         }
-        .drop-trigger:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
-        .drop-trigger.active-cat { 
-            background: rgba(59, 130, 246, 0.2); 
-            border-color: var(--neon-primary); 
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-            color: #fff;
-        }
-
+        .drop-trigger.active-cat { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
         .drop-menu {
-            position: absolute; top: 120%; left: 0; width: 100%; min-width: 220px;
-            background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 16px; padding: 10px;
-            display: none; flex-direction: column; gap: 5px; 
-            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.8); z-index: 200;
-            animation: slideIn 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+            position: absolute; top: 110%; left: 0; width: 100%; min-width: 200px;
+            background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); border: 1px solid var(--border-glass); border-radius: 16px; padding: 8px;
+            display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.8); z-index: 200;
         }
         .dropdown-container:last-child .drop-menu { right: 0; left: auto; }
-        .show-menu { display: flex; }
-        @keyframes slideIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+        .show-menu { display: flex; animation: dropIn 0.2s ease-out; }
+        @keyframes dropIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .menu-btn { background: transparent; border: none; padding: 12px; color: var(--text-sub); text-align: left; font-size: 0.95rem; font-weight: 600; cursor: pointer; border-radius: 8px; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .menu-btn:hover { background: rgba(255,255,255,0.05); color: white; padding-left: 15px; }
+        .menu-btn.active { background: rgba(99, 102, 241, 0.2); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3); }
 
-        .menu-btn {
-            background: transparent; border: none; padding: 12px; color: var(--text-muted); 
-            text-align: left; font-size: 0.9rem; font-weight: 600; cursor: pointer; 
-            border-radius: 8px; display: flex; align-items: center; gap: 10px; transition: 0.2s;
-        }
-        .menu-btn:hover { background: rgba(255,255,255,0.05); color: #fff; padding-left: 15px; }
-        .menu-btn.active { background: linear-gradient(90deg, rgba(59,130,246,0.2), transparent); color: var(--neon-primary); border-left: 3px solid var(--neon-primary); }
-
-        /* --- LAYOUTS --- */
-        .app-view { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        /* VIEWS */
+        .app-view { display: none; opacity: 0; transition: opacity 0.3s; }
         .app-view.active-view { display: grid; opacity: 1; }
-        
-        .tool-layout { grid-template-columns: 1fr 1.6fr; gap: 2rem; }
-        .game-layout { grid-template-columns: 1fr 380px; gap: 2rem; }
-        .kid-layout { grid-template-columns: 1fr; gap: 2rem; max-width: 600px; margin: 0 auto; }
+        .tool-layout { grid-template-columns: 1fr 1.5fr; gap: 1.5rem; }
+        .game-layout { grid-template-columns: 1fr 350px; gap: 1.5rem; }
+        .kid-layout { grid-template-columns: 1fr; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
 
-        /* --- GLASS CARDS (The Theme) --- */
-        .glass-card {
-            background: var(--glass-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; overflow: hidden;
-        }
-        /* Glow effect on top border */
-        .glass-card::before {
-            content: ''; position: absolute; top:0; left:0; width:100%; height:1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        }
-
-        /* --- INPUTS --- */
-        .input-wrap { margin-bottom: 1.5rem; }
-        .input-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
-        .val-input { 
-            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); 
-            color: var(--neon-primary); font-weight: bold; width: 80px; text-align: center; 
-            border-radius: 6px; padding: 4px; font-family: monospace;
-        }
+        /* UI */
+        .glass-card { background: var(--card-glass); border: 1px solid var(--border-glass); border-radius: 20px; padding: 1.5rem; margin-bottom: 1rem; position: relative; }
+        .input-wrap { margin-bottom: 1rem; }
+        .input-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-sub); font-size: 0.9rem; }
+        .input-val { font-weight: 700; color: var(--primary); }
         input[type=range] { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; -webkit-appearance: none; cursor: pointer; }
-        input[type=range]::-webkit-slider-thumb { 
-            -webkit-appearance: none; height: 24px; width: 24px; border-radius: 50%; 
-            background: var(--neon-primary); border: 3px solid #fff; box-shadow: 0 0 15px var(--neon-primary); margin-top: -9px; 
-        }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #fff; margin-top: -6px; }
+        .big-value { font-size: 2.5rem; font-weight: 800; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .chart-wrapper { position: relative; height: 300px; width: 100%; }
 
-        .big-value { font-size: 3.5rem; font-weight: 900; color: #fff; letter-spacing: -2px; text-shadow: 0 0 30px rgba(255,255,255,0.1); line-height: 1; }
-        .chart-wrapper { position: relative; height: 320px; width: 100%; }
-
-        /* --- BUTTONS --- */
-        .kid-btn { 
-            padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; border: none; font-size: 1.1rem; width: 100%; transition: transform 0.1s; 
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        /* BUTTONS */
+        .reset-btn { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #fca5a5; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+        .kid-btn { padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; border: none; font-size: 1rem; width: 100%; transition: transform 0.1s; }
         .kid-btn:active { transform: scale(0.95); }
-        .btn-green { background: var(--neon-success); color: #000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-        .btn-red { background: var(--neon-accent); color: #fff; box-shadow: 0 0 20px rgba(244, 63, 94, 0.4); }
+        .btn-green { background: var(--success); color: #fff; }
+        .btn-red { background: var(--accent); color: #fff; }
+        .perc-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #aaa; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; flex: 1; transition: 0.2s; }
+        .perc-btn.selected { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
+
+        /* GAMES UI */
+        .game-screen { background: #020617; height: 400px; border-radius: 16px; border: 1px solid #334155; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .game-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 20; display:none; flex-direction: column; justify-content: center; align-items: center; color: white; }
         
-        .reset-btn { 
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; 
-            padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; 
-            transition: 0.2s; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .reset-btn:hover { background: rgba(255,255,255,0.2); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
-
-        /* --- GAME SCREENS --- */
-        .game-screen { 
-            background: #000; height: 450px; border-radius: 16px; 
-            border: 2px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: inset 0 0 50px #000;
-        }
-
         /* TRADER */
-        .candle-timer { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 6px; border: 1px solid var(--neon-primary); font-family: monospace; color: var(--neon-primary); }
-        .pattern-badge { position: absolute; bottom: 15px; left: 15px; background: rgba(0,0,0,0.7); padding: 6px 12px; border-radius: 6px; color: var(--gold); border: 1px solid var(--gold); font-size: 0.85rem; text-transform: uppercase; }
-        .trade-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        
-        /* FINANCIAL RACE */
-        #run_game { width: 100%; height: 100%; position: relative; background: linear-gradient(#1e1b4b, #be185d); perspective: 800px; overflow: hidden; }
-        .road { 
-            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotateX(60deg); 
-            width: 360px; height: 150%; background: #1e293b; 
-            border-left: 15px solid var(--neon-blue); border-right: 15px solid var(--neon-blue); 
-            box-shadow: 0 0 50px var(--neon-blue);
-        }
-        .lane-marker { 
-            position: absolute; top: 0; left: 50%; width: 6px; height: 100%; transform: translateX(-50%);
-            background: repeating-linear-gradient(to bottom, #fff 0%, #fff 15%, transparent 15%, transparent 30%); 
-            background-size: 10px 100px; animation: roadMove 0.4s linear infinite; 
-        }
-        @keyframes roadMove { from { background-position: 0 0; } to { background-position: 0 100px; } }
-        
-        .player-car { 
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); 
-            font-size: 4rem; z-index: 10; transition: left 0.1s; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8)); 
-        }
-        .player-car div { transform: rotate(-90deg); } /* Points UP */
-        
-        .obstacle { 
-            position: absolute; width: 70px; height: 40px; background: #111; border: 3px solid var(--neon-accent); 
-            border-radius: 10px; transform: translateX(-50%); display:flex; justify-content:center; align-items:center; 
-            color: var(--neon-accent); font-weight:900; font-size:0.8rem; box-shadow: 0 0 10px var(--neon-accent);
-        }
-        .coin { 
-            position: absolute; width: 50px; height: 50px; background: radial-gradient(circle, #fbbf24, #b45309); 
-            border-radius: 50%; transform: translateX(-50%); border: 3px solid #fff; box-shadow: 0 0 20px gold;
-            display:flex; justify-content:center; align-items:center; font-weight:bold; color:black;
-        }
+        .candle-timer { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px; border: 1px solid var(--primary); font-family: monospace; }
+        .trade-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .trade-percs { display: flex; gap: 5px; margin: 15px 0; justify-content: space-between; }
 
-        /* PIGGY */
-        #piggy_container { width: 100%; height: 100%; position: relative; background: #0f172a; }
-        .piggy { position: absolute; bottom: 20px; width: 80px; height: 80px; background: #ec4899; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 4px solid #fff; z-index: 10; transition: left 0.1s; box-shadow: 0 0 20px #ec4899; }
-        .drop-item { position: absolute; font-size: 4rem; transition: top 0.05s linear; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+        /* WEALTH RUN */
+        #run_game { width: 100%; height: 100%; position: relative; background: linear-gradient(#1e1b4b, #be185d); overflow: hidden; perspective: 600px; }
+        .road { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotateX(50deg); width: 300px; height: 120%; background: #1e293b; border-left: 10px solid var(--neon-blue); border-right: 10px solid var(--neon-blue); }
+        .lane-marker { position: absolute; top: 0; left: 33%; width: 4px; height: 100%; background: repeating-linear-gradient(to bottom, #fff 0%, #fff 20%, transparent 20%, transparent 40%); background-size: 10px 60px; animation: roadMove 0.2s linear infinite; }
+        .lane-marker.right { left: 66%; }
+        @keyframes roadMove { from { background-position: 0 0; } to { background-position: 0 60px; } }
+        .player-car { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 4rem; z-index: 10; transition: left 0.1s; }
+        .player-car div { transform: rotate(-90deg); } 
+        .obstacle { position: absolute; width: 70px; height: 35px; background: #000; border: 3px solid #ef4444; border-radius: 50%; transform: translateX(-50%); display:flex; justify-content:center; align-items:center; color: #ef4444; font-weight:bold;}
+        .coin { position: absolute; width: 50px; height: 50px; background: gold; border-radius: 50%; transform: translateX(-50%); border: 3px solid #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; color: black; box-shadow: 0 0 15px gold; }
+        .control-pad { display: flex; gap: 30px; width: 100%; justify-content: center; margin-top: 15px; }
+        .ctrl-btn { width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 2rem; cursor: pointer; display:flex; align-items:center; justify-content:center;}
 
-        .control-pad { display: flex; gap: 30px; width: 100%; justify-content: center; margin-top: 20px; }
-        .ctrl-btn { 
-            width: 80px; height: 80px; border-radius: 20px; 
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); 
-            color: white; font-size: 2rem; cursor: pointer; 
-            display:flex; align-items:center; justify-content:center; transition: 0.1s;
-        }
-        .ctrl-btn:active { background: var(--neon-primary); transform: scale(0.9); }
+        /* PIGGY DASH (BIGGER) */
+        #piggy_container { width: 100%; height: 600px; position: relative; background: #1e293b; overflow: hidden; border: 3px solid var(--neon-pink); border-radius: 12px; }
+        .piggy { position: absolute; bottom: 10px; width: 80px; height: 80px; background: #ec4899; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 3px solid #fff; transition: left 0.1s; z-index: 10; }
+        .drop-item { position: absolute; font-size: 3.5rem; transition: top 0.05s linear; }
 
-        @media (max-width: 900px) { 
-            .tool-layout, .game-layout, .kid-layout { grid-template-columns: 1fr; } 
-            .big-value { font-size: 2.5rem; }
-        }
+        @media (max-width: 900px) { .dashboard-grid, .game-grid, .kid-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body class="mode-tools">
 
 <div class="container">
     <header>
-        <div class="brand"><i class="ph-fill ph-rocket-launch"></i> WealthVerse v25</div>
+        <div class="brand"><i class="ph-fill ph-currency-inr"></i> CalcIndia | Play 'n' Learn</div>
     </header>
 
     <nav class="nav-dock">
         <div class="dropdown-container">
-            <button class="drop-trigger active-cat" onclick="toggleMenu('menu-tools', this)">TOOLS <i class="ph-bold ph-caret-down"></i></button>
+            <button class="drop-trigger active-cat" onclick="toggleMenu('menu-tools', this)">🛠️ Tools</button>
             <div id="menu-tools" class="drop-menu">
                 <button class="menu-btn active" onclick="switchView('sip', this, 'tools')">SIP Calculator</button>
                 <button class="menu-btn" onclick="switchView('emi', this, 'tools')">EMI Calculator</button>
@@ -250,7 +131,7 @@
             </div>
         </div>
         <div class="dropdown-container">
-            <button class="drop-trigger" onclick="toggleMenu('menu-arcade', this)">ARCADE <i class="ph-bold ph-caret-down"></i></button>
+            <button class="drop-trigger" onclick="toggleMenu('menu-arcade', this)">🕹️ Arcade</button>
             <div id="menu-arcade" class="drop-menu">
                 <button class="menu-btn" onclick="switchView('game1', this, 'arcade')">Trader Pro</button>
                 <button class="menu-btn" onclick="switchView('game2', this, 'arcade')">Defense</button>
@@ -258,7 +139,7 @@
             </div>
         </div>
         <div class="dropdown-container">
-            <button class="drop-trigger" onclick="toggleMenu('menu-kids', this)">KIDS <i class="ph-bold ph-caret-down"></i></button>
+            <button class="drop-trigger" onclick="toggleMenu('menu-kids', this)">👶 Kids</button>
             <div id="menu-kids" class="drop-menu">
                 <button class="menu-btn" onclick="switchView('kid1', this, 'kids')">Coin Quest</button>
                 <button class="menu-btn" onclick="switchView('kid2', this, 'kids')">Piggy Dash</button>
@@ -269,9 +150,9 @@
     <div id="sip" class="app-view dashboard-grid active-view">
         <div class="glass-card">
             <h3>SIP Calculator</h3><br>
-            <div class="input-wrap"><div class="input-header"><label>Monthly</label><input type="number" class="val-input" id="sip_amt_val" value="25000"></div><input type="range" id="sip_amt" min="1000" max="1000000" step="500" value="25000"></div>
-            <div class="input-wrap"><div class="input-header"><label>Years</label><input type="number" class="val-input" id="sip_years_val" value="10"></div><input type="range" id="sip_years" min="1" max="40" step="1" value="10"></div>
-            <div class="input-wrap"><div class="input-header"><label>Return (%)</label><input type="number" class="val-input" id="sip_rate_val" value="12"></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div>
+            <div class="input-wrap"><div class="input-header"><label>Monthly</label><span class="input-val" id="sip_amt_val">25K</span></div><input type="range" id="sip_amt" min="1000" max="1000000" step="500" value="25000"></div>
+            <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="sip_years_val">10Y</span></div><input type="range" id="sip_years" min="1" max="40" step="1" value="10"></div>
+            <div class="input-wrap"><div class="input-header"><label>Return</label><span class="input-val" id="sip_rate_val">12%</span></div><input type="range" id="sip_rate" min="5" max="30" step="0.5" value="12"></div>
         </div>
         <div class="glass-card"><div class="big-value" id="sip_final">₹ 0</div><div class="chart-wrapper"><canvas id="sipChart"></canvas></div></div>
     </div>
@@ -279,9 +160,9 @@
     <div id="emi" class="app-view dashboard-grid">
         <div class="glass-card">
             <h3>EMI Calculator</h3><br>
-            <div class="input-wrap"><div class="input-header"><label>Loan</label><input type="number" class="val-input" id="emi_amt_val" value="5000000"></div><input type="range" id="emi_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
-            <div class="input-wrap"><div class="input-header"><label>Years</label><input type="number" class="val-input" id="emi_years_val" value="20"></div><input type="range" id="emi_years" min="1" max="30" step="1" value="20"></div>
-            <div class="input-wrap"><div class="input-header"><label>Rate (%)</label><input type="number" class="val-input" id="emi_rate_val" value="8.5"></div><input type="range" id="emi_rate" min="1" max="15" step="0.1" value="8.5"></div>
+            <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="emi_amt_val">50L</span></div><input type="range" id="emi_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
+            <div class="input-wrap"><div class="input-header"><label>Years</label><span class="input-val" id="emi_years_val">20Y</span></div><input type="range" id="emi_years" min="1" max="30" step="1" value="20"></div>
+            <div class="input-wrap"><div class="input-header"><label>Rate</label><span class="input-val" id="emi_rate_val">8.5%</span></div><input type="range" id="emi_rate" min="1" max="15" step="0.1" value="8.5"></div>
         </div>
         <div class="glass-card"><div class="big-value" id="emi_monthly">₹ 0</div><div class="chart-wrapper"><canvas id="emiChart"></canvas></div></div>
     </div>
@@ -289,123 +170,99 @@
     <div id="arb" class="app-view dashboard-grid">
         <div class="glass-card">
             <h3>Arbitrage</h3><br>
-            <div class="input-wrap"><div class="input-header"><label>Loan</label><input type="number" class="val-input" id="arb_amt_val" value="5000000"></div><input type="range" id="arb_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
-            <div class="input-wrap"><div class="input-header"><label>Duration</label><input type="number" class="val-input" id="arb_years_val" value="10"></div><input type="range" id="arb_years" min="1" max="50" step="1" value="10"></div>
-            <div class="input-wrap"><div class="input-header"><label>Loan Rate</label><input type="number" class="val-input" id="arb_loan_rate_val" value="8"></div><input type="range" id="arb_loan_rate" min="1" max="15" step="0.1" value="8"></div>
-            <div class="input-wrap"><div class="input-header"><label>Inv Return</label><input type="number" class="val-input" id="arb_inv_rate_val" value="12"></div><input type="range" id="arb_inv_rate" min="1" max="30" step="0.1" value="12"></div>
+            <div class="input-wrap"><div class="input-header"><label>Loan</label><span class="input-val" id="arb_amt_val">50L</span></div><input type="range" id="arb_amt" min="100000" max="100000000" step="100000" value="5000000"></div>
+            <div class="input-wrap"><div class="input-header"><label>Duration</label><span class="input-val" id="arb_years_val">10Y</span></div><input type="range" id="arb_years" min="1" max="50" step="1" value="10"></div>
+            <div class="input-wrap"><div class="input-header"><label>Loan Rate</label><span class="input-val" id="arb_loan_rate_val">8%</span></div><input type="range" id="arb_loan_rate" min="1" max="15" step="0.1" value="8"></div>
+            <div class="input-wrap"><div class="input-header"><label>Inv Return</label><span class="input-val" id="arb_inv_rate_val">12%</span></div><input type="range" id="arb_inv_rate" min="1" max="30" step="0.1" value="12"></div>
         </div>
         <div class="glass-card"><div class="big-value" id="arb_net">₹ 0</div><div class="chart-wrapper"><canvas id="arbChart"></canvas></div></div>
     </div>
 
-    <div id="game1" class="app-view game-layout">
+    <div id="game1" class="app-view game-grid">
         <div class="glass-card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3>Trader Pro</h3>
-                <div style="text-align:right;">
-                    <div style="font-size:0.8rem; color:#aaa">Symbol</div>
-                    <div style="color:var(--neon-blue); font-weight:bold;" id="trader_symbol">NIFTY 50</div>
-                </div>
-            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;"><h3>Trader Pro</h3><button class="reset-btn" onclick="toggleCandles()">Chart</button></div>
             <div class="game-screen">
                 <div class="candle-timer" id="trader_timer">10s</div>
-                <div style="position:absolute; top:15px; left:15px; font-size:1.5rem; color:var(--success); font-weight:bold;" id="trader_price">20000</div>
-                <div class="pattern-badge" id="trader_pattern">Scanning...</div>
+                <div style="position:absolute; top:10px; left:10px; color:var(--success); font-size:1.2rem;">Price: <span id="trader_price">20000</span></div>
                 <canvas id="traderChart"></canvas>
             </div>
             
-            <div style="display:flex; gap:10px; justify-content:space-between; margin-top:15px;">
-                <button class="reset-btn" onclick="setQty(0.1)">10%</button>
-                <button class="reset-btn" onclick="setQty(0.5)">50%</button>
-                <button class="reset-btn" onclick="setQty(1.0)">100%</button>
+            <div style="text-align:center; margin-top:10px;">Amount:</div>
+            <div class="trade-percs">
+                <button class="perc-btn selected" onclick="setQty(0.1, this)">10%</button>
+                <button class="perc-btn" onclick="setQty(0.25, this)">25%</button>
+                <button class="perc-btn" onclick="setQty(0.5, this)">50%</button>
+                <button class="perc-btn" onclick="setQty(1.0, this)">100%</button>
             </div>
             <div class="trade-actions">
                 <button class="kid-btn btn-green" onclick="traderAction(1)">BUY</button>
                 <button class="kid-btn btn-red" onclick="traderAction(-1)">SELL</button>
             </div>
         </div>
-        <div class="glass-card">
-            <h4>Portfolio</h4>
-            <div class="big-value" id="trader_eq">₹ 10.0 L</div>
-            <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                <span>Cash: <b id="trader_cash">10.0 L</b></span>
-                <span>Held: <b id="trader_hold">0</b></span>
-            </div>
-            <button class="reset-btn" onclick="resetTrader()" style="width:100%; margin-top:20px;">RESET ACCOUNT</button>
-        </div>
+        <div class="glass-card"><h4>Portfolio</h4><div class="big-value" id="trader_eq">₹ 10.0 L</div><p>Cash: <span id="trader_cash">10.0 L</span></p><p>Held: <span id="trader_hold">0</span></p><button class="reset-btn" onclick="resetTrader()" style="margin-top:10px; width:100%">Reset Account</button></div>
     </div>
 
-    <div id="game2" class="app-view game-layout">
+    <div id="game2" class="app-view game-grid">
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between;"><h3>Defense</h3><button class="reset-btn" onclick="resetPD()">Restart</button></div>
-            <div style="text-align:center; margin-top:20px; padding:30px; background:rgba(255,255,255,0.03); border:1px solid var(--border-glass); border-radius:16px;">
-                <h2 id="pd_year" style="color:var(--primary); font-size:2rem;">Year 1</h2>
-                <div style="background:var(--gold); color:#000; display:inline-block; padding:5px 10px; margin:15px 0; font-weight:bold; font-size:0.8rem;">NEWS FLASH</div>
-                <h3 id="pd_news" style="margin-bottom:20px;">Market is Stable</h3>
-                <div style="display:flex; gap:15px; justify-content:center;">
+            <div style="text-align:center; margin-top:20px; padding:20px; background:rgba(255,255,255,0.05); border-radius:12px;">
+                <h2 id="pd_year" style="color:var(--primary)">Year 1</h2>
+                <div style="background:#000; color:var(--gold); display:inline-block; padding:5px; margin:10px 0;">📰 NEWS</div>
+                <h3 id="pd_news">Market is Stable</h3>
+                <p style="color:var(--text-sub); margin-bottom:20px;">Analysts predict steady growth.</p>
+                <div style="display:flex; gap:10px; justify-content:center;">
                     <button class="kid-btn btn-green" onclick="pdAction('invest')">Invest</button>
                     <button class="kid-btn btn-red" onclick="pdAction('hold')">Hold</button>
                 </div>
             </div>
         </div>
-        <div class="glass-card">
-            <h4>Net Worth</h4>
-            <div class="big-value" id="pd_networth">₹ 10.0 L</div>
-            <div id="pd_log" style="margin-top:15px; height:150px; overflow-y:auto; font-family:monospace; font-size:0.85rem; color:var(--text-sub);"></div>
-        </div>
+        <div class="glass-card"><h4>Net Worth</h4><div class="big-value" id="pd_networth">₹ 10.0 L</div></div>
     </div>
 
     <div id="game3" class="app-view kid-layout">
         <div class="glass-card" style="border-color:var(--neon-blue);">
-            <div style="display:flex; justify-content:space-between;"><h3>Financial Race</h3><div class="big-value" style="font-size:1.8rem;" id="run_score">0</div></div>
-            <div class="game-screen" style="height:400px; margin-top:15px; background:#111;">
+            <div style="display:flex; justify-content:space-between;"><h3>Financial Race</h3><div class="big-value" style="font-size:1.5rem;" id="run_score">0</div></div>
+            <div class="game-screen" style="height:400px; margin-top:10px;">
                 <div id="run_game">
                     <div class="road"><div class="lane-marker"></div><div class="lane-marker right"></div></div>
                     <div id="run_player" class="player-car"><div>🏎️</div></div>
-                    <div id="run_overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:none; flex-direction:column; justify-content:center; align-items:center;">
-                        <h2 style="color:var(--accent);">CRASHED!</h2><button class="kid-btn btn-green" onclick="startRun()">Try Again</button>
-                    </div>
-                    <div id="run_start" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                        <h2>Ready?</h2><button class="kid-btn btn-green" onclick="startRun()">START</button>
-                    </div>
+                    <div id="run_overlay" class="game-overlay"><h2>CRASHED!</h2><button class="kid-btn btn-green" onclick="startRun()">Try Again</button></div>
+                    <div id="run_start" class="game-overlay" style="display:flex;"><h2>Ready?</h2><button class="kid-btn btn-green" onclick="startRun()">Start</button></div>
                 </div>
             </div>
-            <div class="control-pad">
-                <button class="ctrl-btn" onclick="moveRun(-1)"><i class="ph-bold ph-arrow-left"></i></button>
-                <button class="ctrl-btn" onclick="moveRun(1)"><i class="ph-bold ph-arrow-right"></i></button>
-            </div>
+            <div class="control-pad"><button class="ctrl-btn" onclick="moveRun(-1)"><i class="ph-bold ph-arrow-left"></i></button><button class="ctrl-btn" onclick="moveRun(1)"><i class="ph-bold ph-arrow-right"></i></button></div>
         </div>
     </div>
 
     <div id="kid1" class="app-view kid-layout">
-        <div class="glass-card" style="background:rgba(16,185,129,0.05); border-color:var(--success);">
+        <div class="glass-card" style="background:rgba(14,165,233,0.1); border-color:var(--success);">
             <div style="display:flex; justify-content:space-between;"><h3>Coin Quest</h3><button class="reset-btn" onclick="resetKQ()">Reset</button></div>
-            <div style="text-align:center; padding:20px;">
-                <div style="font-size:1.5rem; margin:10px; color:var(--success);">Score: <span id="kq_score">0</span></div>
-                <div style="font-size:7rem; margin:30px 0;" id="kq_icon">🍎</div>
-                <h2 id="kq_name" style="margin-bottom:30px;">Apple</h2>
-                <div style="display:flex; gap:20px; justify-content:center;">
-                    <button class="kid-btn btn-green" onclick="checkKQ('need')">NEED</button>
-                    <button class="kid-btn btn-red" onclick="checkKQ('want')">WANT</button>
+            <div id="kq_play_area" style="text-align:center; padding:20px;">
+                <div style="font-size:1.2rem; margin:10px;">Score: <span id="kq_score">0</span> / 10</div>
+                <div style="font-size:6rem; margin:20px 0;" id="kq_icon">🍎</div>
+                <h2 id="kq_name">Apple</h2>
+                <div style="display:flex; gap:20px; justify-content:center; margin-top:20px;">
+                    <button class="kid-btn btn-green" onclick="checkKQ('need')">NEED</button><button class="kid-btn btn-red" onclick="checkKQ('want')">WANT</button>
                 </div>
-                <div id="kq_res" style="margin-top:20px; height:30px; font-weight:bold; font-size:1.2rem;"></div>
+                <div id="kq_res" style="margin-top:15px; font-weight:bold;"></div>
+            </div>
+            <div id="kq_end_area" style="display:none; text-align:center; padding:30px;">
+                <h2>Game Over!</h2>
+                <div style="font-size:4rem; margin:10px;">🏆</div>
+                <h3 id="kq_final_msg"></h3>
+                <button class="kid-btn btn-green" onclick="resetKQ()">Play Again</button>
             </div>
         </div>
     </div>
 
     <div id="kid2" class="app-view kid-layout">
         <div class="glass-card" style="border-color:var(--neon-pink);">
-            <div style="display:flex; justify-content:space-between;"><h3>Piggy Dash</h3><div style="color:var(--gold); font-weight:bold; font-size:1.5rem;">₹ <span id="pig_score">0</span></div></div>
-            <div class="game-screen" id="piggy_container" style="margin-top:15px; border:2px solid var(--neon-pink);">
+            <div style="display:flex; justify-content:space-between;"><h3>Piggy Dash</h3><div style="color:var(--gold); font-weight:bold;">₹ <span id="pig_score">0</span></div></div>
+            <div class="game-screen" id="piggy_container" style="margin-top:15px; border:2px solid var(--neon-pink); height:600px;">
                 <div id="piggy_player" class="piggy">🐷</div>
-                <div id="pig_overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                    <h2>Catch Money!</h2><p style="margin:10px 0;">Avoid Hammers 🔨</p>
-                    <button class="kid-btn btn-green" onclick="startPiggy()">START</button>
-                </div>
+                <div id="pig_overlay" class="game-overlay" style="display:flex;"><h2>Catch Cash!</h2><button class="kid-btn btn-green" onclick="startPiggy()">START</button></div>
             </div>
-            <div class="control-pad">
-                <button class="ctrl-btn" onmousedown="movePig(-1)" onmouseup="stopPig()" ontouchstart="movePig(-1)" ontouchend="stopPig()"><i class="ph-bold ph-arrow-left"></i></button>
-                <button class="ctrl-btn" onmousedown="movePig(1)" onmouseup="stopPig()" ontouchstart="movePig(1)" ontouchend="stopPig()"><i class="ph-bold ph-arrow-right"></i></button>
-            </div>
+            <div class="control-pad"><button class="ctrl-btn" onmousedown="movePig(-1)" onmouseup="stopPig()" ontouchstart="movePig(-1)" ontouchend="stopPig()"><</button><button class="ctrl-btn" onmousedown="movePig(1)" onmouseup="stopPig()" ontouchstart="movePig(1)" ontouchend="stopPig()">></button></div>
         </div>
     </div>
 
@@ -455,20 +312,15 @@
 
     // --- CALCULATORS ---
     ['sip_amt','sip_years','sip_rate','emi_amt','emi_years','emi_rate','arb_amt','arb_loan_rate','arb_inv_rate','arb_years'].forEach(id => {
-        // Sync Input -> Slider
-        document.getElementById(id + '_val').addEventListener('input', (e) => {
-            let val = parseFloat(e.target.value);
-            if(!isNaN(val)) { document.getElementById(id).value = val; calcAll(); }
-        });
-        // Sync Slider -> Input
         document.getElementById(id).addEventListener('input', (e) => {
-            document.getElementById(id + '_val').value = e.target.value;
+            let val = parseFloat(e.target.value);
+            let suff = id.includes('rate')?'%':(id.includes('years')?'Yrs':'');
+            document.getElementById(id+'_val').innerText = suff ? val+suff : formatCurrency(val);
             calcAll();
         });
     });
 
     function calcAll() {
-        // SIP
         if(document.getElementById('sip').style.display !== 'none') {
             const P=parseFloat(document.getElementById('sip_amt').value), N=parseFloat(document.getElementById('sip_years').value), R=parseFloat(document.getElementById('sip_rate').value);
             let v=0, mR=R/1200; for(let i=0;i<N*12;i++) v=(v+P)*(1+mR);
@@ -476,7 +328,6 @@
             document.getElementById('sip_final').innerText = formatCurrency(v - tax);
             drawChart('sipChart', 'line', Array.from({length:N},(_,i)=>i+1), Array.from({length:N},(_,i)=>{let t=0;for(let m=0;m<(i+1)*12;m++)t=(t+P)*(1+mR);return t}), '#6366f1');
         }
-        // EMI
         if(document.getElementById('emi').style.display !== 'none') {
             const L=parseFloat(document.getElementById('emi_amt').value), Y=parseFloat(document.getElementById('emi_years').value)*12, I=parseFloat(document.getElementById('emi_rate').value)/1200;
             const emi=(L*I*Math.pow(1+I,Y))/(Math.pow(1+I,Y)-1);
@@ -485,7 +336,6 @@
             for(let i=0; i<Y/12; i++){ let p=0, inT=0; for(let m=0; m<12; m++) { let it=bal*I; let pr=emi-it; inT+=it; p+=pr; bal-=pr; } prin.push(p); int.push(inT); }
             drawStacked('emiChart', Array.from({length:Y/12},(_,i)=>i+1), prin, int);
         }
-        // ARB
         if(document.getElementById('arb').style.display !== 'none') {
             const A=parseFloat(document.getElementById('arb_amt').value), D=parseFloat(document.getElementById('arb_years').value), lR=parseFloat(document.getElementById('arb_loan_rate').value)/100, iR=parseFloat(document.getElementById('arb_inv_rate').value)/100;
             let c=A, l=A, lbs=[], d1=[], d2=[]; for(let i=1;i<=D;i++){ c*=(1+iR); l*=(1+lR); lbs.push("Yr "+i); d1.push(c); d2.push(l); }
@@ -501,7 +351,6 @@
         if(d2) datasets.push({label:'Loan',data:d2,borderColor:'#f43f5e',backgroundColor:'transparent',borderDash:[5,5],fill:false,order:1});
         charts[id] = new Chart(ctx, { type, data:{labels,datasets}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:d2!=null}},scales:{x:{grid:{display:false}},y:{grid:{color:'#333'}}}} });
     }
-    
     function drawStacked(id, labels, d1, d2) {
         const ctx = document.getElementById(id).getContext('2d');
         if(charts[id]) charts[id].destroy();
@@ -509,89 +358,139 @@
     }
 
     // --- GAME 1: TRADER PRO ---
-    let traderInt, traderPrice=20000, traderEquity=1000000, traderStocks=0, currentCandle=null, candleEnd=0, tradeQty=0.1;
-    const stocks = [{s:"MRF",p:130000},{s:"RELIANCE",p:2500},{s:"TCS",p:3500},{s:"ZOMATO",p:260},{s:"VODAFONE",p:15},{s:"NIFTY",p:24000}];
-    const MAX_BARS = 20;
-
+    let traderInt, traderPrice=20000, traderEquity=1000000, traderStocks=0, currentCandle=null, candleEnd=0, isCandle=false, tradeQty=0.1;
     function initTrader() {
-        // Random Stock
-        let s = stocks[Math.floor(Math.random()*stocks.length)];
-        document.getElementById('trader_symbol').innerText = s.s;
-        traderPrice = s.p;
-
         if(charts['trader']) charts['trader'].destroy();
         charts['trader'] = new Chart(document.getElementById('traderChart').getContext('2d'), {
-            type: 'bar',
-            data: { labels: Array(MAX_BARS).fill(''), datasets: [ { label:'Wick', data:Array(MAX_BARS).fill(null), backgroundColor:'#64748b', barThickness:1, grouped:false }, { label:'Body', data:Array(MAX_BARS).fill(null), backgroundColor:(c)=>c.raw&&c.raw[1]>=c.raw[0]?'#089981':'#f23645', barThickness:8, grouped:false } ] },
-            options: { animation: false, responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { position: 'right', grid: { color: '#2a2e39' } } } }
+            type: 'line',
+            data: { labels: Array(20).fill(''), datasets: [ { type:'line', label:'Line', data:Array(20).fill(null), borderColor:'#00f3ff', tension:0.1, pointRadius:0, hidden: false }, { type:'bar', label:'Wick', data:Array(20).fill(null), backgroundColor:'#64748b', barThickness:2, grouped:false, hidden: true, order:1 }, { type:'bar', label:'Body', data:Array(20).fill(null), backgroundColor:(c)=>c.raw&&c.raw[1]>=c.raw[0]?'#10b981':'#f23645', barThickness:10, grouped:false, hidden: true, order:2 } ] },
+            options: { animation: false, responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { position: 'right', grid: { color: '#333' } } } }
         });
         startCandle(); traderInt = setInterval(tickTrader, 100);
     }
     function startCandle() {
-        let prev = currentCandle ? currentCandle.c : traderPrice;
-        currentCandle = { o:prev, h:prev, l:prev, c:prev };
-        candleEnd = Date.now() + 10000;
+        let prev = currentCandle ? currentCandle.c : 20000; currentCandle = { o:prev, h:prev, l:prev, c:prev };
+        candleEnd = Date.now() + 5000;
         let c = charts['trader']; if(c.data.datasets[0].data[19] !== null) { c.data.datasets.forEach(d => { d.data.shift(); d.data.push(null); }); }
     }
     function tickTrader() {
         if(!document.getElementById('game1').classList.contains('active-view')) return;
         document.getElementById('trader_timer').innerText = Math.ceil((candleEnd - Date.now())/1000) + "s";
-        traderPrice += (Math.random()-0.5) * (traderPrice*0.005); // Volatility
+        traderPrice += (Math.random()-0.5)*50;
         currentCandle.c = traderPrice; if(traderPrice > currentCandle.h) currentCandle.h = traderPrice; if(traderPrice < currentCandle.l) currentCandle.l = traderPrice;
-        document.getElementById('trader_price').innerText = traderPrice.toFixed(2);
+        document.getElementById('trader_price').innerText = traderPrice.toFixed(0);
         let c = charts['trader']; let idx = 19; for(let i=0;i<20;i++)if(c.data.datasets[0].data[i]===null){idx=i; break;}
-        c.data.datasets[0].data[idx] = [currentCandle.l, currentCandle.h]; c.data.datasets[1].data[idx] = [currentCandle.o, currentCandle.c]; c.update('none');
+        c.data.datasets[0].data[idx] = traderPrice; c.data.datasets[1].data[idx] = [currentCandle.l, currentCandle.h]; c.data.datasets[2].data[idx] = [currentCandle.o, currentCandle.c];
+        c.update('none');
         document.getElementById('trader_eq').innerText = formatCurrency(traderEquity + (traderStocks*traderPrice));
         if(Date.now() >= candleEnd) startCandle();
     }
-    function setQty(perc) { tradeQty = perc; }
-    function traderAction(d) {
+    function setQty(perc, btn) { tradeQty = perc; document.querySelectorAll('.perc-btn').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); }
+    function traderAction(dir) {
         let amt = traderEquity * tradeQty; let qty = Math.floor(amt / traderPrice);
-        if(d===1 && qty>0) { traderStocks += qty; traderEquity -= qty*traderPrice; }
-        if(d===-1 && traderStocks>0) { let s=Math.ceil(traderStocks*tradeQty); traderStocks-=s; traderEquity+=s*traderPrice; }
+        if(dir===1 && qty>0) { traderStocks += qty; traderEquity -= qty*traderPrice; }
+        if(dir===-1 && traderStocks>0) { let s=Math.ceil(traderStocks*tradeQty); traderStocks-=s; traderEquity+=s*traderPrice; }
         document.getElementById('trader_cash').innerText = formatCurrency(traderEquity); document.getElementById('trader_hold').innerText = traderStocks;
     }
-    function resetTrader() { traderEquity=1000000; traderStocks=0; initTrader(); document.getElementById('trader_cash').innerText=formatCurrency(traderEquity); }
+    function toggleCandles() { isCandle = !isCandle; let c = charts['trader']; c.data.datasets[0].hidden = isCandle; c.data.datasets[1].hidden = !isCandle; c.data.datasets[2].hidden = !isCandle; c.update(); }
+    function resetTrader() { traderEquity=1000000; traderStocks=0; traderPrice=20000; document.getElementById('trader_cash').innerText=formatCurrency(traderEquity); }
 
     // --- GAME 2: DEFENSE ---
-    let defVal=1000000, defYr=1; const defNews=[{t:"Tech Boom",m:1.2},{t:"Crash",m:0.8},{t:"Stable",m:1.05}]; let curDef=defNews[0];
+    let defVal=1000000, defYr=1; const defNews=[{t:"Boom",m:1.2},{t:"Crash",m:0.8},{t:"Stable",m:1.05}]; let curDef=defNews[0];
     function pdAction(type) {
         let chg = type==='invest' ? curDef.m : 1.02;
         defVal *= chg; defYr++;
         document.getElementById('pd_networth').innerText=formatCurrency(defVal);
         document.getElementById('pd_year').innerText="Year "+defYr;
-        document.getElementById('pd_log').innerHTML = `<div>Yr ${defYr-1}: ${curDef.t} (${Math.round((chg-1)*100)}%)</div>` + document.getElementById('pd_log').innerHTML;
         curDef = defNews[Math.floor(Math.random()*defNews.length)];
         document.getElementById('pd_news').innerText = curDef.t;
     }
-    function resetPD() { defVal=1000000; defYr=1; document.getElementById('pd_networth').innerText=formatCurrency(defVal); document.getElementById('pd_log').innerHTML=""; }
+    function resetPD() { defVal=1000000; defYr=1; document.getElementById('pd_networth').innerText=formatCurrency(defVal); }
 
     // --- GAME 3: WEALTH RUN ---
     let runAnim, runActive=false, runLane=1, runScore=0; const lanes=[20,50,80];
     function startRun(){ if(runActive)return; runActive=true; runScore=0; document.getElementById('run_score').innerText=0; document.getElementById('run_overlay').style.display='none'; document.getElementById('run_start').style.display='none'; document.querySelectorAll('.obstacle,.coin').forEach(e=>e.remove()); spawnObj(); loopRun(); }
     function moveRun(d) { runLane+=d; if(runLane<0)runLane=0; if(runLane>2)runLane=2; document.getElementById('run_player').style.left=lanes[runLane]+'%'; }
-    function spawnObj() { if(!runActive)return; const el=document.createElement('div'); el.className=Math.random()>0.4?'obstacle':'coin'; if(el.className==='coin')el.innerText="₹"; else el.innerText="DEBT"; let l=Math.floor(Math.random()*3); el.style.left=lanes[l]+'%'; el.dataset.lane=l; el.dataset.y=0; document.getElementById('run_game').appendChild(el); setTimeout(spawnObj, 800); }
+    function spawnObj() { if(!runActive)return; const el=document.createElement('div'); el.className=Math.random()>0.4?'obstacle':'coin'; if(el.className==='coin')el.innerText="₹"; else el.innerText="TAX"; let l=Math.floor(Math.random()*3); el.style.left=lanes[l]+'%'; el.dataset.lane=l; el.dataset.y=0; document.getElementById('run_game').appendChild(el); setTimeout(spawnObj, 800); }
     function loopRun() {
-        if(!runActive)return; document.querySelectorAll('.obstacle, .coin').forEach(el => { let y=parseFloat(el.dataset.y)+3; el.dataset.y=y; el.style.top=y+'%'; if(y>80 && y<90 && parseInt(el.dataset.lane)===runLane) { if(el.className.includes('obstacle')) { runActive=false; document.getElementById('run_overlay').style.display='flex'; } else { runScore+=100; document.getElementById('run_score').innerText=runScore; el.remove(); } } if(y>100)el.remove(); }); runAnim=requestAnimationFrame(loopRun);
+        if(!runActive)return;
+        document.querySelectorAll('.obstacle, .coin').forEach(el => {
+            let y=parseFloat(el.dataset.y)+3; el.dataset.y=y; el.style.top=y+'%';
+            if(y>80 && y<90 && parseInt(el.dataset.lane)===runLane) {
+                if(el.className.includes('obstacle')) { runActive=false; document.getElementById('run_overlay').style.display='flex'; }
+                else { runScore+=100; document.getElementById('run_score').innerText=runScore; el.remove(); }
+            }
+            if(y>100) el.remove();
+        });
+        runAnim = requestAnimationFrame(loopRun);
     }
 
     // --- KID 1: COIN QUEST ---
-    let kqI=0, kqS=0; const kqList=[{n:"Apple",t:"need",i:"🍎"}, {n:"PS5",t:"want",i:"🎮"}, {n:"Water",t:"need",i:"💧"}];
-    function loadKQ() { if(kqI>=kqList.length) { document.getElementById('kq_name').innerText="DONE!"; return; } let i = kqList[kqI]; document.getElementById('kq_icon').innerText=i.i; document.getElementById('kq_name').innerText=i.n; document.getElementById('kq_score').innerText = kqS + " / " + kqList.length; }
-    function checkKQ(t) { if(t===kqList[kqI].t) kqS++; kqI++; loadKQ(); }
-    function resetKQ() { kqI=0; kqS=0; loadKQ(); }
+    let kqI=0, kqS=0; 
+    // Need pool of 20 unique items
+    const kqMasterList = [
+        {n:"Vegetables",t:"need",i:"🥦"}, {n:"PS5",t:"want",i:"🎮"}, {n:"Water",t:"need",i:"💧"}, {n:"Toy",t:"want",i:"🧸"}, 
+        {n:"Medicine",t:"need",i:"💊"}, {n:"Candy",t:"want",i:"🍬"}, {n:"Books",t:"need",i:"📚"}, {n:"Gold Ring",t:"want",i:"💍"},
+        {n:"Rent",t:"need",i:"🏠"}, {n:"Movie",t:"want",i:"🎟️"}, {n:"Bus",t:"need",i:"🚌"}, {n:"Perfume",t:"want",i:"🧴"},
+        {n:"Rice",t:"need",i:"🍚"}, {n:"Pizza",t:"want",i:"🍕"}, {n:"Electricity",t:"need",i:"💡"}, {n:"Fancy Car",t:"want",i:"🏎️"},
+        {n:"School",t:"need",i:"🎒"}, {n:"Ice Cream",t:"want",i:"🍦"}, {n:"Shoes",t:"need",i:"👟"}, {n:"Phone",t:"want",i:"📱"}
+    ];
+    let kqGameList = [];
+
+    function loadKQ() {
+        // Init game list if empty
+        if(kqGameList.length === 0 && kqI === 0) {
+            kqGameList = [...kqMasterList].sort(() => 0.5 - Math.random()).slice(0, 10); // Pick random 10
+        }
+
+        if(kqI >= 10) { 
+            document.getElementById('kq_play_area').style.display = 'none';
+            document.getElementById('kq_end_area').style.display = 'block';
+            document.getElementById('kq_final_msg').innerText = kqS >= 8 ? "You Won! 🎉" : "Good Try! 👍";
+            return; 
+        }
+        let i = kqGameList[kqI]; 
+        document.getElementById('kq_icon').innerText = i.i; 
+        document.getElementById('kq_name').innerText = i.n;
+        document.getElementById('kq_score').innerText = kqS + " / 10";
+    }
+
+    function checkKQ(t) {
+        let i = kqGameList[kqI];
+        if(t === i.t) { kqS++; document.getElementById('kq_res').innerText="✅ Correct!"; }
+        else { document.getElementById('kq_res').innerText="❌ Wrong!"; }
+        
+        kqI++; 
+        setTimeout(() => { document.getElementById('kq_res').innerText=""; loadKQ(); }, 500);
+    }
+
+    function resetKQ() { 
+        kqI=0; kqS=0; kqGameList=[]; 
+        document.getElementById('kq_play_area').style.display='block'; 
+        document.getElementById('kq_end_area').style.display='none'; 
+        loadKQ(); 
+    }
 
     // --- KID 2: PIGGY DASH ---
     let pigAnim, pigSpawnInt, pigPos=50, pigSc=0, pigActive=false, pigMove=0;
-    function startPiggy() { if(pigActive)return; pigActive=true; pigSc=0; pigPos=50; document.getElementById('pig_score').innerText=0; document.getElementById('pig_overlay').style.display='none'; document.querySelectorAll('.drop-item').forEach(e=>e.remove()); updatePig(); pigAnim=requestAnimationFrame(loopPiggy); pigSpawnInt=setInterval(spawnPig, 600); }
-    function movePig(d) { pigMove=d*2; } function stopPig() { pigMove=0; } function updatePig() { document.getElementById('piggy_player').style.left=pigPos+'%'; }
-    function spawnPig() { if(!pigActive)return; const el=document.createElement('div'); el.className='drop-item'; el.innerText=Math.random()>0.3?'💰':'🔨'; el.dataset.type=el.innerText==='💰'?'good':'bad'; el.style.left=(Math.random()*90+5)+'%'; el.style.top='-50px'; el.dataset.y=-50; document.getElementById('piggy_container').appendChild(el); }
+    function startPiggy() { if(pigActive)return; pigActive=true; pigSc=0; pigPos=50; document.getElementById('pig_score').innerText=0; document.getElementById('pig_overlay').style.display='none'; document.querySelectorAll('.drop-item').forEach(e=>e.remove()); updatePig(); pigAnim=requestAnimationFrame(loopPiggy); pigSpawnInt=setInterval(spawnPig, 1500); }
+    function movePig(d) { pigMove=d*2; } function stopPig() { pigMove=0; }
+    function updatePig() { document.getElementById('piggy_player').style.left=pigPos+'%'; }
+    function spawnPig() { if(!pigActive)return; const el=document.createElement('div'); el.className='drop-item'; el.innerText=Math.random()>0.3?'💰':'🔨'; el.dataset.type=el.innerText==='💰'?'good':'bad'; el.style.left=(Math.random()*80+10)+'%'; el.style.top='-50px'; el.dataset.y=-50; document.getElementById('piggy_container').appendChild(el); }
     function loopPiggy() {
         if(!pigActive)return; if(pigMove!==0){pigPos+=pigMove; if(pigPos<10)pigPos=10; if(pigPos>90)pigPos=90; updatePig();}
-        document.querySelectorAll('.drop-item').forEach(e => { let y=parseFloat(e.dataset.y)+4; e.dataset.y=y; e.style.top=y+'px'; if(y>420 && y<480 && Math.abs(parseFloat(e.style.left)-pigPos)<15) { if(e.dataset.type==='good') { pigSc+=100; document.getElementById('pig_score').innerText=pigSc; e.remove(); } else { pigActive=false; clearInterval(pigSpawnInt); document.getElementById('pig_overlay').style.display='flex'; } } if(y>460) e.remove(); }); pigAnim=requestAnimationFrame(loopPiggy);
+        document.querySelectorAll('.drop-item').forEach(e => {
+            let y=parseFloat(e.dataset.y)+3; e.dataset.y=y; e.style.top=y+'px'; // Slower fall speed (3)
+            if(y>520 && y<580 && Math.abs(parseFloat(e.style.left)-pigPos)<15) {
+                if(e.dataset.type==='good') { pigSc+=100; document.getElementById('pig_score').innerText=pigSc; e.remove(); }
+                else { pigActive=false; clearInterval(pigSpawnInt); document.getElementById('pig_overlay').style.display='flex'; }
+            }
+            if(y>600) e.remove();
+        });
+        pigAnim = requestAnimationFrame(loopPiggy);
     }
 
-    setTimeout(() => { calcAll(); }, 100);
+    setTimeout(calcAll, 100);
 </script>
 </body>
 </html>
