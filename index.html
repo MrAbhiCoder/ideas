@@ -89,7 +89,7 @@
         /* WEALTH RUN */
         #run_game { width: 100%; height: 100%; position: relative; background: linear-gradient(#1e1b4b, #be185d); overflow: hidden; perspective: 600px; }
         .road { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) rotateX(50deg); width: 300px; height: 120%; background: #1e293b; border-left: 10px solid var(--neon-blue); border-right: 10px solid var(--neon-blue); }
-        .lane-marker { position: absolute; top: 0; left: 33%; width: 4px; height: 100%; background: repeating-linear-gradient(to bottom, #fff 0%, #fff 20%, transparent 20%, transparent 40%); background-size: 10px 60px; animation: roadMove 1s linear infinite; }
+        .lane-marker { position: absolute; top: 0; left: 33%; width: 4px; height: 100%; background: repeating-linear-gradient(to bottom, #fff 0%, #fff 20%, transparent 20%, transparent 40%); background-size: 10px 60px; animation: roadMove 0.75s linear infinite; }
         .lane-marker.right { left: 66%; }
         @keyframes roadMove { from { background-position: 0 0; } to { background-position: 0 60px; } }
         .player-car { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 4rem; z-index: 10; transition: left 0.1s; }
